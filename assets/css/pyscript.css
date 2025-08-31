@@ -58,3 +58,31 @@ input[type="range"] {
 #main-content {
     display: none;
 }
+
+input[type="range"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #ccc;
+}
+
+input[type="range"]:disabled::-webkit-slider-thumb {
+    background: #999;
+    cursor: not-allowed;
+}
+
+input[type="range"]:disabled::-moz-range-thumb {
+    background: #999;
+    cursor: not-allowed;
+}
+
+/* Disabled labels */
+label.disabled {
+    opacity: 0.5;
+    color: #999;
+}
+
+/* Disabled output */
+output.disabled {
+    opacity: 0.5;
+    color: #999;
+}
