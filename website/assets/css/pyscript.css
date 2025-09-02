@@ -5,7 +5,7 @@ body {
 
 .controls {
     display: grid;
-    grid-template-columns: 150px 1fr 50px;
+    grid-template-columns: 50px 500px 80px;
     align-items: left;
     gap: 10px;
     margin-top: 20px;
@@ -14,7 +14,17 @@ body {
 
 label {
     text-align: right;
-    font-size: medium
+    font-size: medium;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+output {
+    text-align: left;
+    font-size: medium;
+    white-space: nowrap;
+    /* Prevent output values from wrapping */
 }
 
 input[type="range"] {
