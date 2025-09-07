@@ -95,3 +95,4 @@ html_theme = "sphinx_rtd_theme"
 
 # -- Options for EPUB output
 epub_show_urls = "footnote"
+html_baseurl = "https://eshort0401.github.io/METOYBOX/"
