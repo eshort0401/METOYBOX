@@ -1,6 +1,0 @@
-Mountain Valley Breeze Toy Model
-=======================================
-
-.. raw:: html
-
-   <iframe src="./_static/mountain_valley.html" width="100%" height="800"></iframe>

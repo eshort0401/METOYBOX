@@ -1,3 +1,0 @@
-name = "Mountain-valley Breeze Toy-Model"
-description = "Toy model of the mountain-valley breeze."
-packages = ["numpy", "matplotlib", "scipy"]
