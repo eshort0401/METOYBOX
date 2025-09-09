@@ -148,7 +148,7 @@ def amend_labels(event):
 
         x_label = r"$x$ [km]"
         z_label = r"$z$ [km]"
-        psi_label += rf" [$10^{{{exponent}}}$ m s$^{-3}$]"
+        psi_label += rf" [$10^{{{exponent}}}$ m$^2$ s$^{{-1}}$]"
 
         u_key = 10 * Q_0 / (N * omega)
         w_key = 10 * Q_0 / (N**2)

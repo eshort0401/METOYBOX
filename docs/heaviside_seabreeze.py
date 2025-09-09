@@ -1,10 +1,26 @@
-import asyncio
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-from scipy.special import expi
+from scipy.special import expi as sp_expi
 from pyscript import document, display, when
 import js
+
+
+def expi(z, theta_b=np.pi / 2):
+    """
+    Calculates the exponential integral Ei(z) with a custom branch cut in direction
+    theta_b.
+    """
+    principal_value = sp_expi(z)
+    z_angle = np.angle(z)
+    correction = np.zeros_like(principal_value, dtype=np.complex128)
+    if 0 <= theta_b < np.pi:
+        mask = (z_angle > theta_b) & (z_angle <= np.pi)
+        correction[mask] = -2j * np.pi
+    elif -np.pi < theta_b < 0:
+        mask = (z_angle > -np.pi) & (z_angle < theta_b)
+        correction[mask] = 2j * np.pi
+    return principal_value + correction
 
 
 def initialize_figure():
@@ -12,8 +28,10 @@ def initialize_figure():
     global fig, ax, im_psi, quiv, subset, x, z, psi_max
     global X, Z, psi_cbar, quiv_key
 
-    x = np.linspace(-1, 1, 201)
-    z = np.linspace(0, 2, 401)
+    # Create the grid offsetting by small amount to avoid singularity
+    offset = 1e-8
+    x = np.linspace(-4, 4 + offset, 201) - offset
+    z = np.linspace(0, 8, 201)
     X, Z = np.meshgrid(x, z)
 
     fig, ax = plt.subplots(1, 1, figsize=(5, 4))
@@ -23,7 +41,7 @@ def initialize_figure():
     kwargs = {"cmap": "RdBu_r", "origin": "lower", "aspect": "auto", "zorder": 0}
     kwargs.update({"extent": [x.min(), x.max(), z.min(), z.max()]})
     cmap = plt.get_cmap(kwargs["cmap"])
-    psi_max = 4.0
+    psi_max = 0.5
     psi_levels = np.linspace(-psi_max, psi_max, 21)
     psi_norm = mcolors.BoundaryNorm(psi_levels, ncolors=cmap.N, extend="both")
 
@@ -42,27 +60,27 @@ def initialize_figure():
     kwargs = {"labelpos": "E", "coordinates": "axes"}
     quiv_key = ax.quiverkey(quiv, 0.95, 1.05, 10, r"10 [-]", **kwargs)
 
-    ax.set_ylim(0, 2)
-    ax.set_xlim(-1, 1)
-    ax.set_xticks(np.arange(-1, 1.5, 0.5))
-    ax.set_yticks(np.arange(0, 2.5, 0.5))
+    ax.set_ylim(0, 8)
+    ax.set_xlim(-4, 4)
+    ax.set_xticks(np.arange(-4, 5, 2))
+    ax.set_yticks(np.arange(0, 9, 2))
     ax.set_xlabel(r"$x$ [-]")
     ax.set_ylabel(r"$z$ [-]")
     ax.set_facecolor("tab:brown")
     ax.set_aspect("equal")
 
-    ax.set_title(r"$\operatorname{Re}\left\{\widetilde{\psi}e^{i\sigma t}\right\}$ [-]")
+    ax.set_title(r"$\psi$ [-]")
     fig.patch.set_facecolor("#E6E6E6")
     fig.suptitle(r"", y=0.995)
 
     display(fig, target="plot-output")
 
 
-def calculate_constants(f_omega, alpha_omega, N_omega, sigma):
+def calculate_constants(f_omega, alpha_omega, N_omega):
     """Calculate the constants B, C, A, a_n, a_p used in the solution."""
 
-    B = (-((1j * sigma + alpha_omega) ** 2) - f_omega**2) ** (1 / 2)
-    C = (1 / (N_omega**2) * (1j * sigma + alpha_omega) ** 2 + 1) ** (1 / 2)
+    B = (-((1j + alpha_omega) ** 2) - f_omega**2) ** (1 / 2)
+    C = (1 / (N_omega**2) * (1j + alpha_omega) ** 2 + 1) ** (1 / 2)
     B, C = np.complex128(B), np.complex128(C)
     A = B / C
     chi = np.sign(np.imag(1 / A))
@@ -76,41 +94,39 @@ def get_psi_tilde(X, Z, A, B, chi):
     L_1 = chi * (1 / A) * Z + X
     L_2 = -chi * (1 / A) * Z + X
 
-    mu_1 = np.sign(np.real(L_1))
-    mu_2 = np.sign(np.real(L_2))
-
     psi_1 = np.zeros_like(Z, dtype=complex)
     psi_2 = np.zeros_like(Z, dtype=complex)
     psi_3 = np.zeros_like(Z, dtype=complex)
     psi_4 = np.zeros_like(Z, dtype=complex)
 
-    D = -2 * np.pi / (B**2 * 2 * 1j)
+    D = -1 / (B**2 * 4 * np.pi * 1j)
 
-    psi_1 = (
-        -D * A * 2 * 1j * np.pi * (mu_1 * np.sinh(A * L_1) + mu_2 * np.sinh(A * L_2))
-    )
-    psi_2 = (
-        D * A * (np.exp(A * L_1) * expi(-A * L_1) - np.exp(-A * L_1) * expi(A * L_1))
-    )
-    psi_3 = (
-        D * A * (np.exp(-A * L_2) * expi(A * L_2) - np.exp(A * L_2) * expi(-A * L_2))
-    )
-    psi_4 = D * np.exp(-Z) * 2 * A * np.sign(X) * 1j * np.pi * 2 * np.sinh(A * X)
+    psi_1 += -np.exp(A * L_1) * (-1j * np.pi - expi(-A * L_1))
+    psi_1 += np.exp(A * X) * (-1j * np.pi - expi(-A * X)) * np.exp(-Z)
 
-    return psi_1 + psi_2 + psi_3 + psi_4
+    psi_1 += np.exp(-A * L_1) * (1j * np.pi - expi(A * L_1, theta_b=np.pi))
+    psi_1 += -np.exp(-A * X) * (1j * np.pi - expi(A * X, theta_b=np.pi)) * np.exp(-Z)
+
+    psi_1 += -np.exp(A * L_2) * (expi(-A * L_2, theta_b=np.pi) + 1j * np.pi)
+    psi_1 += np.exp(A * X) * (expi(-A * X, theta_b=np.pi) + 1j * np.pi) * np.exp(-Z)
+
+    psi_1 += np.exp(-A * L_2) * (expi(A * L_2) + 1j * np.pi)
+    psi_1 += -np.exp(-A * X) * (expi(A * X) + 1j * np.pi) * np.exp(-Z)
+
+    return D * (psi_1 + psi_2 + psi_3 + psi_4)
 
 
 def amend_labels(event):
     """Amend the plot tick labels."""
     global psi_levels
 
-    x_ticklabels = np.arange(-1, 1.5, 0.5)
-    z_ticklabels = np.arange(0, 2.5, 0.5)
+    x_ticklabels = np.arange(-4, 5, 2)
+    z_ticklabels = np.arange(0, 9, 2)
     psi_ticklabels = np.linspace(-psi_max, psi_max, 11)
 
     x_label = r"$x$ [-]"
     z_label = r"$z$ [-]"
-    psi_label = r"$\operatorname{Re}\left\{\widetilde{\psi}e^{i\sigma t}\right\}$"
+    psi_label = r"$\psi$"
 
     quiv_label = r"$10$ [-]"
 
@@ -134,7 +150,7 @@ def amend_labels(event):
 
         x_label = r"$x$ [km]"
         z_label = r"$z$ [km]"
-        psi_label += rf" [$10^{{{exponent}}}$ m s$^{-3}$]"
+        psi_label += rf" [$10^{{{exponent}}}$ m$^2$ s$^{{-1}}$]"
 
         u_key = 10 * Q_0 / (N * omega)
         w_key = 10 * Q_0 / (N**2)
@@ -201,8 +217,7 @@ def update_dimensional_params(event):
     update_suptitle(event)
 
 
-sliders = "#f_omega_slider, #alpha_omega_slider, #N_omega_slider, "
-sliders += "#z_f_slider, #t_slider, #sigma_slider"
+sliders = "#f_omega_slider, #alpha_omega_slider, #N_omega_slider, #t_slider"
 
 
 @when("input", sliders)
@@ -214,18 +229,14 @@ def update_params(event):
     f_omega = float(document.getElementById("f_omega_slider").value)
     alpha_omega = float(document.getElementById("alpha_omega_slider").value)
     N_omega = float(document.getElementById("N_omega_slider").value)
-    sigma = float(document.getElementById("sigma_slider").value)
-    z_f = float(document.getElementById("z_f_slider").value)
 
     # Update the text output
     document.getElementById("f_omega_out").innerText = f"{f_omega:.2f}"
     document.getElementById("alpha_omega_out").innerText = f"{alpha_omega:.2f}"
     document.getElementById("N_omega_out").innerText = f"{N_omega:.2f}"
-    document.getElementById("sigma_out").innerText = f"{sigma:.2f}"
-    document.getElementById("z_f_out").innerText = f"{z_f:.2f}"
 
     # Perform the original physics calculations
-    A, B, chi = calculate_constants(f_omega, alpha_omega, N_omega, sigma)
+    A, B, chi = calculate_constants(f_omega, alpha_omega, N_omega)
     psi_tilde = get_psi_tilde(X, Z, A, B, chi)
 
     update_time(event)
@@ -235,10 +246,9 @@ def update_params(event):
 def update_time(event):
     # Get slider values
     t = float(document.getElementById("t_slider").value)
-    sigma = float(document.getElementById("sigma_slider").value)
     document.getElementById("t_out").innerText = f"{t:.2f}"
 
-    psi = np.real(psi_tilde * np.exp(1j * sigma * t))
+    psi = np.real(psi_tilde * np.exp(1j * t))
     # u = np.real(u_tilde * np.exp(1j * sigma * t))
     # w = np.real(w_tilde * np.exp(1j * sigma * t))
 

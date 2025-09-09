@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 # -- Project information
 
-project = "METOYBOX"
+project = "metoybox"
 copyright = "2025, Ewan Short"
 author = "Ewan Short"
 
@@ -45,43 +45,43 @@ autodoc_pydantic_field_list_validators = False
 autodoc_pydantic_model_show_config_summary = False
 
 
-autodoc_mock_imports = [
-    "numba",
-    "scipy",
-    "scikit-image",
-    "cartopy",
-    "typing_extensions",
-    "codecov",
-    "netcdf4",
-    "h5netcdf",
-    "requests",
-    "tqdm",
-    "cdsapi",
-    "xesmf",
-    "skimage",
-    "cv2",
-    "nco",
-    "pytables",
-    "zarr",
-    "windrose",
-    "pydot",
-    "metpy",
-    "graphviz",
-    "pygraphviz",
-    "nbconvert",
-    "networkx",
-    "imageio",
-]
+# autodoc_mock_imports = [
+#     "numba",
+#     "scipy",
+#     "scikit-image",
+#     "cartopy",
+#     "typing_extensions",
+#     "codecov",
+#     "netcdf4",
+#     "h5netcdf",
+#     "requests",
+#     "tqdm",
+#     "cdsapi",
+#     "xesmf",
+#     "skimage",
+#     "cv2",
+#     "nco",
+#     "pytables",
+#     "zarr",
+#     "windrose",
+#     "pydot",
+#     "metpy",
+#     "graphviz",
+#     "pygraphviz",
+#     "nbconvert",
+#     "networkx",
+#     "imageio",
+# ]
 
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
-    "pydantic": ("https://docs.pydantic.dev/latest/", None),
-    "pylint": ("https://pylint.pycqa.org/en/latest/", None),
-    "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
-    "xarray": ("https://docs.xarray.dev/en/stable/", None),
-    "numpy": ("https://numpy.org/doc/stable/", None),
+    # "pydantic": ("https://docs.pydantic.dev/latest/", None),
+    # "pylint": ("https://pylint.pycqa.org/en/latest/", None),
+    # "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
+    # "xarray": ("https://docs.xarray.dev/en/stable/", None),
+    # "numpy": ("https://numpy.org/doc/stable/", None),
 }
 intersphinx_disabled_domains = ["std"]
 

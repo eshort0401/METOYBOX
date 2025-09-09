@@ -96,3 +96,30 @@ output.disabled {
     opacity: 0.5;
     color: #999;
 }
+
+.slider-row {
+    display: flex;
+    align-items: center;
+    /* gap: 0.5em; */
+    margin-bottom: 0.25em;
+    min-height: 1.5em;
+}
+
+.slider-row label {
+    margin-right: .5em;
+    min-width: 3em;
+    text-align: right;
+    font-size: medium;
+    white-space: nowrap;
+    display: inline-block;
+    line-height: 1.4;
+}
+
+.slider-row output {
+    margin-left: .5em;
+    min-width: 3em;
+    text-align: left;
+    display: inline-block;
+    font-size: medium;
+    white-space: nowrap;
+}
