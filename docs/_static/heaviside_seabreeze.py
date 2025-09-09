@@ -113,7 +113,7 @@ def get_psi_tilde(X, Z, A, B, chi):
     psi_1 += np.exp(-A * L_2) * (expi(A * L_2) + 1j * np.pi)
     psi_1 += -np.exp(-A * X) * (expi(A * X) + 1j * np.pi) * np.exp(-Z)
 
-    return D * (psi_1 + psi_2 + psi_3 + psi_4)
+    return D * A * (psi_1 + psi_2 + psi_3 + psi_4)
 
 
 def amend_labels(event):
