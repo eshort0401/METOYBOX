@@ -84,6 +84,9 @@ def calculate_constants(f_omega, alpha_omega, N_omega):
     B, C = np.complex128(B), np.complex128(C)
     A = B / C
     chi = np.sign(np.imag(1 / A))
+    # Choose the correct branch for chi
+    if chi < 0:
+        chi = chi * np.exp(1j * np.pi)
 
     return A, B, chi
 

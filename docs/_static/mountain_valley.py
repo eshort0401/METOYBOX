@@ -88,10 +88,10 @@ def update_params(event):
     M = float(document.getElementById("M_slider").value)
 
     # Update the text output
-    document.getElementById("f_omega_out").innerText = f"{f_omega:.2f}"
-    document.getElementById("alpha_omega_out").innerText = f"{alpha_omega:.2f}"
-    document.getElementById("N_omega_out").innerText = f"{N_omega:.1f}"
-    document.getElementById("M_out").innerText = f"{M:.2f}"
+    # document.getElementById("f_omega_out").innerText = f"{f_omega:.2f}"
+    # document.getElementById("alpha_omega_out").innerText = f"{alpha_omega:.2f}"
+    # document.getElementById("N_omega_out").innerText = f"{N_omega:.1f}"
+    # document.getElementById("M_out").innerText = f"{M:.2f}"
 
     # Perform the original physics calculations
     Z_sigma = Z - M * X
@@ -122,7 +122,7 @@ def update_time(event):
     # Get slider values
     t = float(document.getElementById("t_slider").value)
     M = float(document.getElementById("M_slider").value)
-    document.getElementById("t_out").innerText = f"{t:.2f}"
+    # document.getElementById("t_out").innerText = f"{t:.2f}"
 
     cos_t_B = np.cos(t - 2 * np.angle(B))
     psi = psi_base * cos_t_B

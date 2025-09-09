@@ -17,9 +17,11 @@ function createModelControls(config, containerId = "controls") {
         input.id = slider.id;
         input.min = slider.min;
         input.max = slider.max;
-        input.value = slider.value;
         input.step = slider.step;
         row.appendChild(input);
+
+        // Set initial value
+        input.value = slider.value;
 
         // Output
         const output = document.createElement("output");
