@@ -109,7 +109,7 @@ output.disabled {
     margin-right: .5em;
     min-width: 3em;
     text-align: right;
-    font-size: medium;
+    font-size: small;
     white-space: nowrap;
     display: inline-block;
     line-height: 1.4;
@@ -120,6 +120,6 @@ output.disabled {
     min-width: 3em;
     text-align: left;
     display: inline-block;
-    font-size: medium;
+    font-size: small;
     white-space: nowrap;
 }
