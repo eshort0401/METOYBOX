@@ -7,7 +7,8 @@
   <title>Python Mountain Breeze Toy-Model</title>
   <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
   <link rel="stylesheet" href="assets/css/mathjax.css" />
-  <link rel="stylesheet" href="assets/css/pyscript.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/controls.css" />
   <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
   <!-- Load and configure MathJax -->
@@ -26,17 +27,16 @@
   <div id="main-content">
     <div id="plot-output"></div>
     <div id="controls"></div>
-    <!-- Try alternative js sliders -->
     <script src="assets/js/model-controls.js"></script>
     <script>
-      const sliders = [
-        ...coreWaveControls(),
-        { label: "\\(M:\\)", id: 'M_slider', min: 0, max: 3, value: 0.2, step: 0.01 },
-      ];
-      createModelControls(sliders, "controls");
+      const controls = coreWaveControls();
+      let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, 0.01, "non-dimensional"];
+      controls.push(sliderConfig(...args));
+      args = ["\\(M:\\)", "M-slider-dim", 0, .1, 0.02, 0.001, "dimensional"];
+      controls.push(sliderConfig(...args));
+      createModelControls(controls, "controls");
     </script>
   </div>
-
   <py-script src="mountain_valley.py" config="assets/pyscript.toml"></py-script>
 </body>
 

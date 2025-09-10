@@ -135,8 +135,8 @@ def get_psi_n_tilde(X, Z, M, z_f, B, a_p, a_n):
     return psi_n_tilde
 
 
-sliders = "#f_omega_slider, #alpha_omega_slider, #N_omega_slider, #M_slider, "
-sliders += "#z_f_slider, #t_slider"
+sliders = "#f-omega-slider, #alpha-omega-slider, #N-omega-slider, #M-slider, "
+sliders += "#zf-slider, #t-slider"
 
 
 @when("input", sliders)
@@ -145,18 +145,11 @@ def update_params(event):
     global psi_p_tilde, psi_n_tilde, B, a_p, a_n
 
     # Get slider values
-    f_omega = float(document.getElementById("f_omega_slider").value)
-    alpha_omega = float(document.getElementById("alpha_omega_slider").value)
-    N_omega = float(document.getElementById("N_omega_slider").value)
-    M = float(document.getElementById("M_slider").value)
-    z_f = float(document.getElementById("z_f_slider").value)
-
-    # Update the text output
-    document.getElementById("f_omega_out").innerText = f"{f_omega:.2f}"
-    document.getElementById("alpha_omega_out").innerText = f"{alpha_omega:.2f}"
-    document.getElementById("N_omega_out").innerText = f"{N_omega:.1f}"
-    document.getElementById("M_out").innerText = f"{M:.2f}"
-    document.getElementById("z_f_out").innerText = f"{z_f:.2f}"
+    f_omega = float(document.getElementById("f-omega-slider").value)
+    alpha_omega = float(document.getElementById("alpha-omega-slider").value)
+    N_omega = float(document.getElementById("N-omega-slider").value)
+    M = float(document.getElementById("M-slider").value)
+    z_f = float(document.getElementById("zf-slider").value)
 
     # Perform the original physics calculations
     B, a_p, a_n = calculate_constants(f_omega, alpha_omega, N_omega, M)
@@ -170,12 +163,11 @@ def update_params(event):
     update_time(event)
 
 
-@when("input", "#t_slider")
+@when("input", "#t-slider")
 def update_time(event):
     # Get slider values
-    t = float(document.getElementById("t_slider").value)
-    M = float(document.getElementById("M_slider").value)
-    document.getElementById("t_out").innerText = f"{t:.2f}"
+    t = float(document.getElementById("t-slider").value)
+    M = float(document.getElementById("M-slider").value)
 
     psi = np.real(psi_p_tilde * np.exp(1j * t) + psi_n_tilde * np.exp(-1j * t))
 

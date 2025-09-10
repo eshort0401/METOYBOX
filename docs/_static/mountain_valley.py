@@ -76,22 +76,16 @@ def initialize_figure():
     display(fig, target="plot-output")
 
 
-@when("input", "#f_omega_slider, #alpha_omega_slider, #N_omega_slider, #M_slider")
+@when("input", "#f-omega-slider, #alpha-omega-slider, #N-omega-slider, #M-slider")
 def update_params(event):
     """Update the model parameters."""
     global psi_base, u_base, w_base, Q_base, B
 
     # Get slider values
-    f_omega = float(document.getElementById("f_omega_slider").value)
-    alpha_omega = float(document.getElementById("alpha_omega_slider").value)
-    N_omega = float(document.getElementById("N_omega_slider").value)
-    M = float(document.getElementById("M_slider").value)
-
-    # Update the text output
-    # document.getElementById("f_omega_out").innerText = f"{f_omega:.2f}"
-    # document.getElementById("alpha_omega_out").innerText = f"{alpha_omega:.2f}"
-    # document.getElementById("N_omega_out").innerText = f"{N_omega:.1f}"
-    # document.getElementById("M_out").innerText = f"{M:.2f}"
+    f_omega = float(document.getElementById("f-omega-slider").value)
+    alpha_omega = float(document.getElementById("alpha-omega-slider").value)
+    N_omega = float(document.getElementById("N-omega-slider").value)
+    M = float(document.getElementById("M-slider").value)
 
     # Perform the original physics calculations
     Z_sigma = Z - M * X
@@ -117,12 +111,11 @@ def update_params(event):
     update_time(event)
 
 
-@when("input", "#t_slider")
+@when("input", "#t-slider")
 def update_time(event):
     # Get slider values
-    t = float(document.getElementById("t_slider").value)
-    M = float(document.getElementById("M_slider").value)
-    # document.getElementById("t_out").innerText = f"{t:.2f}"
+    t = float(document.getElementById("t-slider").value)
+    M = float(document.getElementById("M-slider").value)
 
     cos_t_B = np.cos(t - 2 * np.angle(B))
     psi = psi_base * cos_t_B

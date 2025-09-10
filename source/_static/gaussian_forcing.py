@@ -130,10 +130,10 @@ def amend_labels(event):
 
     checkbox = document.getElementById("dimensional_checkbox")
     if checkbox.checked:
-        N_omega = float(document.getElementById("N_omega_slider").value)
-        H = float(document.getElementById("H_slider").value)
-        Q_0 = float(document.getElementById("Q_0_slider").value)
-        omega = float(document.getElementById("omega_slider").value)
+        N_omega = float(document.getElementById("N-omega-slider").value)
+        H = float(document.getElementById("H-slider").value)
+        Q_0 = float(document.getElementById("Q0-slider").value)
+        omega = float(document.getElementById("omega-slider").value)
         x_ticklabels = x_ticklabels * N_omega * H / 1000  # km
         z_ticklabels = z_ticklabels * H / 1000  # km
         x_ticklabels = [f"{val:.2f}" for val in x_ticklabels]
@@ -194,30 +194,30 @@ def toggle_dimensional_controls(event):
     amend_labels(checkbox)
 
 
-dimensional_sliders = "#H_slider, #omega_slider, #Q_0_slider, #N_omega_slider"
+dimensional-sliders = "#H-slider, #omega-slider, #Q0-slider, #N-omega-slider"
 
 
-@when("input", dimensional_sliders)
+@when("input", dimensional-sliders)
 def update_dimensional_params(event):
     """Update dimensional parameters and recalculate dependent parameters."""
     # Get slider values
-    H = float(document.getElementById("H_slider").value)
-    omega = float(document.getElementById("omega_slider").value)
-    Q_0 = float(document.getElementById("Q_0_slider").value)
-    N_omega = float(document.getElementById("N_omega_slider").value)
+    H = float(document.getElementById("H-slider").value)
+    omega = float(document.getElementById("omega-slider").value)
+    Q_0 = float(document.getElementById("Q0-slider").value)
+    N_omega = float(document.getElementById("N-omega-slider").value)
 
     # Update the text output
-    document.getElementById("H_out").innerText = f"{H/1000:.2f} km"
-    document.getElementById("omega_out").innerText = rf"{omega:.2e} s⁻¹"
-    document.getElementById("Q_0_out").innerText = rf"{Q_0:.2e} m s⁻³"
-    document.getElementById("N_omega_out").innerText = f"{N_omega:.2f}"
+    document.getElementById("H-out").innerText = f"{H/1000:.2f} km"
+    document.getElementById("omega-out").innerText = rf"{omega:.2e} s⁻¹"
+    document.getElementById("Q0-out").innerText = rf"{Q_0:.2e} m s⁻³"
+    document.getElementById("N-omega-out").innerText = f"{N_omega:.2f}"
 
     amend_labels(event)
     update_suptitle(event)
 
 
-sliders = "#f_omega_slider, #alpha_omega_slider, #N_omega_slider, "
-sliders += "#z_f_slider, #t_slider, #sigma_slider"
+sliders = "#f-omega-slider, #alpha-omega-slider, #N-omega-slider, "
+sliders += "#zf-slider, #t-slider, #sigma-slider"
 
 
 @when("input", sliders)
@@ -226,18 +226,18 @@ def update_params(event):
     global psi_tilde, B, A, chi, u_tilde, w_tilde
 
     # Get slider values
-    f_omega = float(document.getElementById("f_omega_slider").value)
-    alpha_omega = float(document.getElementById("alpha_omega_slider").value)
-    N_omega = float(document.getElementById("N_omega_slider").value)
-    sigma = float(document.getElementById("sigma_slider").value)
-    z_f = float(document.getElementById("z_f_slider").value)
+    f_omega = float(document.getElementById("f-omega-slider").value)
+    alpha_omega = float(document.getElementById("alpha-omega-slider").value)
+    N_omega = float(document.getElementById("N-omega-slider").value)
+    sigma = float(document.getElementById("sigma-slider").value)
+    z_f = float(document.getElementById("zf-slider").value)
 
     # Update the text output
-    document.getElementById("f_omega_out").innerText = f"{f_omega:.2f}"
-    document.getElementById("alpha_omega_out").innerText = f"{alpha_omega:.2f}"
-    document.getElementById("N_omega_out").innerText = f"{N_omega:.2f}"
-    document.getElementById("sigma_out").innerText = f"{sigma:.2f}"
-    document.getElementById("z_f_out").innerText = f"{z_f:.2f}"
+    document.getElementById("f-omega-out").innerText = f"{f_omega:.2f}"
+    document.getElementById("alpha-omega-out").innerText = f"{alpha_omega:.2f}"
+    document.getElementById("N-omega-out").innerText = f"{N_omega:.2f}"
+    document.getElementById("sigma-out").innerText = f"{sigma:.2f}"
+    document.getElementById("zf-out").innerText = f"{z_f:.2f}"
 
     # Perform the original physics calculations
     A, B, chi = calculate_constants(f_omega, alpha_omega, N_omega, sigma)
@@ -246,12 +246,12 @@ def update_params(event):
     update_time(event)
 
 
-@when("input", "#t_slider")
+@when("input", "#t-slider")
 def update_time(event):
     # Get slider values
-    t = float(document.getElementById("t_slider").value)
-    sigma = float(document.getElementById("sigma_slider").value)
-    document.getElementById("t_out").innerText = f"{t:.2f}"
+    t = float(document.getElementById("t-slider").value)
+    sigma = float(document.getElementById("sigma-slider").value)
+    document.getElementById("t-out").innerText = f"{t:.2f}"
 
     psi = np.real(psi_tilde * np.exp(1j * sigma * t))
     u = np.real(u_tilde * np.exp(1j * sigma * t))
@@ -281,10 +281,10 @@ def hide_loading_screen():
 
 def update_suptitle(event):
     """Update the figure suptitle based on dimensional checkbox state."""
-    t = float(document.getElementById("t_slider").value)
+    t = float(document.getElementById("t-slider").value)
     checkbox = document.getElementById("dimensional_checkbox")
     if checkbox.checked:
-        omega = float(document.getElementById("omega_slider").value)
+        omega = float(document.getElementById("omega-slider").value)
         t_seconds = t / omega
         hour = int(np.floor(t_seconds / 3600))
         minute = int(np.floor((t_seconds - hour * 3600) / 60))
