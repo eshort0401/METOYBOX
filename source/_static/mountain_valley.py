@@ -6,6 +6,23 @@ from pyscript import document, display, when
 import js
 
 
+class SliderCache:
+    """Cache for slider elements to avoid repeated DOM searches."""
+
+    def __init__(self):
+        self.elements = {}
+
+    def get(self, element_id):
+        if element_id not in self.elements:
+            # Only search once per element
+            self.elements[element_id] = document.getElementById(element_id)
+        return self.elements[element_id]
+
+
+# Create cache once
+cache = SliderCache()
+
+
 def initialize_figure():
     """Initialize the figure and set the global variables."""
     global fig, axes, im_psi, im_Q, quiv, slope_line_psi, slope_line_Q, subset, x, z
@@ -76,16 +93,24 @@ def initialize_figure():
     display(fig, target="plot-output")
 
 
-@when("input", "#f-omega-slider, #alpha-omega-slider, #N-omega-slider, #M-slider")
+# @when(
+#     "python-update", "#f-omega-slider, #alpha-omega-slider, #N-omega-slider, #M-slider"
+# )
+@when("python-update", "#controls")
 def update_params(event):
     """Update the model parameters."""
     global psi_base, u_base, w_base, Q_base, B
 
+    f_omega_slider = cache.get("f-omega-slider")
+    alpha_omega_slider = cache.get("alpha-omega-slider")
+    N_omega_slider = cache.get("N-omega-slider")
+    M_slider = cache.get("M-slider")
+
     # Get slider values
-    f_omega = float(document.getElementById("f-omega-slider").value)
-    alpha_omega = float(document.getElementById("alpha-omega-slider").value)
-    N_omega = float(document.getElementById("N-omega-slider").value)
-    M = float(document.getElementById("M-slider").value)
+    f_omega = float(f_omega_slider.value)
+    alpha_omega = float(alpha_omega_slider.value)
+    N_omega = float(N_omega_slider.value)
+    M = float(M_slider.value)
 
     # Perform the original physics calculations
     Z_sigma = Z - M * X
@@ -111,11 +136,14 @@ def update_params(event):
     update_time(event)
 
 
-@when("input", "#t-slider")
+@when("python-update", "#t-slider")
 def update_time(event):
     # Get slider values
-    t = float(document.getElementById("t-slider").value)
-    M = float(document.getElementById("M-slider").value)
+    t_slider = cache.get("t-slider")
+    M_slider = cache.get("M-slider")
+
+    t = float(t_slider.value)
+    M = float(M_slider.value)
 
     cos_t_B = np.cos(t - 2 * np.angle(B))
     psi = psi_base * cos_t_B
@@ -130,7 +158,7 @@ def update_time(event):
     slope_line_Q.set_ydata(x * M)
     quiv.set_UVC(u[subset], w[subset])
 
-    fig.suptitle(rf"$t={t/np.pi:.4f}\pi$ [-]", y=0.975)
+    fig.suptitle(rf"$t={t:.2f}$ [-]", y=0.975)
 
     # Redraw fig using display
     display(fig, target="plot-output", append=False)

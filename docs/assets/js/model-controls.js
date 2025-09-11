@@ -27,8 +27,21 @@ function createSliderRow(config) {
     row.appendChild(output);
 
     // Update output on slider change
+    // input.addEventListener("input", () => {
+    //     output.textContent = formatOutput(input.value, config.units, config.step);
+    // });
+
+    let throttleTimeout;
     input.addEventListener("input", () => {
-        output.textContent = formatOutput(input.value, config.units, config.step);
+        // Throttle the updates
+        clearTimeout(throttleTimeout);
+        throttleTimeout = setTimeout(() => {
+            // Trigger Python update less frequently
+            output.textContent = formatOutput(input.value, config.units, config.step);
+            input.dispatchEvent(new CustomEvent('python-update', {
+                detail: { value: input.value, id: config.id }, bubbles: true
+            }));
+        }, 100); // Only update Python every 100ms
     });
 
     // Apply any additional attributes from config to all elements
@@ -239,9 +252,9 @@ function sliderConfig(label, id, min, max, value, step, className = null, units 
  * Convenience function to apply overrides
  */
 function applyOverrides(configs, overrides) {
-    configs.forEach(ctrl => {
-        if (overrides[ctrl.id]) {
-            Object.assign(ctrl, overrides[ctrl.id]);
+    configs.forEach(config => {
+        if (overrides[config.id]) {
+            Object.assign(config, overrides[config.id]);
         }
     });
 }

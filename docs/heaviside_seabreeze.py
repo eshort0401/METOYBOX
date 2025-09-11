@@ -5,6 +5,8 @@ from scipy.special import expi as sp_expi
 from pyscript import document, display, when
 import js
 
+omega = 2 * np.pi / (24 * 3600)
+
 
 def expi(z, theta_b=np.pi / 2):
     """
@@ -119,6 +121,22 @@ def get_psi_tilde(X, Z, A, B, chi):
     return D * A * (psi_1 + psi_2 + psi_3 + psi_4)
 
 
+def is_dimensional_mode():
+    """Check if dimensional mode is active."""
+    dim_radio = document.getElementById("dimensional-button")
+    return dim_radio.checked if dim_radio else False
+
+
+@when("change", "#dimensional-button, #non-dimensional-button")
+def on_coordinate_change(event):
+    """Handle coordinate system changes"""
+    if is_dimensional_mode():
+        update_dimensional_params(event)
+    else:
+        update_params(event)
+    amend_labels(event)
+
+
 def amend_labels(event):
     """Amend the plot tick labels."""
     global psi_levels
@@ -133,18 +151,15 @@ def amend_labels(event):
 
     quiv_label = r"$10$ [-]"
 
-    checkbox = document.getElementById("dimensional_checkbox")
-    if checkbox.checked:
-        N_omega = float(document.getElementById("N-omega-slider").value)
+    if is_dimensional_mode():
         H = float(document.getElementById("H-slider").value)
         Q_0 = float(document.getElementById("Q0-slider").value)
-        omega = float(document.getElementById("omega-slider").value)
-        x_ticklabels = x_ticklabels * N_omega * H / 1000  # km
+        N = float(document.getElementById("N-slider").value)
+        x_ticklabels = x_ticklabels * (N / omega) * H / 1000  # km
         z_ticklabels = z_ticklabels * H / 1000  # km
         x_ticklabels = [f"{val:.2f}" for val in x_ticklabels]
         z_ticklabels = [f"{val:.2f}" for val in z_ticklabels]
 
-        N = N_omega * omega
         psi_ticklabels = psi_ticklabels * Q_0 / (N * omega * H)
         scaled_psi_max = psi_max * Q_0 / (N * omega * H)
         exponent = int(np.floor(np.log10(scaled_psi_max)))
@@ -181,41 +196,12 @@ def amend_labels(event):
     display(fig, target="plot-output", append=False)
 
 
-@when("change", "#dimensional_checkbox")
-def toggle_dimensional_controls(event):
-    """Enable/disable dimensional controls based on checkbox state"""
-    checkbox = document.getElementById("dimensional_checkbox")
-    dimensional_elements = document.querySelectorAll(".dimensional-param")
-
-    for element in dimensional_elements:
-        if checkbox.checked:
-            element.removeAttribute("disabled")
-            element.classList.remove("disabled")
-        else:
-            element.setAttribute("disabled", "true")
-            element.classList.add("disabled")
-
-    amend_labels(checkbox)
+dimensional_sliders = "#H-slider, #Q0-slider, #N-slider"
 
 
-dimensional-sliders = "#H-slider, #omega-slider, #Q0-slider, #N-omega-slider"
-
-
-@when("input", dimensional-sliders)
+@when("input", dimensional_sliders)
 def update_dimensional_params(event):
     """Update dimensional parameters and recalculate dependent parameters."""
-    # Get slider values
-    H = float(document.getElementById("H-slider").value)
-    omega = float(document.getElementById("omega-slider").value)
-    Q_0 = float(document.getElementById("Q0-slider").value)
-    N_omega = float(document.getElementById("N-omega-slider").value)
-
-    # Update the text output
-    document.getElementById("H-out").innerText = f"{H/1000:.2f} km"
-    document.getElementById("omega-out").innerText = rf"{omega:.2e} s⁻¹"
-    document.getElementById("Q0-out").innerText = rf"{Q_0:.2e} m s⁻³"
-    document.getElementById("N-omega-out").innerText = f"{N_omega:.2f}"
-
     amend_labels(event)
     update_suptitle(event)
 
@@ -233,12 +219,7 @@ def update_params(event):
     alpha_omega = float(document.getElementById("alpha-omega-slider").value)
     N_omega = float(document.getElementById("N-omega-slider").value)
 
-    # Update the text output
-    document.getElementById("f-omega-out").innerText = f"{f_omega:.2f}"
-    document.getElementById("alpha-omega-out").innerText = f"{alpha_omega:.2f}"
-    document.getElementById("N-omega-out").innerText = f"{N_omega:.2f}"
-
-    # Perform the original physics calculations
+    # Perform the calculations
     A, B, chi = calculate_constants(f_omega, alpha_omega, N_omega)
     psi_tilde = get_psi_tilde(X, Z, A, B, chi)
 
@@ -278,11 +259,9 @@ def hide_loading_screen():
 
 
 def update_suptitle(event):
-    """Update the figure suptitle based on dimensional checkbox state."""
+    """Update the figure suptitle based on dimensional state."""
     t = float(document.getElementById("t-slider").value)
-    checkbox = document.getElementById("dimensional_checkbox")
-    if checkbox.checked:
-        omega = float(document.getElementById("omega-slider").value)
+    if is_dimensional_mode():
         t_seconds = t / omega
         hour = int(np.floor(t_seconds / 3600))
         minute = int(np.floor((t_seconds - hour * 3600) / 60))
@@ -290,7 +269,7 @@ def update_suptitle(event):
         time_str = f"{hour:02d}$ hr ${minute:02d}$ min ${second:.1f}$ s"
         fig.suptitle(rf"$t={time_str}", y=0.995)
     else:
-        fig.suptitle(rf"$t={t/np.pi:.4f}\pi$ [-]", y=0.995)
+        fig.suptitle(rf"$t={t:.2f}$ [-]", y=0.995)
 
 
 initialize_figure()

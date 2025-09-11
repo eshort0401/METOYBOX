@@ -28,27 +28,16 @@
 
     <script src="assets/js/model-controls.js"></script>
     <script>
-      const sliders = coreWaveControls();
+      // Override the default slider configuration
+      const overrides = {
+        "t-slider": { value: 2.0 },
+        "f-omega-slider": { value: 0.7 },
+        "alpha-omega-slider": { value: 0.1 },
+      };
+      const configs = coreWaveConfigs(overrides);
+      createModelControls(configs, "controls");
     </script>
-
-    <div class="controls"></div>
-    <label>Scale:</label>
-    <input type="checkbox" id="dimensional_checkbox">
-    <span></span>
-
-    <label class="dimensional-param">\(H\):</label>
-    <input type="range" id="H-slider" min="100" max="5000" value="1000" step="10" class="dimensional-param" disabled>
-    <output id="H-out" class="dimensional-param">1000</output>
-
-    <label class="dimensional-param">\(\omega\):</label>
-    <input type="range" id="omega-slider" min="0.0001" max="0.01" value="0.00174532925" step="0.0001"
-      class="dimensional-param" disabled>
-    <output id="omega-out" class="dimensional-param">0.00174532925</output>
-
-    <label class="dimensional-param">\(Q_0\):</label>
-    <input type="range" id="Q0-slider" min="0.000001" max="0.00005" value=".000012" step="0.000001"
-      class="dimensional-param" disabled>
-    <output id="Q0-out" class="dimensional-param">0.000012</output>
+  </div>
 
   </div>
   </div>
