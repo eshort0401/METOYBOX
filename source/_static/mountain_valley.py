@@ -4,6 +4,24 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from pyscript import document, display, when
 import js
+import asyncio
+
+_update_timeout = None
+
+
+async def debounced_update(update_func, event, delay=50):
+    """Debounce updates to prevent excessive calls"""
+    global _update_timeout
+
+    if _update_timeout:
+        _update_timeout.cancel()
+
+    _update_timeout = asyncio.create_task(asyncio.sleep(delay / 1000))
+    try:
+        await _update_timeout
+        update_func(event)
+    except asyncio.CancelledError:
+        pass
 
 
 class SliderCache:
@@ -97,6 +115,11 @@ def initialize_figure():
 #     "python-update", "#f-omega-slider, #alpha-omega-slider, #N-omega-slider, #M-slider"
 # )
 @when("python-update", "#controls")
+def update_params_debounced(event):
+    """Debounced update to model parameters."""
+    asyncio.create_task(debounced_update(update_params, event, delay=100))
+
+
 def update_params(event):
     """Update the model parameters."""
     global psi_base, u_base, w_base, Q_base, B
