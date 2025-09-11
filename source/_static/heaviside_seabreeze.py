@@ -160,20 +160,18 @@ def amend_labels(event):
         x_ticklabels = [f"{val:.2f}" for val in x_ticklabels]
         z_ticklabels = [f"{val:.2f}" for val in z_ticklabels]
 
-        psi_ticklabels = psi_ticklabels * Q_0 / (N * omega * H)
-        scaled_psi_max = psi_max * Q_0 / (N * omega * H)
-        exponent = int(np.floor(np.log10(scaled_psi_max)))
-
-        psi_ticklabels = [f"{val/(10**exponent):.1f}" for val in psi_ticklabels]
+        psi_ticklabels = psi_ticklabels * Q_0 * H / (N * omega)
+        psi_ticklabels = [f"{val:.1e}" for val in psi_ticklabels]
+        scaled_psi_max = psi_max * Q_0 * H / (N * omega)
 
         x_label = r"$x$ [km]"
         z_label = r"$z$ [km]"
-        psi_label += rf" [$10^{{{exponent}}}$ m$^2$ s$^{{-1}}$]"
+        psi_label += rf" [m$^2$ s$^{{-1}}$]"
 
         u_key = 10 * Q_0 / (N * omega)
         w_key = 10 * Q_0 / (N**2)
 
-        quiv_label = rf"$({u_key:0.1f} u, {w_key:0.1f} w)$ m s$^{{-1}}$"
+        quiv_label = rf"$u:$ ${u_key:0.1f}$ m s$^{{-1}}$"
     else:
         x_ticklabels = [f"{val:.2f}" for val in x_ticklabels]
         z_ticklabels = [f"{val:.2f}" for val in z_ticklabels]

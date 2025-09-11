@@ -1,4 +1,3 @@
-import asyncio
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
@@ -6,21 +5,20 @@ from pyscript import document, display, when
 import js
 
 
-class SliderCache:
-    """Cache for slider elements to avoid repeated DOM searches."""
+class WebCache:
+    """Cache for DOM elements to avoid repeated lookups."""
 
     def __init__(self):
         self.elements = {}
 
     def get(self, element_id):
         if element_id not in self.elements:
-            # Only search once per element
             self.elements[element_id] = document.getElementById(element_id)
         return self.elements[element_id]
 
 
 # Create cache once
-cache = SliderCache()
+cache = WebCache()
 
 
 def initialize_figure():
@@ -46,13 +44,13 @@ def initialize_figure():
     psi_norm = mcolors.BoundaryNorm(psi_levels, ncolors=cmap.N, extend="both")
 
     # Plot psi
-    im_psi = axes[0].imshow(np.zeros_like(Z), **kwargs, norm=psi_norm)
+    im_psi = axes[0].imshow(np.zeros_like(Z), **kwargs, norm=psi_norm, rasterized=True)
     psi_cbar = fig.colorbar(im_psi, ax=axes[0], extend="both")
     psi_cbar.set_label(r"$\psi$ [-]")
     psi_cbar.set_ticks(np.linspace(-psi_max, psi_max, 11))
 
     # Plot Q
-    im_Q = axes[1].imshow(np.zeros_like(Z), **kwargs, norm=Q_norm)
+    im_Q = axes[1].imshow(np.zeros_like(Z), **kwargs, norm=Q_norm, rasterized=True)
     Q_cbar = fig.colorbar(im_Q, ax=axes[1], extend="both")
     Q_cbar.set_label(r"$Q$ [-]")
     Q_cbar.set_ticks(np.linspace(-1, 1, 11))
@@ -63,7 +61,7 @@ def initialize_figure():
     dummy_wind = np.zeros_like(X)
     quiv_args = [X[subset], Z[subset], dummy_wind[subset], dummy_wind[subset]]
     quiv_kwargs = {"color": "k", "scale": 2.5, "width": 0.006, "angles": "xy"}
-    quiv = axes[0].quiver(*quiv_args, **quiv_kwargs, zorder=2)
+    quiv = axes[0].quiver(*quiv_args, **quiv_kwargs, zorder=2, rasterized=True)
     axes[0].quiverkey(
         quiv, 0.80, 1.05, 0.2, r"0.2 [-]", labelpos="E", coordinates="axes"
     )
@@ -89,14 +87,11 @@ def initialize_figure():
     # fig.tight_layout()
     fig.suptitle(r"", y=0.975)
 
-    # --- Display the empty figure template on the page IMMEDIATELY ---
-    display(fig, target="plot-output")
+    # Display the empty figure template on the page immediately
+    display(fig, target="plot-output", append=False)
 
 
-# @when(
-#     "python-update", "#f-omega-slider, #alpha-omega-slider, #N-omega-slider, #M-slider"
-# )
-@when("python-update", "#controls")
+@when("input", "#f-omega-slider, #alpha-omega-slider, #N-omega-slider, #M-slider")
 def update_params(event):
     """Update the model parameters."""
     global psi_base, u_base, w_base, Q_base, B
@@ -106,11 +101,22 @@ def update_params(event):
     N_omega_slider = cache.get("N-omega-slider")
     M_slider = cache.get("M-slider")
 
+    f_omega_out = cache.get("f-omega-out")
+    alpha_omega_out = cache.get("alpha-omega-out")
+    N_omega_out = cache.get("N-omega-out")
+    M_out = cache.get("M-out")
+
     # Get slider values
     f_omega = float(f_omega_slider.value)
     alpha_omega = float(alpha_omega_slider.value)
     N_omega = float(N_omega_slider.value)
     M = float(M_slider.value)
+
+    # Update outputs
+    f_omega_out.textContent = f"{f_omega:.2f}" + f" {f_omega_out.units}"
+    alpha_omega_out.textContent = f"{alpha_omega:.2f}" + f" {alpha_omega_out.units}"
+    N_omega_out.textContent = f"{N_omega:.2f}" + f" {N_omega_out.units}"
+    M_out.textContent = f"{M:.2f}" + f" {M_out.units}"
 
     # Perform the original physics calculations
     Z_sigma = Z - M * X
@@ -136,14 +142,14 @@ def update_params(event):
     update_time(event)
 
 
-@when("python-update", "#t-slider")
+@when("input", "#t-slider")
 def update_time(event):
     # Get slider values
-    t_slider = cache.get("t-slider")
-    M_slider = cache.get("M-slider")
+    t = float(cache.get("t-slider").value)
+    M = float(cache.get("M-slider").value)
 
-    t = float(t_slider.value)
-    M = float(M_slider.value)
+    t_out = cache.get("t-out")
+    t_out.innerText = f"{t:.2f}" + f" {t_out.units}"
 
     cos_t_B = np.cos(t - 2 * np.angle(B))
     psi = psi_base * cos_t_B
