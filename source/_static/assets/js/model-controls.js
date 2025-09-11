@@ -248,7 +248,7 @@ const Omega = 2 * Math.PI / (24 * 3600); // diurnal frequency in radians per sec
 // const nonDimStep = 1e-2;
 // const dimStep = nonDimStep * Omega;
 
-const stepRatio = 1e-2; // Step as a ratio of the quantity's scale
+const stepRatio = 5e-3; // Step as a ratio of the quantity's scale
 
 const tDimMax = 4 * Math.PI / Omega; // 48 hours in seconds
 const tDimStep = tDimMax * stepRatio;
