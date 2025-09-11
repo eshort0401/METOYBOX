@@ -23,18 +23,31 @@ function createSliderRow(config) {
     // Output
     const output = document.createElement("output");
     output.id = config.id.replace("-slider", "-out");
-    output.textContent = config.value;
+    output.textContent = formatOutput(config.value, config.units, config.step);
     row.appendChild(output);
 
     // Update output on slider change
     input.addEventListener("input", () => {
-        output.textContent = input.value;
+        output.textContent = formatOutput(input.value, config.units, config.step);
     });
 
     // Apply any additional attributes from config to all elements
     applyConfigAttributes(config, [label, input, output], ["className"]);
 
     return row;
+}
+
+/**
+ * Format slider outputs neatly
+ */
+function formatOutput(value, units, step) {
+    const rounded = (Math.round(value / step) * step);
+    if (units) {
+        return `${rounded.toExponential(1)} ${units}`;
+    }
+    else {
+        return `${rounded.toPrecision(2)}`;
+    }
 }
 
 /**
@@ -97,7 +110,7 @@ function applyConfigAttributes(config, elements, attributes) {
 /**
  * Create a text input row
  */
-function createTextInputControl(config) {
+function createTextInputRow(config) {
     const row = document.createElement("div");
     row.className = "control-row";
 
@@ -141,7 +154,7 @@ function radioConfig(label, id, value, checked, className = null) {
 /**
  * Convenience function to create coordinate options radio button group
  */
-function createCoordinateControl() {
+function coordinatesConfig() {
     let args = ["Non-dimensional", "non-dimensional-button", "non-dimensional", true];
     const nonDimButton = radioConfig(...args);
     args = ["Dimensional", "dimensional-button", "dimensional", false];
@@ -157,16 +170,16 @@ function createCoordinateControl() {
 /**
  * Create stacked model control rows based on config
  */
-function createModelControls(controls, containerId = "controls") {
+function createModelControls(configs, containerId = "controls") {
     const container = document.getElementById(containerId);
 
     // Create radio buttons first
-    const coordControl = createCoordinateControl();
+    const coordControl = coordinatesConfig();
     const coordElement = createRadioGroupRow(coordControl);
     container.appendChild(coordElement);
 
     // Create ALL sliders (both dimensional and non-dimensional) 
-    controls.forEach(config => {
+    configs.forEach(config => {
         const element = createSliderRow(config);
         container.appendChild(element);
     });
@@ -208,12 +221,16 @@ function createModelControls(controls, containerId = "controls") {
  * @param {number} value - Initial slider value
  * @param {number} step - Slider step increment
  * @param {string|null} className - Optional CSS class name for styling
+ * @param {string|null} units - Optional units string for display
  * @returns {Object} Slider configuration object
 */
-function sliderConfig(label, id, min, max, value, step, className = null) {
+function sliderConfig(label, id, min, max, value, step, className = null, units = null) {
     const config = { type: "slider", label, id, min, max, value, step };
-    if (className) {
+    if (className !== null) {
         config.className = className;
+    }
+    if (units !== null) {
+        config.units = units;
     }
     return config;
 }
@@ -221,49 +238,86 @@ function sliderConfig(label, id, min, max, value, step, className = null) {
 /**
  * Convenience function to apply overrides
  */
-function applyOverrides(controls, overrides) {
-    controls.forEach(ctrl => {
+function applyOverrides(configs, overrides) {
+    configs.forEach(ctrl => {
         if (overrides[ctrl.id]) {
             Object.assign(ctrl, overrides[ctrl.id]);
         }
     });
 }
 
-/**
- * Convenience function for core non-dimensional controls for gravity wave models
- */
-function coreWaveControlsNonDim(overrides = {}) {
-    const className = "non-dimensional";
-    const tArgs = ["\\(t:\\)", "t-slider", 0, 12.56637, 0.0, 0.01, className];
-    const fArgs = ["\\(f / \\omega :\\)", "f-omega-slider", 0, 2, 0.51, 0.01, className];
-    const alphaArgs = ["\\(\\alpha / \\omega :\\)", "alpha-omega-slider", 0.01, 1, 0.2, 0.01, className];
-    const NArgs = ["\\(N / \\omega :\\)", "N-omega-slider", 0.1, 150, 137.5, 0.1, className];
-    const controls = [sliderConfig(...tArgs), sliderConfig(...fArgs)];
-    controls.push(sliderConfig(...alphaArgs), sliderConfig(...NArgs));
-    applyOverrides(controls, overrides);
-    return controls;
-}
+// Setup variables and steps to help ensure dimensional and non-dimensional sliders match up
+const Omega = 2 * Math.PI / (24 * 3600); // diurnal frequency in radians per second
+const nonDimStep = 1e-2;
+const dimStep = nonDimStep * Omega;
 
+const tDimStep = nonDimStep / Omega;
+const tDimMax = 4 * Math.PI / Omega; // 48 hours in seconds
+
+const fMax = 2 * Omega;
+const fValue = 0.5 * Omega;
+
+const alphaMin = 1e-2 * Omega;
+const alphaMax = 2 * Omega;
+const alphaValue = 0.2 * Omega;
+
+const NMin = 1e-2 * Omega;
+const NMax = 0.1 / Omega * Omega;
+const NValue = 1e-2 / Omega * Omega;
 
 /**
- * Convenience function for core dimensional controls for gravity wave models
+ * Convenience function for core dimensional coordinate control configs for gravity wave models
  */
-function coreWaveControlsDim(overrides = {}) {
+function coreWaveConfigsDim(overrides = {}) {
     const className = "dimensional";
-    const tArgs = ["\\(t:\\)", "t-dim-slider", 0, 12.56637, 0.0, 0.01, className];
-    const fArgs = ["\\(f:\\)", "f-slider", 0, 2, 0.51, 0.01, className];
-    const alphaArgs = ["\\(\\alpha:\\)", "alpha-slider", 0.01, 1, 0.2, 0.01, className];
-    const NArgs = ["\\(N:\\)", "N-slider", 0.1, 150, 137.5, 0.1, className];
-    const omegaArgs = ["\\(\\omega:\\)", "omega-slider", 0.0001, 0.01, 0.00174, 0.0001, className];
-    const controls = [sliderConfig(...tArgs), sliderConfig(...fArgs), sliderConfig(...alphaArgs)];
-    controls.push(sliderConfig(...NArgs), sliderConfig(...omegaArgs));
-    applyOverrides(controls, overrides);
-    return controls;
+    const Omega = 2 * Math.PI / (24 * 3600); // diurnal freq in radians per second
+    const tArgs = ["\\(t:\\)", "t-dim-slider", 0, tDimMax, 0.0, tDimStep, className, "s"];
+    const fArgs = ["\\(f:\\)", "f-slider", 0, fMax, .5 * Omega, dimStep, className, "s⁻¹"];
+    const alphaArgs = ["\\(\\alpha:\\)", "alpha-slider", alphaMin, alphaMax, alphaValue, dimStep, className, "s⁻¹"];
+    const NArgs = ["\\(N:\\)", "N-slider", NMin, NMax, NValue, dimStep, className, "s⁻¹"];
+    // Let's leave omega out of the core controls for now, as most of the time omega = Omega
+    // const omegaArgs = ["\\(\\omega:\\)", "omega-slider", 0.5 * Omega, 5 * Omega, Omega, 1e-2 * Omega, className];
+    const HArgs = ["\\(H:\\)", "H-slider", 100, 5e3, 1e3, 100, className, "m"];
+    const Q0Args = ["\\(Q_0:\\)", "Q0-slider", 1e-6, 10e-5, 1.2e-5, 1e-6, className, "m s⁻³"];
+    const configs = [sliderConfig(...tArgs), sliderConfig(...fArgs), sliderConfig(...alphaArgs)];
+    configs.push(sliderConfig(...NArgs), sliderConfig(...HArgs));
+    configs.push(sliderConfig(...Q0Args));
+    applyOverrides(configs, overrides);
+    return configs;
+}
+
+
+const tNonDimMax = tDimMax * Omega; // Non-dimensional max time
+const NOmegaMin = NMin / Omega;
+const NOmegaMax = NMax / Omega;
+const NOmegaValue = NValue / Omega;
+const fOmMax = fMax / Omega;
+const fOmValue = fValue / Omega;
+const alOmMin = alphaMin / Omega;
+const alOmMax = alphaMax / Omega;
+const alOmValue = alphaValue / Omega;
+
+
+/**
+ * Convenience function for core non-dimensional config for gravity wave models
+ */
+function coreWaveConfigsNonDim(overrides = {}) {
+    const className = "non-dimensional";
+    const alOmLabel = "\\(\\alpha / \\omega :\\)";
+    const NOmegaLabel = "\\(N / \\omega :\\)";
+    const tArgs = ["\\(t:\\)", "t-slider", 0, tNonDimMax, 0, nonDimStep, className];
+    const fArgs = ["\\(f / \\omega :\\)", "f-omega-slider", 0, fOmMax, fOmValue, nonDimStep, className];
+    const alphaArgs = [alOmLabel, "alpha-omega-slider", alOmMin, alOmMax, alOmValue, nonDimStep, className];
+    const NArgs = [NOmegaLabel, "N-omega-slider", NOmegaMin, NOmegaMax, NOmegaValue, nonDimStep, className];
+    const configs = [sliderConfig(...tArgs), sliderConfig(...fArgs)];
+    configs.push(sliderConfig(...alphaArgs), sliderConfig(...NArgs));
+    applyOverrides(configs, overrides);
+    return configs;
 }
 
 /**
- * Main function to create all wave controls with coordinate toggle
+ * Main function to create all wave config with coordinate toggle
  */
-function coreWaveControls(overrides = {}) {
-    return [...coreWaveControlsNonDim(overrides), ...coreWaveControlsDim(overrides)];
+function coreWaveConfigs(overrides = {}) {
+    return [...coreWaveConfigsNonDim(overrides), ...coreWaveConfigsDim(overrides)];
 }

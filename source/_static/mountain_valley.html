@@ -17,7 +17,6 @@
 </head>
 
 <body>
-
   <div id="loading-screen">
     <div class="spinner"></div>
     <p>Loading...</p>
@@ -29,12 +28,12 @@
     <div id="controls"></div>
     <script src="assets/js/model-controls.js"></script>
     <script>
-      const controls = coreWaveControls();
+      const configs = coreWaveConfigs();
       let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, 0.01, "non-dimensional"];
-      controls.push(sliderConfig(...args));
+      configs.push(sliderConfig(...args));
       args = ["\\(M:\\)", "M-slider-dim", 0, .1, 0.02, 0.001, "dimensional"];
-      controls.push(sliderConfig(...args));
-      createModelControls(controls, "controls");
+      configs.push(sliderConfig(...args));
+      createModelControls(configs, "controls");
     </script>
   </div>
   <py-script src="mountain_valley.py" config="assets/pyscript.toml"></py-script>
