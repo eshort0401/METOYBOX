@@ -41,12 +41,12 @@ function createSliderRow(config) {
  * Format slider outputs neatly
  */
 function formatOutput(value, units, step) {
-    const rounded = (Math.round(value / step) * step);
     if (units) {
-        return `${rounded.toExponential(1)} ${units}`;
+        return `${parseFloat(value).toExponential(1)} ${units}`;
     }
     else {
-        return `${rounded.toPrecision(2)}`;
+        const decimals = Math.max(0, -Math.floor(Math.log10(step)));
+        return `${parseFloat(value).toFixed(decimals)}`;
     }
 }
 
@@ -248,22 +248,28 @@ function applyOverrides(configs, overrides) {
 
 // Setup variables and steps to help ensure dimensional and non-dimensional sliders match up
 const Omega = 2 * Math.PI / (24 * 3600); // diurnal frequency in radians per second
-const nonDimStep = 1e-2;
-const dimStep = nonDimStep * Omega;
 
-const tDimStep = nonDimStep / Omega;
+// const nonDimStep = 1e-2;
+// const dimStep = nonDimStep * Omega;
+
+const stepRatio = 1e-2; // Step as a ratio of the quantity's scale
+
 const tDimMax = 4 * Math.PI / Omega; // 48 hours in seconds
+const tDimStep = tDimMax * stepRatio;
 
 const fMax = 2 * Omega;
 const fValue = 0.5 * Omega;
+const fDimStep = fMax * stepRatio;
 
 const alphaMin = 1e-2 * Omega;
 const alphaMax = 2 * Omega;
 const alphaValue = 0.2 * Omega;
+const alphaDimStep = (alphaMax - alphaMin) * stepRatio;
 
 const NMin = 1e-2 * Omega;
 const NMax = 0.1 / Omega * Omega;
 const NValue = 1e-2 / Omega * Omega;
+const NDimStep = (NMax - NMin) * stepRatio;
 
 /**
  * Convenience function for core dimensional coordinate control configs for gravity wave models
@@ -272,9 +278,9 @@ function coreWaveConfigsDim(overrides = {}) {
     const className = "dimensional";
     const Omega = 2 * Math.PI / (24 * 3600); // diurnal freq in radians per second
     const tArgs = ["\\(t:\\)", "t-dim-slider", 0, tDimMax, 0.0, tDimStep, className, "s"];
-    const fArgs = ["\\(f:\\)", "f-slider", 0, fMax, .5 * Omega, dimStep, className, "s⁻¹"];
-    const alphaArgs = ["\\(\\alpha:\\)", "alpha-slider", alphaMin, alphaMax, alphaValue, dimStep, className, "s⁻¹"];
-    const NArgs = ["\\(N:\\)", "N-slider", NMin, NMax, NValue, dimStep, className, "s⁻¹"];
+    const fArgs = ["\\(f:\\)", "f-slider", 0, fMax, .5 * Omega, fDimStep, className, "s⁻¹"];
+    const alphaArgs = ["\\(\\alpha:\\)", "alpha-slider", alphaMin, alphaMax, alphaValue, alphaDimStep, className, "s⁻¹"];
+    const NArgs = ["\\(N:\\)", "N-slider", NMin, NMax, NValue, NDimStep, className, "s⁻¹"];
     // Let's leave omega out of the core controls for now, as most of the time omega = Omega
     // const omegaArgs = ["\\(\\omega:\\)", "omega-slider", 0.5 * Omega, 5 * Omega, Omega, 1e-2 * Omega, className];
     const HArgs = ["\\(H:\\)", "H-slider", 100, 5e3, 1e3, 100, className, "m"];
@@ -288,14 +294,18 @@ function coreWaveConfigsDim(overrides = {}) {
 
 
 const tNonDimMax = tDimMax * Omega; // Non-dimensional max time
+const tNonDimStep = tNonDimMax * stepRatio
 const NOmegaMin = NMin / Omega;
 const NOmegaMax = NMax / Omega;
 const NOmegaValue = NValue / Omega;
+const NOmNonDimStep = (NOmegaMax - NOmegaMin) * stepRatio;
 const fOmMax = fMax / Omega;
 const fOmValue = fValue / Omega;
+const fOmNonDimStep = fOmMax * stepRatio;
 const alOmMin = alphaMin / Omega;
 const alOmMax = alphaMax / Omega;
 const alOmValue = alphaValue / Omega;
+const alOmNonDimStep = (alOmMax - alOmMin) * stepRatio;
 
 
 /**
@@ -305,10 +315,10 @@ function coreWaveConfigsNonDim(overrides = {}) {
     const className = "non-dimensional";
     const alOmLabel = "\\(\\alpha / \\omega :\\)";
     const NOmegaLabel = "\\(N / \\omega :\\)";
-    const tArgs = ["\\(t:\\)", "t-slider", 0, tNonDimMax, 0, nonDimStep, className];
-    const fArgs = ["\\(f / \\omega :\\)", "f-omega-slider", 0, fOmMax, fOmValue, nonDimStep, className];
-    const alphaArgs = [alOmLabel, "alpha-omega-slider", alOmMin, alOmMax, alOmValue, nonDimStep, className];
-    const NArgs = [NOmegaLabel, "N-omega-slider", NOmegaMin, NOmegaMax, NOmegaValue, nonDimStep, className];
+    const tArgs = ["\\(t:\\)", "t-slider", 0, tNonDimMax, 0, tNonDimStep, className];
+    const fArgs = ["\\(f / \\omega :\\)", "f-omega-slider", 0, fOmMax, fOmValue, fOmNonDimStep, className];
+    const alphaArgs = [alOmLabel, "alpha-omega-slider", alOmMin, alOmMax, alOmValue, alOmNonDimStep, className];
+    const NArgs = [NOmegaLabel, "N-omega-slider", NOmegaMin, NOmegaMax, NOmegaValue, NOmNonDimStep, className];
     const configs = [sliderConfig(...tArgs), sliderConfig(...fArgs)];
     configs.push(sliderConfig(...alphaArgs), sliderConfig(...NArgs));
     applyOverrides(configs, overrides);

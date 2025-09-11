@@ -20,7 +20,7 @@ input[type="range"] {
 
 .control-row output {
     margin-left: .5em;
-    min-width: 3em;
+    min-width: 5em;
     text-align: left;
     font-size: small;
     white-space: nowrap;
