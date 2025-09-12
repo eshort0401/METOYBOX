@@ -1,1 +1,13 @@
 kitchen_sink
+*.pyc
+__pycache__
+.pytest_cache
+*.ipynb_checkpoints
+*.egg-info
+log
+.flake8
+.vscode
+.coverage*
+htmlcov
+.pre-commit-config.yaml
+conda_init_out.out
