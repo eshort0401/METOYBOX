@@ -36,13 +36,53 @@ def is_dimensional_mode():
 def on_coordinate_change(event):
     """Handle coordinate system changes"""
     if is_dimensional_mode():
+        # Update the dimensional parameters based on the current values of the
+        # non-dimensional parameters
+        f = float(cache.get("f-omega-slider").value) * omega
+        alpha = float(cache.get("alpha-omega-slider").value) * omega
+        N = float(cache.get("N-omega-slider").value) * omega
+        M = float(cache.get("M-slider").value)
+        t = float(cache.get("t-slider").value)
+        M_dim = M * omega / N
+        t_dim = t / omega
+        cache.get("t-dim-slider").value = t_dim
+        cache.get("f-slider").value = f
+        cache.get("alpha-slider").value = alpha
+        cache.get("N-slider").value = N
+        cache.get("M-dim-slider").value = M_dim
+        update_outputs(["f", "alpha", "N", "M-dim", "t-dim"])
         update_dimensional_params(event)
     else:
-        update_params(event)
+        f_omega = float(cache.get("f-slider").value) / omega
+        alpha_omega = float(cache.get("alpha-slider").value) / omega
+        N_omega = float(cache.get("N-slider").value) / omega
+        M_dim = float(cache.get("M-dim-slider").value)
+        t_dim = float(cache.get("t-dim-slider").value)
+        t = t_dim * omega
+        M = M_dim * N_omega
+        cache.get("t-slider").value = t
+        cache.get("f-omega-slider").value = f_omega
+        cache.get("alpha-omega-slider").value = alpha_omega
+        cache.get("N-omega-slider").value = N_omega
+        cache.get("M-slider").value = M
+        update_outputs(["f-omega", "alpha-omega", "N-omega", "M", "t-dim"])
+    update_params(event)
     amend_labels(event)
+    update_time(event)
 
 
 dimensional_sliders = "#H-slider, #Q0-slider, #N-slider"
+
+
+def update_outputs(names, control_suffix="-slider", output_suffix="-out"):
+    """Update the output text for a given slider."""
+    for name in names:
+        value = float(cache.get(f"{name}{control_suffix}").value)
+        out = cache.get(f"{name}{output_suffix}")
+        if out.units:
+            out.textContent = f"{value:.1e}" + f" {out.units}"
+        else:
+            out.textContent = f"{value:.2f}"
 
 
 @when("input", dimensional_sliders)
@@ -62,7 +102,6 @@ def initialize_figure():
     X, Z = np.meshgrid(x, z)
 
     fig, ax = plt.subplots(1, 1, figsize=(5, 4))
-    fig.subplots_adjust(wspace=0.3)
 
     # Create placeholder artists.
     kwargs = {"cmap": "RdBu_r", "origin": "lower", "aspect": "auto", "zorder": 0}
@@ -228,21 +267,6 @@ def get_parameters():
     return f_omega, alpha_omega, N_omega, M
 
 
-def update_outputs():
-    """Update the output text elements with current parameter values."""
-
-    if is_dimensional_mode():
-        for name in ["f", "alpha", "N", "M-dim"]:
-            value = float(cache.get(f"{name}-slider").value)
-            out = cache.get(f"{name}-out")
-            out.textContent = f"{value:.1e}" + f" {out.units}"
-    else:
-        for name in ["f-omega", "alpha-omega", "N-omega", "M"]:
-            value = float(cache.get(f"{name}-slider").value)
-            out = cache.get(f"{name}-out")
-            out.textContent = f"{value:.2f}" + f" {out.units}"
-
-
 parameter_sliders = "#f-omega-slider, #alpha-omega-slider, #N-omega-slider, #M-slider, "
 parameter_sliders += "#f-slider, #alpha-slider, #N-slider, #M-dim-slider"
 
@@ -252,7 +276,13 @@ def update_params(event):
     """Update the model parameters."""
     global psi_base, u_base, w_base, Q_base, B
 
-    update_outputs()
+    # Just update all the relevant outputs, as sometimes event is None etc.
+    if is_dimensional_mode():
+        names = ["f", "alpha", "N", "M-dim"]
+    else:
+        names = ["f-omega", "alpha-omega", "N-omega", "M"]
+    update_outputs(names)
+
     f_omega, alpha_omega, N_omega, M = get_parameters()
 
     Z_sigma = Z - M * X
@@ -288,7 +318,7 @@ def update_time(event):
         t = t_dim * omega
         M = M_dim * N / omega
         t_dim_out = cache.get("t-dim-out")
-        t_dim_out.innerText = f"{t_dim:.2f}" + f" {t_dim_out.units}"
+        t_dim_out.innerText = f"{t_dim:.1e}" + f" {t_dim_out.units}"
     else:
         t = float(cache.get("t-slider").value)
         M = float(cache.get("M-slider").value)
