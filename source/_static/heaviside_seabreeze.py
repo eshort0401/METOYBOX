@@ -60,7 +60,9 @@ def initialize_figure():
     quiv_kwargs = {"color": "k", "scale": 100, "width": 0.006, "angles": "xy"}
     quiv = ax.quiver(*quiv_args, **quiv_kwargs, zorder=2)
     kwargs = {"labelpos": "E", "coordinates": "axes"}
-    quiv_key = ax.quiverkey(quiv, 0.95, 1.05, 10, r"10 [-]", **kwargs)
+    quiv_key_mag = 0.2
+    args = [quiv, 0.95, 1.05, quiv_key_mag, rf"{quiv_key_mag} [-]"]
+    quiv_key = ax.quiverkey(*args, **kwargs)
 
     ax.set_ylim(0, 8)
     ax.set_xlim(-4, 4)
@@ -162,7 +164,6 @@ def amend_labels(event):
 
         psi_ticklabels = psi_ticklabels * Q_0 * H / (N * omega)
         psi_ticklabels = [f"{val:.1e}" for val in psi_ticklabels]
-        scaled_psi_max = psi_max * Q_0 * H / (N * omega)
 
         x_label = r"$x$ [km]"
         z_label = r"$z$ [km]"

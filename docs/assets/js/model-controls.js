@@ -4,7 +4,10 @@
 function createSliderRow(config) {
     const row = document.createElement("div");
     row.classList.add("control-row");
-    row.classList.add(config.className);     // Add "dimensional" or "non-dimensional"
+    // row.classList.add(config.className);
+    if (config.className) {
+        row.classList.add(config.className);
+    }
 
     // Label
     const label = document.createElement("label");
@@ -24,11 +27,8 @@ function createSliderRow(config) {
     const output = document.createElement("output");
     output.id = config.id.replace("-slider", "-out");
     output.textContent = formatOutput(config.value, config.units, config.step);
-    output.units = config.units || "tt";
+    output.units = config.units || "";
     row.appendChild(output);
-
-    // Apply any additional attributes from config to all elements
-    applyConfigAttributes(config, [label, input, output], ["className"]);
 
     return row;
 }
@@ -248,7 +248,7 @@ const Omega = 2 * Math.PI / (24 * 3600); // diurnal frequency in radians per sec
 // const nonDimStep = 1e-2;
 // const dimStep = nonDimStep * Omega;
 
-const stepRatio = 1e-2; // Step as a ratio of the quantity's scale
+const stepRatio = 5e-3; // Step as a ratio of the quantity's scale
 
 const tDimMax = 4 * Math.PI / Omega; // 48 hours in seconds
 const tDimStep = tDimMax * stepRatio;
@@ -262,7 +262,7 @@ const alphaMax = 2 * Omega;
 const alphaValue = 0.2 * Omega;
 const alphaDimStep = (alphaMax - alphaMin) * stepRatio;
 
-const NMin = 1e-2 * Omega;
+const NMin = 1e-1 * Omega;
 const NMax = 0.1 / Omega * Omega;
 const NValue = 1e-2 / Omega * Omega;
 const NDimStep = (NMax - NMin) * stepRatio;

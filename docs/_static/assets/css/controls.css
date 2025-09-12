@@ -12,7 +12,7 @@ input[type="range"] {
 .control-row label {
     margin-right: .5em;
     min-width: 3em;
-    text-align: right;
+    text-align: right !important;
     font-size: small;
     white-space: nowrap;
     line-height: 1.4;
@@ -20,7 +20,7 @@ input[type="range"] {
 
 .control-row output {
     margin-left: .5em;
-    min-width: 5em;
+    min-width: 6em;
     text-align: left;
     font-size: small;
     white-space: nowrap;

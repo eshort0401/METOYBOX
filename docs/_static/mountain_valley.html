@@ -29,9 +29,13 @@
     <script src="assets/js/model-controls.js"></script>
     <script>
       const configs = coreWaveConfigs();
-      let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, 0.01, "non-dimensional"];
+      const MStep = 3 * stepRatio
+      const MDimMax = 1e-2
+      const MDimStep = MDimMax * stepRatio
+      let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
       configs.push(sliderConfig(...args));
-      args = ["\\(M:\\)", "M-slider-dim", 0, .1, 0.02, 0.001, "dimensional"];
+      args = ["\\(M:\\)", "M-dim-slider", 0, MDimMax, Omega * 1e2, MDimStep]
+      args.push("dimensional", "m m⁻¹");
       configs.push(sliderConfig(...args));
       createModelControls(configs, "controls");
     </script>
