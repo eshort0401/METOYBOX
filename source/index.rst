@@ -12,3 +12,7 @@ A collection of simple toy models of atmospheric phenomena. This site is evolvin
    point_forcing_over_slope.rst
    heaviside_seabreeze.rst
 
+.. .. raw:: html
+
+..    <iframe src="_static/test.html" width="100%" height="700"></iframe>
+

@@ -114,7 +114,7 @@ def get_psi_u_w_tilde(X, Z, z_f, A, B, sigma, chi):
     return psi_tilde, u_tilde, w_tilde
 
 
-def amend_labels(event):
+def update_labels(event):
     """Amend the plot tick labels."""
     global psi_levels
 
@@ -191,13 +191,13 @@ def toggle_dimensional_controls(event):
             element.setAttribute("disabled", "true")
             element.classList.add("disabled")
 
-    amend_labels(checkbox)
+    update_labels(checkbox)
 
 
-dimensional-sliders = "#H-slider, #omega-slider, #Q0-slider, #N-omega-slider"
+dimensional_sliders = "#H-slider, #omega-slider, #Q0-slider, #N-omega-slider"
 
 
-@when("input", dimensional-sliders)
+@when("input", dimensional_sliders)
 def update_dimensional_params(event):
     """Update dimensional parameters and recalculate dependent parameters."""
     # Get slider values
@@ -212,7 +212,7 @@ def update_dimensional_params(event):
     document.getElementById("Q0-out").innerText = rf"{Q_0:.2e} m s⁻³"
     document.getElementById("N-omega-out").innerText = f"{N_omega:.2f}"
 
-    amend_labels(event)
+    update_labels(event)
     update_suptitle(event)
 
 

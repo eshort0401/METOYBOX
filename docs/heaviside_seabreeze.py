@@ -136,10 +136,10 @@ def on_coordinate_change(event):
         update_dimensional_params(event)
     else:
         update_params(event)
-    amend_labels(event)
+    update_labels(event)
 
 
-def amend_labels(event):
+def update_labels(event):
     """Amend the plot tick labels."""
     global psi_levels
 
@@ -201,7 +201,7 @@ dimensional_sliders = "#H-slider, #Q0-slider, #N-slider"
 @when("input", dimensional_sliders)
 def update_dimensional_params(event):
     """Update dimensional parameters and recalculate dependent parameters."""
-    amend_labels(event)
+    update_labels(event)
     update_suptitle(event)
 
 

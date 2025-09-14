@@ -1,0 +1,127 @@
+"""Extensions of the BaseWaveModel to flows over sloping topography."""
+
+import sys
+from pathlib import Path
+
+metoybox_path = Path(__file__).parent.parent
+
+sys.path.append(str(metoybox_path))
+
+from . import core
+from calculate import mountain_valley
+import matplotlib.colors as mcolors
+
+
+# Extend the default model variables to include the slope parameter M
+default_dimensional = core.default_dimensional.copy()
+default_dimensional.update({"M_dim": core.Omega * 1e2})
+default_non_dimensional = core.default_non_dimensional.copy()
+default_non_dimensional.update({"M": 0.2})
+
+
+def get_scalings(
+    coordinates: core.CoordinateOptions,
+    dimensional_variables: dict[str, float],
+    non_dimensional_variables: dict[str, float],
+) -> dict[str, float]:
+    """
+    Get the dictionary of scalings to recover the dimensional variables from the
+    non-dimensional variables. Multiply for non-dimensional to dimensional; divide for
+    dimensional to non-dimensional.
+    """
+    dim_var = dimensional_variables
+    non_dim_var = non_dimensional_variables
+    scalings = core.get_default_scalings(coordinates, dim_var, non_dim_var)
+    # Add the slope scaling
+    scalings["M"] = dim_var["omega"] / dim_var["N"]
+    return scalings
+
+
+def match_non_dimensional(
+    dimensional_variables: dict[str, float],
+    non_dimensional_variables: dict[str, float],
+) -> dict[str, float]:
+    """
+    Ensure the variables of the dimensional coordinate system are consistent with the
+    non-dimensional coordinate system. Typically this will be called when we change
+    coordinates.
+    """
+    dim_var = dimensional_variables
+    non_dim_var = non_dimensional_variables
+    matched_non_dim_var = core.match_default_non_dimensional(dim_var, non_dim_var)
+    # Add the slope matching
+    matched_non_dim_var["M"] = dim_var["M_dim"] * dim_var["N"] / dim_var["omega"]
+    return matched_non_dim_var
+
+
+def match_dimensional(
+    dimensional_variables: dict[str, float],
+    non_dimensional_variables: dict[str, float],
+) -> dict[str, float]:
+    """
+    Ensure the variables of the non-dimensional coordinate system are consistent with
+    the dimensional coordinate system. Typically this will be called when we change
+    variables.
+    """
+    dim_var = dimensional_variables
+    non_dim_var = non_dimensional_variables
+    matched_dim_var = core.match_default_dimensional(dim_var, non_dim_var)
+    # Add the slope matching
+    matched_dim_var["M_dim"] = non_dim_var["M"] * dim_var["omega"] / dim_var["N"]
+    return matched_dim_var
+
+
+class BaseSlopedModel(core.BaseWaveModel):
+    """
+    A linear theory model for the mountain-valley breeze or low-level jet type flows.
+    """
+
+    def __init__(self, *args, **kwargs):
+        """See the base class for input documentation."""
+        kwargs.setdefault("get_scalings", get_scalings)
+        kwargs.setdefault("match_non_dimensional", match_non_dimensional)
+        kwargs.setdefault("match_dimensional", match_dimensional)
+        kwargs.setdefault("dimensional_variables", default_dimensional)
+        kwargs.setdefault("non_dimensional_variables", default_non_dimensional)
+        super().__init__(*args, **kwargs)
+        self.plot = None  # This will store the plot line for the slope.
+
+    def initialize_figure(self, *args, **kwargs):
+        """
+        See the base class for input documentation.
+        """
+        super().initialize_figure(*args, **kwargs)
+
+        # Initialize the slope line
+        dark_brown = tuple([c * 0.5 for c in mcolors.to_rgb("tab:brown")])
+        M = self.non_dimensional_variables["M"]
+        self.plot = self.ax.plot(self.x, self.x * M, color=dark_brown, zorder=1)[0]
+        # Set the ax face color to brown so it looks like ground when the imshow is nan
+        self.ax.set_facecolor("tab:brown")
+        self.active_imshow_field = "psi"
+        self.active_quiver_field = "velocity"
+
+
+class MountainValleyModel(BaseSlopedModel):
+    """
+    A linear theory model for the mountain-valley breeze or low-level jet type flows.
+    """
+
+    def update_fields(self):
+        """Update the fields for the mountain-valley model."""
+        names = self.get_active_fields()
+        new_fields = mountain_valley.calculate_fields_spatial(
+            self.X,
+            self.Z,
+            self.non_dimensional_variables["M"],
+            self.non_dimensional_variables["f_omega"],
+            self.non_dimensional_variables["alpha_omega"],
+            self.non_dimensional_variables["N_omega"],
+            fields=names,
+        )
+        name = self.active_imshow_field
+        self.fields[name].field = new_fields[name]
+        name = self.active_quiver_field
+        quiv_names = list(self.fields[name].fields.keys())
+        self.fields[name].fields[quiv_names[0]].field = new_fields[quiv_names[0]]
+        self.fields[name].fields[quiv_names[1]].field = new_fields[quiv_names[1]]
