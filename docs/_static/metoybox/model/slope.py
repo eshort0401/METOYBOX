@@ -2,13 +2,10 @@
 
 import sys
 from pathlib import Path
+import numpy as np
 
-metoybox_path = Path(__file__).parent.parent
-
-sys.path.append(str(metoybox_path))
-
-from . import core
-from calculate import mountain_valley
+from metoybox.model import core
+from metoybox.calculate import mountain_valley
 import matplotlib.colors as mcolors
 
 
@@ -48,10 +45,10 @@ def match_non_dimensional(
     """
     dim_var = dimensional_variables
     non_dim_var = non_dimensional_variables
-    matched_non_dim_var = core.match_default_non_dimensional(dim_var, non_dim_var)
+    matched_dim_var = core.default_match_non_dimensional(dim_var, non_dim_var)
     # Add the slope matching
-    matched_non_dim_var["M"] = dim_var["M_dim"] * dim_var["N"] / dim_var["omega"]
-    return matched_non_dim_var
+    matched_dim_var["M_dim"] = non_dim_var["M"] * dim_var["omega"] / dim_var["N"]
+    return matched_dim_var
 
 
 def match_dimensional(
@@ -65,10 +62,10 @@ def match_dimensional(
     """
     dim_var = dimensional_variables
     non_dim_var = non_dimensional_variables
-    matched_dim_var = core.match_default_dimensional(dim_var, non_dim_var)
+    matched_non_dim_var = core.default_match_dimensional(dim_var, non_dim_var)
     # Add the slope matching
-    matched_dim_var["M_dim"] = non_dim_var["M"] * dim_var["omega"] / dim_var["N"]
-    return matched_dim_var
+    matched_non_dim_var["M"] = dim_var["M_dim"] * dim_var["N"] / dim_var["omega"]
+    return matched_non_dim_var
 
 
 class BaseSlopedModel(core.BaseWaveModel):
@@ -101,15 +98,21 @@ class BaseSlopedModel(core.BaseWaveModel):
         self.active_imshow_field = "psi"
         self.active_quiver_field = "velocity"
 
+    def update_figure_data(self):
+        """Update the extra slope line element for sloped models."""
+        super().update_figure_data()
+        self.plot.set_ydata(self.x * self.non_dimensional_variables["M"])
+
 
 class MountainValleyModel(BaseSlopedModel):
     """
     A linear theory model for the mountain-valley breeze or low-level jet type flows.
     """
 
-    def update_fields(self):
-        """Update the fields for the mountain-valley model."""
-        names = self.get_active_fields()
+    def calculate_fields(self, names):
+        """Calculate the fields for the mountain-valley model."""
+
+        # Update imshow field
         new_fields = mountain_valley.calculate_fields_spatial(
             self.X,
             self.Z,
@@ -119,9 +122,4 @@ class MountainValleyModel(BaseSlopedModel):
             self.non_dimensional_variables["N_omega"],
             fields=names,
         )
-        name = self.active_imshow_field
-        self.fields[name].field = new_fields[name]
-        name = self.active_quiver_field
-        quiv_names = list(self.fields[name].fields.keys())
-        self.fields[name].fields[quiv_names[0]].field = new_fields[quiv_names[0]]
-        self.fields[name].fields[quiv_names[1]].field = new_fields[quiv_names[1]]
+        return new_fields

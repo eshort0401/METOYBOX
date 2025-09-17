@@ -162,7 +162,7 @@ def initialize_figure():
     fig.suptitle(r"", y=suptitle_height)
 
     # Display the empty figure template on the page immediately
-    display(fig, target="plot-output", append=False)
+    display(fig, target="figure-output", append=False)
 
 
 def update_suptitle(event):
@@ -243,7 +243,7 @@ def update_labels(event):
 
     update_suptitle(event)
 
-    display(fig, target="plot-output", append=False)
+    display(fig, target="figure-output", append=False)
 
 
 def get_parameters():
@@ -342,7 +342,7 @@ def update_time(event):
     fig.suptitle(rf"$t={t:.2f}$ [-]", y=suptitle_height)
 
     # Redraw fig using display
-    display(fig, target="plot-output", append=False)
+    display(fig, target="figure-output", append=False)
 
 
 def hide_loading_screen():

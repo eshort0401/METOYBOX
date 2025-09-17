@@ -58,7 +58,7 @@ def initialize_figure():
     fig.patch.set_facecolor("#E6E6E6")
     fig.suptitle(r"", y=0.995)
 
-    display(fig, target="plot-output")
+    display(fig, target="figure-output")
 
 
 def calculate_constants(f_omega, alpha_omega, N_omega, M):
@@ -180,7 +180,7 @@ def update_time(event):
     fig.suptitle(rf"$t={t/np.pi:.4f}\pi$ [-]", y=0.995)
 
     # Redraw fig using display
-    display(fig, target="plot-output", append=False)
+    display(fig, target="figure-output", append=False)
 
 
 def hide_loading_screen():

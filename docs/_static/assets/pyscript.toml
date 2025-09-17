@@ -1,3 +1,18 @@
 name = "Mountain-valley Breeze Toy-Model"
 description = "Toy model of the mountain-valley breeze."
 packages = ["numpy", "matplotlib", "scipy"]
+[files]
+"{SOURCE}" = "../metoybox"
+"{DEST}" = "./metoybox"
+"{MODEL}" = "{SOURCE}/model"
+"{CALCULATE}" = "{SOURCE}/calculate"
+"{CTRL}" = "{SOURCE}/pyscript_controllers"
+
+"{SOURCE}/__init__.py" = "{DEST}/"
+"{MODEL}/__init__.py" = "{DEST}/model/"
+"{MODEL}/core.py" = "{DEST}/model/"
+"{MODEL}/slope.py" = "{DEST}/model/"
+"{CALCULATE}/__init__.py" = "{DEST}/calculate/"
+"{CALCULATE}/mountain_valley.py" = "{DEST}/calculate/"
+"{CTRL}/__init__.py" = "{DEST}/pyscript_controllers/"
+"{CTRL}/core.py" = "{DEST}/pyscript_controllers/"
