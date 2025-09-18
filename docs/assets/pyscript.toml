@@ -3,7 +3,7 @@ description = "Toy model of the mountain-valley breeze."
 packages = ["numpy", "matplotlib", "scipy"]
 [files]
 "{SOURCE}" = "metoybox"
-"{DEST}" = "_static/metoybox"
+"{DEST}" = "metoybox"
 "{MODEL}" = "{SOURCE}/model"
 "{CALCULATE}" = "{SOURCE}/calculate"
 "{CTRL}" = "{SOURCE}/pyscript_controllers"
