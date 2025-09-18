@@ -18,7 +18,6 @@
       <script src="_static/documentation_options.js?v=d45e8c67"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -80,43 +79,41 @@
              
   <section id="mountain-valley-breeze-test">
 <h1>Mountain Valley Breeze Test<a class="headerlink" href="#mountain-valley-breeze-test" title="Link to this heading"></a></h1>
-<p>Introductory paragraph. Some math <span class="math notranslate nohighlight">\(E = mc^2\)</span>.</p>
- <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-  <link rel="stylesheet" href="_static/assets/css/mathjax.css" />
-  <link rel="stylesheet" href="_static/assets/css/base.css" />
-  <link rel="stylesheet" href="_static/assets/css/controls.css" />
-  <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-  <script src="_static/assets/js/mathjax-config.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+<link rel="stylesheet" href="_static/assets/css/mathjax.css" />
+<link rel="stylesheet" href="_static/assets/css/base.css" />
+<link rel="stylesheet" href="_static/assets/css/controls.css" />
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<script src="_static/assets/js/mathjax-config.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
- <div id="loading-screen">
-  <div class="spinner"></div>
-  <p>Loading...</p>
-  <p><small>This can take a few minutes!</small></p>
+<div id="loading-screen">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+    <p><small>This can take a few minutes!</small></p>
 </div>
 
-  <div id="main-content">
+<div id="main-content">
     <div id="figure-output"></div>
     <div id="controls"></div>
     <script src="_static/assets/js/model-controls.js"></script>
     <script>
-      const configs = coreWaveConfigs();
-      // Add an imshow selection control row above the sliders
-      const imshow_sel_config = imshowSelectionConfig();
-      configs.unshift(imshow_sel_config);
-      const MStep = 3 * stepRatio
-      const MDimMax = 1e-2
-      const MDimStep = MDimMax * stepRatio
-      let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
-      configs.push(sliderConfig(...args));
-      args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep]
-      args.push("dimensional", "m m⁻¹");
-      configs.push(sliderConfig(...args));
-      createModelControls(configs, "controls");
+        const configs = coreWaveConfigs();
+        // Add an imshow selection control row above the sliders
+        const imshow_sel_config = imshowSelectionConfig();
+        configs.unshift(imshow_sel_config);
+        const MStep = 3 * stepRatio
+        const MDimMax = 1e-2
+        const MDimStep = MDimMax * stepRatio
+        let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep]
+        args.push("dimensional", "m m⁻¹");
+        configs.push(sliderConfig(...args));
+        createModelControls(configs, "controls");
     </script>
     <py-script src="_static/mountain_valley_test.py" config="_static/assets/pyscript.toml"></py-script>
-  </div><p>Some more text.</p>
-</section>
+</div></section>
 
 
            </div>
