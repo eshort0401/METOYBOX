@@ -2,9 +2,9 @@ input[type="range"] {
     width: 100%;
 }
 
-#controls {
+/* #controls {
     margin-bottom: 1em !important;
-}
+} */
 
 input[type="radio"]:checked,
 input[type="range"] {
