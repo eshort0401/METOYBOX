@@ -2,11 +2,25 @@ import numpy as np
 import sys
 from pathlib import Path
 
-# from pyscript import document, display, when
+from pyscript import document, display, when
+
+import sys
+
+
+def excepthook(exctype, value, tb):
+    import traceback
+
+    document.getElementById("error-log").textContent = "".join(
+        traceback.format_exception(exctype, value, tb)
+    )
+
+
+sys.excepthook = excepthook
 
 from metoybox.model import slope
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core
+
 
 # Configure the model
 x = np.linspace(-2, 2, 201)

@@ -17,6 +17,7 @@ Introductory paragraph. Some math :math:`E = mc^2`.
   </div>
 
     <div id="main-content">
+      <div id="error-log"></div>
       <div id="figure-output"></div>
       <div id="controls"></div>
       <script src="assets/js/model-controls.js"></script>
