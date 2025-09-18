@@ -38,7 +38,7 @@ Introductory paragraph. Some math :math:`E = mc^2`.
         configs.push(sliderConfig(...args));
         createModelControls(configs, "controls");
       </script>
-      <py-script src="_static/mountain_valley_test.py" config="assets/pyscript.toml"></py-script>
+      <py-script src="_static/mountain_valley_test.py" config="_static/assets/pyscript.toml"></py-script>
     </div>
 
 Some more text.
