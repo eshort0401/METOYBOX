@@ -6,11 +6,11 @@ Introductory paragraph. Some math :math:`E = mc^2`.
 .. raw:: html
 
    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-    <link rel="stylesheet" href="_static/assetsassets/css/mathjax.css" />
+    <link rel="stylesheet" href="_static/assets/css/mathjax.css" />
     <link rel="stylesheet" href="_static/assets/css/base.css" />
     <link rel="stylesheet" href="_static/assets/css/controls.css" />
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-    <script src="_staticassets/js/mathjax-config.js"></script>
+    <script src="_static/assets/js/mathjax-config.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
    <div id="loading-screen">
@@ -22,7 +22,7 @@ Introductory paragraph. Some math :math:`E = mc^2`.
     <div id="main-content">
       <div id="figure-output"></div>
       <div id="controls"></div>
-      <script src="assets/js/model-controls.js"></script>
+      <script src="_static/assets/js/model-controls.js"></script>
       <script>
         const configs = coreWaveConfigs();
         // Add an imshow selection control row above the sliders
