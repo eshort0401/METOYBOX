@@ -201,6 +201,16 @@ class Psi(ScalarField):
         super().__init__(*args, max_upper=0.5)
 
 
+class Q(ScalarField):
+    """Convenience class for creating Q fields."""
+
+    def __init__(self):
+        """Initialize a Q field."""
+        formatter = UnitFormatter("m s$^{-3}$", 1.0)
+        args = ["Q", r"$Q$", formatter]
+        super().__init__(*args, max_upper=0.1)
+
+
 class U(ScalarField):
     """Convenience class for creating u fields."""
 
@@ -322,7 +332,7 @@ class BaseWaveModel:
 
         # Initialize the figure, axes and layout
         self.fig, self.ax = plt.subplots(1, 1, figsize=self.figure_size)
-        self.fig.patch.set_facecolor("#E6E6E6")
+        # self.fig.patch.set_facecolor("#E6E6E6")
         self.X, self.Z = np.meshgrid(self.x, self.z)
         self.ax.set_ylim(self.z_limits)
         self.ax.set_xlim(self.x_limits)
@@ -566,7 +576,7 @@ class BaseWaveModel:
         message += "subclasses."
         raise NotImplementedError(message)
 
-    def update_fields(self):
+    def update_fields(self, force_update_norm=False):
         """Update the fields and the requisite figure elements."""
 
         # Update imshow field
@@ -579,9 +589,13 @@ class BaseWaveModel:
         max_upper = self.fields[name].max_upper
         max_lower = self.fields[name].max_lower
         # Don't rescale if the field is extremely small
-        if current_max > 1e-8 and (current_max > max_upper or current_max < max_lower):
+        cond = current_max > max_upper or current_max < max_lower
+        if cond or force_update_norm:
             # Reset max_upper and max_lower
             max_lower, max_upper = bounds_half_order_magnitude(current_max)
+            if max_upper < 1e-8:
+                max_upper = 1e-8
+                max_lower = 0
             self.fields[name].max_lower = max_lower
             self.fields[name].max_upper = max_upper
             self.fields[name].min = -max_upper

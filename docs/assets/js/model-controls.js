@@ -164,19 +164,60 @@ function coordinatesConfig() {
 }
 
 /**
+ * Convenience function to create imshow field selection radio button group
+ */
+function imshowSelectionConfig(
+    fields = ["psi", "Q"],
+    labels = ["\\(\\psi\\)", "\\(Q\\)"]
+) {
+    // Create a list of radio button configs
+    const buttons = fields.map((field, index) => {
+        const label = labels[index] || field;
+        const id = `imshow-${field}-button`;
+        const value = field;
+        const checked = index === 0; // First button checked by default
+        return radioConfig(label, id, value, checked);
+    });
+
+    return {
+        type: "radio",
+        label: "Shading:",
+        name: "imshow-field",
+        buttons: buttons
+    };
+}
+
+/**
+ * Create control row dispatcher
+ */
+function createControlRow(config) {
+    switch (config.type) {
+        case "slider":
+            return createSliderRow(config);
+        case "radio":
+            return createRadioGroupRow(config);
+        case "text":
+            return createTextInputRow(config);
+        default:
+            console.warn(`Unknown control type: ${config.type}`);
+            return null;
+    }
+}
+
+/**
  * Create stacked model control rows based on config
  */
 function createModelControls(configs, containerId = "controls") {
     const container = document.getElementById(containerId);
 
-    // Create radio buttons first
+    // Create coordinate selection control row first
     const coordControl = coordinatesConfig();
     const coordElement = createRadioGroupRow(coordControl);
     container.appendChild(coordElement);
 
-    // Create ALL sliders (both dimensional and non-dimensional) 
+    // Create control rows
     configs.forEach(config => {
-        const element = createSliderRow(config);
+        const element = createControlRow(config);
         container.appendChild(element);
     });
 

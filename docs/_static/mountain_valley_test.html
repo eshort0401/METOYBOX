@@ -29,6 +29,9 @@
     <script src="assets/js/model-controls.js"></script>
     <script>
       const configs = coreWaveConfigs();
+      // Add an imshow selection control row above the sliders
+      const imshow_sel_config = imshowSelectionConfig();
+      configs.unshift(imshow_sel_config);
       const MStep = 3 * stepRatio
       const MDimMax = 1e-2
       const MDimStep = MDimMax * stepRatio
@@ -40,9 +43,6 @@
       createModelControls(configs, "controls");
     </script>
   </div>
-  <!-- <py-config>
-    paths = ["./metoybox", "."]
-  </py-config> -->
   <py-script src="mountain_valley_test.py" config="assets/pyscript.toml"></py-script>
 </body>
 

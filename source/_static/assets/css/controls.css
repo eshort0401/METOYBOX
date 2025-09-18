@@ -2,6 +2,15 @@ input[type="range"] {
     width: 100%;
 }
 
+#controls {
+    margin-bottom: 1em !important;
+}
+
+input[type="radio"]:checked,
+input[type="range"] {
+    accent-color: #2980B9;
+}
+
 .control-row {
     display: flex;
     align-items: center;
@@ -39,6 +48,7 @@ input[type="range"] {
 .radio-group label {
     font-size: small;
     margin-right: 0.5em;
+    min-width: 0.1em;
 }
 
 .radio-button {

@@ -9,6 +9,7 @@ A collection of simple toy models of atmospheric phenomena. This site is evolvin
 
    mountain_valley.rst
    mountain_valley_test.rst
+   mountain_valley_raw_html_test.rst
    gaussian_forcing.rst
    point_forcing_over_slope.rst
    heaviside_seabreeze.rst

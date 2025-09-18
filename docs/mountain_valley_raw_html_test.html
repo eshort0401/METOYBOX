@@ -6,23 +6,24 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Point Forcing Over Slope &mdash; metoybox 0.0.1 documentation</title>
+  <title>Mountain Valley Breeze Test &mdash; metoybox 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
 
   
-    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/point_forcing_over_slope.html" />
+    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/mountain_valley_raw_html_test.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=d45e8c67"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Heaviside Sea-breeze Forcing" href="heaviside_seabreeze.html" />
-    <link rel="prev" title="Gaussian Temporal Forcing" href="gaussian_forcing.html" /> 
+    <link rel="next" title="Gaussian Temporal Forcing" href="gaussian_forcing.html" />
+    <link rel="prev" title="Mountain Valley Breeze Test" href="mountain_valley_test.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,9 +48,9 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="mountain_valley.html">Mountain Valley Breeze</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mountain_valley_test.html">Mountain Valley Breeze Test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mountain_valley_raw_html_test.html">Mountain Valley Breeze Test</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Mountain Valley Breeze Test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Point Forcing Over Slope</a></li>
+<li class="toctree-l1"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
 <li class="toctree-l1"><a class="reference internal" href="heaviside_seabreeze.html">Heaviside Sea-breeze Forcing</a></li>
 </ul>
 
@@ -67,9 +68,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Point Forcing Over Slope</li>
+      <li class="breadcrumb-item active">Mountain Valley Breeze Test</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/point_forcing_over_slope.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/mountain_valley_raw_html_test.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -77,16 +78,53 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="point-forcing-over-slope">
-<h1>Point Forcing Over Slope<a class="headerlink" href="#point-forcing-over-slope" title="Link to this heading"></a></h1>
-<iframe src="_static/point_forcing_over_slope.html" width="100%" height="800"></iframe></section>
+  <section id="mountain-valley-breeze-test">
+<h1>Mountain Valley Breeze Test<a class="headerlink" href="#mountain-valley-breeze-test" title="Link to this heading"></a></h1>
+<p>Introductory paragraph. Some math <span class="math notranslate nohighlight">\(E = mc^2\)</span>.</p>
+ <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+  <link rel="stylesheet" href="assets/css/mathjax.css" />
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/controls.css" />
+  <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+  <script src="assets/js/mathjax-config.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+ <div id="loading-screen">
+  <div class="spinner"></div>
+  <p>Loading...</p>
+  <p><small>This can take a few minutes!</small></p>
+</div>
+
+  <div id="main-content">
+    <div id="figure-output"></div>
+    <div id="controls"></div>
+    <script src="assets/js/model-controls.js"></script>
+    <script>
+      const configs = coreWaveConfigs();
+      // Add an imshow selection control row above the sliders
+      const imshow_sel_config = imshowSelectionConfig();
+      configs.unshift(imshow_sel_config);
+      const MStep = 3 * stepRatio
+      const MDimMax = 1e-2
+      const MDimStep = MDimMax * stepRatio
+      let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
+      configs.push(sliderConfig(...args));
+      args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep]
+      args.push("dimensional", "m m⁻¹");
+      configs.push(sliderConfig(...args));
+      createModelControls(configs, "controls");
+    </script>
+    <py-script src="mountain_valley_test.py" config="assets/pyscript.toml"></py-script>
+  </div><p>Some more text.
+This is after the raw HTML block.</p>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="gaussian_forcing.html" class="btn btn-neutral float-left" title="Gaussian Temporal Forcing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="heaviside_seabreeze.html" class="btn btn-neutral float-right" title="Heaviside Sea-breeze Forcing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="mountain_valley_test.html" class="btn btn-neutral float-left" title="Mountain Valley Breeze Test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="gaussian_forcing.html" class="btn btn-neutral float-right" title="Gaussian Temporal Forcing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

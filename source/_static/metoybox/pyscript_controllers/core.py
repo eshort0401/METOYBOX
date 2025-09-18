@@ -101,10 +101,29 @@ class BaseWaveController:
             """Update the time variable."""
             self.update_time(event)
 
+        @when("change", 'input[name="imshow-field"]')
+        def _change_imshow_field(event):
+            """Handle imshow field change."""
+            self.change_imshow_field(event)
+
     def _is_dimensional_mode(self):
         """Check if the controller is in dimensional mode."""
         button = self.cache.get("dimensional-button")
         return button.checked if button else False
+
+    def _get_active_imshow_field(self):
+        """Get the currently active imshow field from the relevant buttons."""
+        checked = document.querySelector('input[name="imshow-field"]:checked')
+        return checked.value if checked else "psi"
+
+    def change_imshow_field(self, event):
+        """Handle imshow field change."""
+        name = self._get_active_imshow_field()
+        self.model.active_imshow_field = name
+        self.model.update_fields(force_update_norm=True)
+        self.model.update_labels()
+        self.model.update_figure_data()
+        display(self.model.fig, target="figure-output", append=False)
 
     def _update_values(
         self, new_values: dict[str, float], control_suffix: str = "-slider"

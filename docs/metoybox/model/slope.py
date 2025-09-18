@@ -92,7 +92,8 @@ class BaseSlopedModel(core.BaseWaveModel):
         # Initialize the slope line
         dark_brown = tuple([c * 0.5 for c in mcolors.to_rgb("tab:brown")])
         M = self.non_dimensional_variables["M"]
-        self.plot = self.ax.plot(self.x, self.x * M, color=dark_brown, zorder=1)[0]
+        kwargs = {"linewidth": 2, "color": dark_brown, "zorder": 1}
+        self.plot = self.ax.plot(self.x, self.x * M, **kwargs)[0]
         # Set the ax face color to brown so it looks like ground when the imshow is nan
         self.ax.set_facecolor("tab:brown")
         self.active_imshow_field = "psi"

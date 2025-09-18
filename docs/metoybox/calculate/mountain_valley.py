@@ -41,7 +41,7 @@ def calculate_fields_spatial(
         w[mask] = (1 + 1j) * np.nan
         fields_dict["w"] = w
     if "Q" in fields:
-        Q = exp_Z_sigma
+        Q = exp_Z_sigma.astype(np.complex128)
         Q[mask] = (1 + 1j) * np.nan
         fields_dict["Q"] = Q
 

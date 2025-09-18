@@ -15,7 +15,7 @@ x_ticks = np.arange(-2, 3, 1)
 z_ticks = np.arange(-1, 4, 1)
 x_limits = (-2, 2)
 z_limits = (-1, 3)
-fields = {"psi": core.Psi(), "velocity": core.Velocity()}
+fields = {"psi": core.Psi(), "Q": core.Q(), "velocity": core.Velocity()}
 args = ["mountain_valley", x, z, x_ticks, z_ticks, x_limits, z_limits]
 model = slope.MountainValleyModel(*args, fields=fields)
 
