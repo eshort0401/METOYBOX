@@ -6,9 +6,12 @@ Introductory paragraph. Some math :math:`E = mc^2`.
 .. raw:: html
 
    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-    <link rel="stylesheet" href="assets/css/base.css" />
-    <link rel="stylesheet" href="assets/css/controls.css" />
+    <link rel="stylesheet" href="_static/assetsassets/css/mathjax.css" />
+    <link rel="stylesheet" href="_static/assets/css/base.css" />
+    <link rel="stylesheet" href="_static/assets/css/controls.css" />
     <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <script src="_staticassets/js/mathjax-config.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
    <div id="loading-screen">
     <div class="spinner"></div>
@@ -17,7 +20,6 @@ Introductory paragraph. Some math :math:`E = mc^2`.
   </div>
 
     <div id="main-content">
-      <div id="error-log"></div>
       <div id="figure-output"></div>
       <div id="controls"></div>
       <script src="assets/js/model-controls.js"></script>
@@ -36,8 +38,7 @@ Introductory paragraph. Some math :math:`E = mc^2`.
         configs.push(sliderConfig(...args));
         createModelControls(configs, "controls");
       </script>
-      <py-script src="mountain_valley_test.py" config="assets/pyscript.toml"></py-script>
+      <py-script src="_static/mountain_valley_test.py" config="assets/pyscript.toml"></py-script>
     </div>
 
 Some more text.
-This is after the raw HTML block.
