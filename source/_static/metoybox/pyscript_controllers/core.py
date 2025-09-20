@@ -86,6 +86,11 @@ class BaseWaveController:
             """Handle coordinate system change."""
             self.change_coordinates(event)
 
+        @when("change", "#displacement-lines-checkbox")
+        def _toggle_displacement_lines(event):
+            """Handle displacement lines visibility change."""
+            self.toggle_displacement_lines(event)
+
         time_sliders = ["t-slider", "t_dim-slider"]
         model_sliders = self.dimensional_sliders + self.non_dimensional_sliders
         model_sliders = [s for s in model_sliders if s not in time_sliders]
@@ -123,6 +128,18 @@ class BaseWaveController:
         self.model.active_imshow_field = name
         self.model.update_fields(force_update_norm=True)
         self.model.update_labels()
+        self.model.update_figure_data()
+        display(self.model.fig, target="figure-output", append=False)
+
+    def toggle_displacement_lines(self, event):
+        """Toggle the visibility of the displacement lines."""
+        checkbox = event.target
+        visible = checkbox.checked
+        self.model.displacement_lines.visible = visible
+        self.model.displacement_lines.set_visibility()
+        if visible:
+            self.model.update_fields()
+            self.model.update_displacement_lines()
         self.model.update_figure_data()
         display(self.model.fig, target="figure-output", append=False)
 

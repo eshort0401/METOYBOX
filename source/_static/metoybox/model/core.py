@@ -11,7 +11,6 @@ import matplotlib.colors as mcolors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from typing import Literal, Callable
 from dataclasses import dataclass
-import warnings
 
 CoordinateOptions = Literal["dimensional", "non-dimensional"]
 
@@ -51,6 +50,7 @@ def get_default_scalings(
     b_scale = Q_0 / omega  # times b to redimensionalize
     phi_scale = Q_0 * H / omega  # times phi to redimensionalize
     scalings = {"x": x_scale, "y": y_scale, "z": z_scale, "psi": psi_scale}
+    scalings.update({"xi": x_scale, "zeta": z_scale})
     scalings.update({"u": u_scale, "v": v_scale, "w": w_scale, "Q": Q_scale})
     scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale})
     return scalings
@@ -301,18 +301,19 @@ default_non_dimensional.update({"alpha_omega": 0.2, "f_omega": 0.5})
 class DisplacementLines:
     """Convenience class to cleanly manage lists of displacement lines."""
 
-    def __init__(self, z, number_lines=10):
+    def __init__(self, z, number_lines=10, fields=["xi", "zeta"]):
         """Initialize the displacement lines."""
         self.step = len(z) // number_lines
         self.subset = slice(0, None, self.step)
+        self.base_heights = z[self.subset]
         self.lines: list[plt.Line2D] = []
         self.visible: bool = True
+        self.fields = fields
 
-    def set_visible(self, visible: bool):
+    def set_visibility(self):
         """Set the visibility of all lines."""
-        self.visible = visible
         for line in self.lines:
-            line.set_visible(visible)
+            line.set_visible(self.visible)
 
 
 class BaseWaveModel:
@@ -445,8 +446,13 @@ class BaseWaveModel:
         # Not yet implemented
 
         # Initialize the displacements
-        # Not yet implemented
+        for height in self.displacement_lines.base_heights:
+            kwargs = {"color": "k", "linewidth": 0.5, "zorder": 3}
+            line = self.ax.plot(self.x, np.ones_like(self.x) * height, **kwargs)[0]
+            line.set_visible(self.displacement_lines.visible)
+            self.displacement_lines.lines.append(line)
 
+        # Finalize
         self.fig.suptitle("placeholder", y=self.suptitle_height)
         self.fig.tight_layout()
         self.ax.set_aspect("equal")
@@ -616,8 +622,8 @@ class BaseWaveModel:
         subset = self.quiver_subset
         self.quiver.set_UVC(field_1[subset], field_2[subset])
 
-        # Update the contour
-        # Not yet implemented
+        if self.displacement_lines.visible:
+            self.update_displacement_lines()
 
     def get_active_fields(self):
         """Return all the active scalars fields. Typically used for updating."""
@@ -633,6 +639,21 @@ class BaseWaveModel:
         message = "calculate_fields is model specific and should be implemented in "
         message += "subclasses."
         raise NotImplementedError(message)
+
+    def update_displacement_lines(self):
+        """Update the displacement lines based on the current displacement fields."""
+
+        x, z = self.x, self.z
+        disp_lines = self.displacement_lines
+        xi = self.fields[disp_lines.fields[0]].field[disp_lines.subset, :]
+        zeta = self.fields[disp_lines.fields[1]].field[disp_lines.subset, :]
+        z = z[disp_lines.subset]
+        t = self.non_dimensional_variables["t"]
+        xi = np.real(xi * np.exp(1j * t))
+        zeta = np.real(zeta * np.exp(1j * t))
+        for i, line in enumerate(disp_lines.lines):
+            line.set_xdata(x + xi[i, :])
+            line.set_ydata(z[i] + zeta[i, :])
 
     def update_fields(self, force_update_norm=False):
         """Update the fields and the requisite figure elements."""
@@ -669,6 +690,12 @@ class BaseWaveModel:
             # Update the ticks after change of normal
             self.colorbar.set_ticks(tick_labels)
             self.update_colorbar_labels()
+
+        # Update displacement line fields
+        if self.displacement_lines.visible:
+            disp_field_names = self.displacement_lines.fields
+            for name in disp_field_names:
+                self.fields[name].field = new_fields[name]
 
         # Update quiver field
         name = self.active_quiver_field
