@@ -47,6 +47,50 @@ function formatOutput(value, units, step) {
 }
 
 /**
+ * Create a checkbox control row
+ */
+function createCheckboxGroupRow(config) {
+    const row = document.createElement("div");
+    row.className = "control-row";
+
+    // Label for the group
+    const groupLabel = document.createElement("label");
+    groupLabel.innerHTML = config.label;
+    row.appendChild(groupLabel);
+
+    // Container for all checkboxes
+    const checkboxContainer = document.createElement("div");
+    checkboxContainer.className = "checkbox-group";
+
+    config.checkboxes.forEach(checkbox => {
+        const checkboxWrapper = document.createElement("span");
+        checkboxWrapper.className = "checkbox-button";
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.name = checkbox.name;
+        applyConfigAttributes(checkbox, [input], ["id", "value"]);
+        input.checked = checkbox.checked || false;
+
+        const label = document.createElement("label");
+        label.setAttribute("for", checkbox.id);
+        label.innerHTML = checkbox.label;
+
+        checkboxWrapper.appendChild(input);
+        checkboxWrapper.appendChild(label);
+        checkboxContainer.appendChild(checkboxWrapper);
+    });
+
+    row.appendChild(checkboxContainer);
+
+    // Apply any additional attributes
+    applyConfigAttributes(config, [row, checkboxContainer], ["className"]);
+
+    return row;
+}
+
+
+/**
  * Create a radio button control group row
  */
 function createRadioGroupRow(config) {
@@ -164,11 +208,24 @@ function coordinatesConfig() {
 }
 
 /**
+ * Convenience function to create displacement toggle checkbox
+ */
+function displacementToggleConfig() {
+    return {
+        type: "checkbox",
+        label: "",
+        checkboxes: [
+            { id: "displacements-checkbox", label: "Show displacement:", checked: false },
+        ]
+    };
+}
+
+/**
  * Convenience function to create imshow field selection radio button group
  */
 function imshowSelectionConfig(
-    fields = ["psi", "Q"],
-    labels = ["\\(\\psi\\)", "\\(Q\\)"]
+    fields = ["psi", "Q", "v", "phi"],
+    labels = ["\\(\\psi\\)", "\\(Q\\)", "\\(v\\)", "\\(\\phi\\)"]
 ) {
     // Create a list of radio button configs
     const buttons = fields.map((field, index) => {
@@ -198,6 +255,8 @@ function createControlRow(config) {
             return createRadioGroupRow(config);
         case "text":
             return createTextInputRow(config);
+        case "checkbox":
+            return createCheckboxGroupRow(config);
         default:
             console.warn(`Unknown control type: ${config.type}`);
             return null;

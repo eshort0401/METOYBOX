@@ -221,6 +221,16 @@ class U(ScalarField):
         super().__init__(*args, max_upper=1.0)
 
 
+class V(ScalarField):
+    """Convenience class for creating v fields."""
+
+    def __init__(self):
+        """Initialize a v field."""
+        formatter = UnitFormatter("m s$^{-1}$", 1.0)
+        args = ["v", r"$v$", formatter]
+        super().__init__(*args, max_upper=1.0)
+
+
 class W(ScalarField):
     """Convenience class for creating w fields."""
 
@@ -229,6 +239,26 @@ class W(ScalarField):
         formatter = UnitFormatter("cm s$^{-1}$", 1e2)
         args = ["w", r"$w$", formatter]
         super().__init__(*args, max_upper=0.2)
+
+
+class Xi(ScalarField):
+    """Convenience class for creating xi (x displacement) fields."""
+
+    def __init__(self):
+        """Initialize a xi field."""
+        formatter = UnitFormatter("m", 1.0)
+        args = ["xi", r"$\xi$", formatter]
+        super().__init__(*args, max_upper=0.1)
+
+
+class Zeta(ScalarField):
+    """Convenience class for creating zeta (z displacement) fields."""
+
+    def __init__(self):
+        """Initialize a zeta field."""
+        formatter = UnitFormatter("m", 1.0)
+        args = ["zeta", r"$\zeta$", formatter]
+        super().__init__(*args, max_upper=0.1)
 
 
 class Velocity(VectorField):
@@ -241,6 +271,16 @@ class Velocity(VectorField):
         fields = {"u": u, "w": w}
         args = ["velocity", r"$\mathbf{v}$", fields]
         super().__init__(*args, quiver_key_magnitude=0.5)
+
+
+class Phi(ScalarField):
+    """Convenience class for creating Boussinesq pressure, aka phi fields."""
+
+    def __init__(self):
+        """Initialize a phi field."""
+        formatter = UnitFormatter("m$^2$ s$^{-2}$", 1.0)
+        args = ["phi", r"$\phi$", formatter]
+        super().__init__(*args, max_upper=0.1)
 
 
 GetScalingsFunction = Callable[
@@ -256,6 +296,23 @@ default_dimensional = {"t_dim": 0.0, "N": 1e-2, "H": 1e3, "omega": Omega}
 default_dimensional.update({"Q_0": 1.2e-5, "alpha": 0.2 * Omega, "f": 0.5 * Omega})
 default_non_dimensional = {"t": 0.0, "N_omega": 1e-2 / Omega}
 default_non_dimensional.update({"alpha_omega": 0.2, "f_omega": 0.5})
+
+
+class DisplacementLines:
+    """Convenience class to cleanly manage lists of displacement lines."""
+
+    def __init__(self, z, number_lines=10):
+        """Initialize the displacement lines."""
+        self.step = len(z) // number_lines
+        self.subset = slice(0, None, self.step)
+        self.lines: list[plt.Line2D] = []
+        self.visible: bool = True
+
+    def set_visible(self, visible: bool):
+        """Set the visibility of all lines."""
+        self.visible = visible
+        for line in self.lines:
+            line.set_visible(visible)
 
 
 class BaseWaveModel:
@@ -326,6 +383,7 @@ class BaseWaveModel:
         coord = self.coordinates
         dim, non_dim = self.dimensional_variables, self.non_dimensional_variables
         self.scalings = self.get_scalings(coord, dim, non_dim)
+        self.displacement_lines = DisplacementLines(z)
 
     def initialize_figure(self):
         """Initialize the figure with the fields."""
@@ -468,7 +526,7 @@ class BaseWaveModel:
 
         def format_labels(ticks, exp, field_label, unit_label="-"):
             """Format the the colorbar ticks and labels using exponent."""
-            if exp < -1 or exp > 2:
+            if exp < -1 or exp >= 2:
                 tick_lab = ticks * 10 ** (-exp)
                 axis_label = rf"{field_label} [$10^{{{exp}}}$ {unit_label}]"
             else:

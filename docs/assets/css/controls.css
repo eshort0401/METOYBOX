@@ -11,6 +11,19 @@ input[type="range"] {
     accent-color: #2980B9;
 }
 
+.control-row .checkbox-button {
+    display: flex;
+    flex-direction: row-reverse;
+    /* align-items: center; */
+    gap: 0.2em;
+    font-size: small;
+}
+
+.control-row .checkbox-button input[type="checkbox"] {
+    vertical-align: middle;
+    margin-top: -8px;
+}
+
 .control-row {
     display: flex;
     align-items: center;

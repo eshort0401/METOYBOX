@@ -3,6 +3,7 @@
 from metoybox.model.core import BaseWaveModel
 from typing import Iterable
 
+# Import pyscript. Note these are not normal imports and typically confuse IDE linters!
 from pyscript import document, display, when
 
 

@@ -1,6 +1,5 @@
-Mountain Valley Breeze
-=======================================
+Mountain-Valley Breeze, Low-Level Jet
+================================================
 
 .. raw:: html
-
-   <iframe src="_static/mountain_valley.html" width="100%" height="700"></iframe>
+   :file: _static/mountain_valley.html

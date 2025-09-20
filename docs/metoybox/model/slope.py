@@ -1,9 +1,5 @@
 """Extensions of the BaseWaveModel to flows over sloping topography."""
 
-import sys
-from pathlib import Path
-import numpy as np
-
 from metoybox.model import core
 from metoybox.calculate import mountain_valley
 import matplotlib.colors as mcolors
