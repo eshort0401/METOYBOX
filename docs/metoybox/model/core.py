@@ -11,7 +11,6 @@ import matplotlib.colors as mcolors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from typing import Literal, Callable
 from dataclasses import dataclass
-import warnings
 
 CoordinateOptions = Literal["dimensional", "non-dimensional"]
 
@@ -51,6 +50,7 @@ def get_default_scalings(
     b_scale = Q_0 / omega  # times b to redimensionalize
     phi_scale = Q_0 * H / omega  # times phi to redimensionalize
     scalings = {"x": x_scale, "y": y_scale, "z": z_scale, "psi": psi_scale}
+    scalings.update({"xi": x_scale, "zeta": z_scale})
     scalings.update({"u": u_scale, "v": v_scale, "w": w_scale, "Q": Q_scale})
     scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale})
     return scalings
@@ -122,6 +122,7 @@ class BaseField:
         # (.1, .5), (.5, 1), (1, 5), (5, 10), (10, 50) etc.
         max_lower: float = 0.5,
         min: float | None = None,
+        percentile: float | None = None,
     ):
         """Initialize field properties."""
         self.name = name
@@ -130,6 +131,7 @@ class BaseField:
         self.unit_formatter = unit_formatter
         self.max_upper = max_upper
         self.max_lower = max_lower
+        self.percentile = percentile
         if min is None:
             self.min = -np.abs(max_upper)
 
@@ -155,9 +157,12 @@ class ScalarField(BaseField):
         max_lower: float = 0.5,
         min: float | None = None,
         cmap_name: str = "RdBu_r",
+        percentile: float | None = None,
     ):
         """Initialize field properties."""
-        super().__init__(name, label, unit_formatter, field, max_upper, max_lower, min)
+        args = [name, label, unit_formatter, field, max_upper, max_lower, min]
+        args += [percentile]
+        super().__init__(*args)
         self.cmap = plt.get_cmap(cmap_name)
         self.levels = np.linspace(self.min, self.max_upper, 21)
         # Store the tick labels in non-dimensional coordinates
@@ -180,6 +185,7 @@ class VectorField(BaseField):
         max_upper: float = 0.1,
         max_lower: float = 0.05,
         quiver_key_magnitude: float = 0.5,
+        percentile: float | None = None,
     ):
         self.name = name
         self.label = label
@@ -189,56 +195,57 @@ class VectorField(BaseField):
         # For vector fields, max and min refer to the magnitude of the vector
         self.max_upper = max_upper
         self.max_lower = max_lower
+        self.percentile = percentile
 
 
 class Psi(ScalarField):
     """Convenience class for creating psi fields."""
 
-    def __init__(self):
+    def __init__(self, percentile: float | None = None):
         """Initialize a psi field."""
         formatter = UnitFormatter("m$^2$ s$^{-1}$", 1.0)
         args = ["psi", r"$\psi$", formatter]
-        super().__init__(*args, max_upper=0.5)
+        super().__init__(*args, max_upper=0.5, percentile=percentile)
 
 
 class Q(ScalarField):
     """Convenience class for creating Q fields."""
 
-    def __init__(self):
+    def __init__(self, percentile: float | None = None):
         """Initialize a Q field."""
         formatter = UnitFormatter("m s$^{-3}$", 1.0)
         args = ["Q", r"$Q$", formatter]
-        super().__init__(*args, max_upper=0.1)
+        super().__init__(*args, max_upper=0.1, percentile=percentile)
 
 
 class U(ScalarField):
     """Convenience class for creating u fields."""
 
-    def __init__(self):
+    def __init__(self, percentile: float | None = None):
         """Initialize a u field."""
         formatter = UnitFormatter("m s$^{-1}$", 1.0)
         args = ["u", r"$u$", formatter]
-        super().__init__(*args, max_upper=1.0)
+        super().__init__(*args, max_upper=1.0, percentile=percentile)
 
 
 class V(ScalarField):
     """Convenience class for creating v fields."""
 
-    def __init__(self):
+    def __init__(self, percentile: float | None = None):
         """Initialize a v field."""
         formatter = UnitFormatter("m s$^{-1}$", 1.0)
         args = ["v", r"$v$", formatter]
-        super().__init__(*args, max_upper=1.0)
+        super().__init__(*args, max_upper=1.0, percentile=percentile)
 
 
 class W(ScalarField):
     """Convenience class for creating w fields."""
 
-    def __init__(self):
+    def __init__(self, percentile: float | None = None):
         """Initialize a w field."""
         formatter = UnitFormatter("cm s$^{-1}$", 1e2)
         args = ["w", r"$w$", formatter]
-        super().__init__(*args, max_upper=0.2)
+        super().__init__(*args, max_upper=0.2, percentile=percentile)
 
 
 class Xi(ScalarField):
@@ -264,23 +271,23 @@ class Zeta(ScalarField):
 class Velocity(VectorField):
     """Convenience class for creating velocity fields."""
 
-    def __init__(self):
+    def __init__(self, percentile: float | None = None):
         """Initialize a velocity field."""
-        u = U()
-        w = W()
+        u = U(percentile=percentile)
+        w = W(percentile=percentile)
         fields = {"u": u, "w": w}
         args = ["velocity", r"$\mathbf{v}$", fields]
-        super().__init__(*args, quiver_key_magnitude=0.5)
+        super().__init__(*args, quiver_key_magnitude=0.5, percentile=percentile)
 
 
 class Phi(ScalarField):
     """Convenience class for creating Boussinesq pressure, aka phi fields."""
 
-    def __init__(self):
+    def __init__(self, percentile: float | None = None):
         """Initialize a phi field."""
         formatter = UnitFormatter("m$^2$ s$^{-2}$", 1.0)
         args = ["phi", r"$\phi$", formatter]
-        super().__init__(*args, max_upper=0.1)
+        super().__init__(*args, max_upper=0.1, percentile=percentile)
 
 
 GetScalingsFunction = Callable[
@@ -301,18 +308,19 @@ default_non_dimensional.update({"alpha_omega": 0.2, "f_omega": 0.5})
 class DisplacementLines:
     """Convenience class to cleanly manage lists of displacement lines."""
 
-    def __init__(self, z, number_lines=10):
+    def __init__(self, z, number_lines=8, fields=["xi", "zeta"]):
         """Initialize the displacement lines."""
         self.step = len(z) // number_lines
-        self.subset = slice(0, None, self.step)
+        self.subset = slice(int(self.step / 3), None, self.step)
+        self.base_heights = z[self.subset]
         self.lines: list[plt.Line2D] = []
-        self.visible: bool = True
+        self.visible: bool = False
+        self.fields = fields
 
-    def set_visible(self, visible: bool):
+    def set_visibility(self):
         """Set the visibility of all lines."""
-        self.visible = visible
         for line in self.lines:
-            line.set_visible(visible)
+            line.set_visible(self.visible)
 
 
 class BaseWaveModel:
@@ -441,12 +449,16 @@ class BaseWaveModel:
         kwargs = {"labelpos": "E", "coordinates": "axes"}
         self.quiver_key = self.ax.quiverkey(*args, **kwargs)
 
-        # Initialize the contour
-        # Not yet implemented
-
         # Initialize the displacements
-        # Not yet implemented
+        kwargs = {"color": "k", "linewidth": 1.0, "zorder": 1, "markersize": 3}
+        kwargs.update({"markevery": 2 * self.displacement_lines.step})
+        kwargs.update({"rasterized": True, "color": "#333333", "marker": "s"})
+        for height in self.displacement_lines.base_heights:
+            line = self.ax.plot(self.x, np.ones_like(self.x) * height, **kwargs)[0]
+            self.displacement_lines.lines.append(line)
+        self.displacement_lines.set_visibility()
 
+        # Finalize
         self.fig.suptitle("placeholder", y=self.suptitle_height)
         self.fig.tight_layout()
         self.ax.set_aspect("equal")
@@ -613,11 +625,15 @@ class BaseWaveModel:
         keys = list(component_fields.keys())
         field_1 = np.real(component_fields[keys[0]].field * np.exp(1j * t))
         field_2 = np.real(component_fields[keys[1]].field * np.exp(1j * t))
+        # Mask out arrows larger than max_upper
+        magnitude = np.sqrt(field_1**2 + field_2**2)
+        field_1[magnitude > quiver_field.max_upper] = np.nan
+        field_2[magnitude > quiver_field.max_upper] = np.nan
         subset = self.quiver_subset
         self.quiver.set_UVC(field_1[subset], field_2[subset])
 
-        # Update the contour
-        # Not yet implemented
+        if self.displacement_lines.visible:
+            self.update_displacement_lines()
 
     def get_active_fields(self):
         """Return all the active scalars fields. Typically used for updating."""
@@ -634,23 +650,43 @@ class BaseWaveModel:
         message += "subclasses."
         raise NotImplementedError(message)
 
+    def update_displacement_lines(self):
+        """Update the displacement lines based on the current displacement fields."""
+
+        x, z = self.x, self.z
+        disp_lines = self.displacement_lines
+        xi = self.fields[disp_lines.fields[0]].field[disp_lines.subset, :]
+        zeta = self.fields[disp_lines.fields[1]].field[disp_lines.subset, :]
+        z = z[disp_lines.subset]
+        t = self.non_dimensional_variables["t"]
+        xi = np.real(xi * np.exp(1j * t))
+        zeta = np.real(zeta * np.exp(1j * t))
+        for i, line in enumerate(disp_lines.lines):
+            line.set_xdata(x + xi[i, :])
+            line.set_ydata(z[i] + zeta[i, :])
+
     def update_fields(self, force_update_norm=False):
         """Update the fields and the requisite figure elements."""
 
         # Update imshow field
         names = self.get_active_fields()
+        names += self.displacement_lines.fields
         self.match_variables()
         new_fields = self.calculate_fields(names)
         name = self.active_imshow_field
         self.fields[name].field = new_fields[name]
-        current_max = np.nanmax(np.abs(new_fields[name]))
+        percentile = self.fields[name].percentile
+        if percentile is not None:
+            current_max = np.nanpercentile(np.abs(new_fields[name]), percentile)
+        else:
+            current_max = np.nanmax(np.abs(new_fields[name]))
         max_upper = self.fields[name].max_upper
         max_lower = self.fields[name].max_lower
-        # Don't rescale if the field is extremely small
         cond = current_max > max_upper or current_max < max_lower
         if cond or force_update_norm:
             # Reset max_upper and max_lower
             max_lower, max_upper = bounds_half_order_magnitude(current_max)
+            # Don't rescale if the field is extremely small
             if max_upper < 1e-8:
                 max_upper = 1e-8
                 max_lower = 0
@@ -670,6 +706,12 @@ class BaseWaveModel:
             self.colorbar.set_ticks(tick_labels)
             self.update_colorbar_labels()
 
+        # Update displacement line fields
+        if self.displacement_lines.visible:
+            disp_field_names = self.displacement_lines.fields
+            for name in disp_field_names:
+                self.fields[name].field = new_fields[name]
+
         # Update quiver field
         name = self.active_quiver_field
         quiv_names = list(self.fields[name].fields.keys())
@@ -678,7 +720,11 @@ class BaseWaveModel:
         self.fields[name].fields[quiv_names[0]].field = new_comp_1
         self.fields[name].fields[quiv_names[1]].field = new_comp_2
         magnitude = np.sqrt(np.abs(new_comp_1) ** 2 + np.abs(new_comp_2) ** 2)
-        current_max = np.nanmax(magnitude)
+        percentile = self.fields[name].percentile
+        if percentile is not None:
+            current_max = np.nanpercentile(magnitude, 90)
+        else:
+            current_max = np.nanmax(magnitude)
         max_upper = self.fields[name].max_upper
         max_lower = self.fields[name].max_lower
 

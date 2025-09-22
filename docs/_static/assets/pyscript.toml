@@ -14,5 +14,7 @@ packages = ["numpy", "matplotlib", "scipy"]
 "{MODEL}/slope.py" = "{DEST}/model/"
 "{CALCULATE}/__init__.py" = "{DEST}/calculate/"
 "{CALCULATE}/mountain_valley.py" = "{DEST}/calculate/"
+"{CALCULATE}/utils.py" = "{DEST}/calculate/"
+"{CALCULATE}/point_forcing_slope.py" = "{DEST}/calculate/"
 "{CTRL}/__init__.py" = "{DEST}/pyscript_controllers/"
 "{CTRL}/core.py" = "{DEST}/pyscript_controllers/"

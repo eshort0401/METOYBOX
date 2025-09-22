@@ -4,6 +4,8 @@ import numpy as np
 from typing import List
 from numpy.typing import NDArray
 
+from metoybox.calculate.utils import recover_polarized_default
+
 
 def calculate_fields_spatial(
     X: NDArray,
@@ -27,40 +29,35 @@ def calculate_fields_spatial(
     mask = Z < M * X
 
     fields_dict = {}
-    base = 1 / B_sq * exp_Z_sigma
     sigma_hat = 1j + alpha_omega
+    psi = M / B_sq * (exp_Z_sigma - 1)
+    u = -M / B_sq * exp_Z_sigma
+    w = -(M**2) / B_sq * exp_Z_sigma
 
     if "psi" in fields:
-        psi = M / B_sq * (exp_Z_sigma - 1)
-        psi[mask] = (1 + 1j) * np.nan
         fields_dict["psi"] = psi
     if "u" in fields:
-        u = -M * base
-        u[mask] = (1 + 1j) * np.nan
         fields_dict["u"] = u
     if "w" in fields:
-        w = -(M**2) * base
-        w[mask] = (1 + 1j) * np.nan
         fields_dict["w"] = w
-    if "v" in fields:
-        v = f_omega * M / (1j + alpha_omega) * base
-        v[mask] = (1 + 1j) * np.nan
-        fields_dict["v"] = v
-    if "xi" in fields:
-        xi = 1j * M * base
-        xi[mask] = (1 + 1j) * np.nan
-        fields_dict["xi"] = xi
-    if "zeta" in fields:
-        zeta = 1j * (M**2) * base
-        zeta[mask] = (1 + 1j) * np.nan
-        fields_dict["zeta"] = zeta
+
+    args = [u, w, f_omega, alpha_omega, fields]
+    polarized_fields = recover_polarized_default(*args)
+    fields_dict.update(polarized_fields)
+
     if "phi" in fields:
-        phi = sigma_hat * base + f_omega**2 / sigma_hat * base
-        phi[mask] = (1 + 1j) * np.nan
-        fields_dict["phi"] = phi
+        if M == 0:
+            fields_dict["phi"] = np.zeros_like(psi)
+        else:
+            fields_dict["phi"] = 1 / M * (-sigma_hat - f_omega**2) * u
     if "Q" in fields:
-        Q = exp_Z_sigma.astype(np.complex128)
-        Q[mask] = (1 + 1j) * np.nan
-        fields_dict["Q"] = Q
+        fields_dict["Q"] = exp_Z_sigma.astype(np.complex128)
+    if "bq" in fields:
+        bq = 1 / sigma_hat * exp_Z_sigma
+        fields_dict["bq"] = bq
+
+    for key in fields_dict:
+        # Mask values below the slope
+        fields_dict[key][mask] = (1 + 1j) * np.nan
 
     return fields_dict

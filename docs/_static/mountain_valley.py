@@ -9,8 +9,8 @@ from metoybox.pyscript_controllers import core as ctl_core
 
 
 # Configure the model
-x = np.linspace(-2, 2, 201)
-z = np.linspace(-1, 4, 401)
+x = np.linspace(-2.5, 2.5, 251)
+z = np.linspace(-1, 4, 251)
 x_ticks = np.arange(-2, 3, 1)
 z_ticks = np.arange(-1, 4, 1)
 x_limits = (-2, 2)

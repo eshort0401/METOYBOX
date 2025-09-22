@@ -1,0 +1,45 @@
+<!-- Note we only need a snippet that will get put in the rst generated html file.-->
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+<link rel="stylesheet" href="_static/assets/css/mathjax.css" />
+<link rel="stylesheet" href="_static/assets/css/base.css" />
+<link rel="stylesheet" href="_static/assets/css/controls.css" />
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<script src="_static/assets/js/mathjax-config.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<div id="loading-screen">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+    <p><small>This can take a few minutes!</small></p>
+</div>
+
+<div id="main-content">
+    <div id="figure-output"></div>
+    <div id="controls"></div>
+    <script src="_static/assets/js/model-controls.js"></script>
+    <script>
+        const configs = coreWaveConfigs();
+        // Add a displacement toggle checkbox row above the sliders
+        const displacement_config = displacementToggleConfig();
+        configs.unshift(displacement_config);
+
+        // Add an imshow selection control row above the sliders
+        const imshow_sel_config = imshowSelectionConfig();
+        configs.unshift(imshow_sel_config);
+        const MStep = 3 * stepRatio
+        const MDimMax = 1e-2
+        const MDimStep = MDimMax * stepRatio
+        const zFStep = 3 * stepRatio
+        let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(z_f:\\)", "z_f-slider", 0, 3, 1, zFStep, "non-dimensional"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(z_f:\\)", "z_f_dim-slider", 0, 3e3, 1e3, zFStep * 1e3, "dimensional", "m"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep, "dimensional", "m m⁻¹"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(\\omega:\\)", "omega-slider", 0, Omega, Omega / 24, Omega * stepRatio, "dimensional", "s⁻¹"];
+        createModelControls(configs, "controls");
+    </script>
+    <py-script src="_static/point_forcing_over_slope_test.py" config="_static/assets/pyscript.toml"></py-script>
+</div>

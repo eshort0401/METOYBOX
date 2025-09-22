@@ -215,7 +215,7 @@ function displacementToggleConfig() {
         type: "checkbox",
         label: "",
         checkboxes: [
-            { id: "displacements-checkbox", label: "Show displacement:", checked: false },
+            { id: "displacement-checkbox", label: "Show displacement:", checked: false },
         ]
     };
 }

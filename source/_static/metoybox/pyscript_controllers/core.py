@@ -86,7 +86,7 @@ class BaseWaveController:
             """Handle coordinate system change."""
             self.change_coordinates(event)
 
-        @when("change", "#displacement-lines-checkbox")
+        @when("change", "#displacement-checkbox")
         def _toggle_displacement_lines(event):
             """Handle displacement lines visibility change."""
             self.toggle_displacement_lines(event)
