@@ -5,6 +5,7 @@ Point Forcing Over Slope
 
 ..    <iframe src="_static/point_forcing_over_slope.html" width="100%" height="800"></iframe>
 
+:math:`\psi` good, everything else broken
 
 .. raw:: html
    :file: _static/point_forcing_over_slope_test.html
