@@ -313,6 +313,8 @@ class DisplacementLines:
         self.step = len(z) // number_lines
         self.subset = slice(int(self.step / 3), None, self.step)
         self.base_heights = z[self.subset]
+        dz = self.base_heights[1] - self.base_heights[0]
+        self.max_upper = 5 * dz
         self.lines: list[plt.Line2D] = []
         self.visible: bool = False
         self.fields = fields
@@ -661,6 +663,11 @@ class BaseWaveModel:
         t = self.non_dimensional_variables["t"]
         xi = np.real(xi * np.exp(1j * t))
         zeta = np.real(zeta * np.exp(1j * t))
+        print(np.nanmax(np.abs(xi)))
+        print(np.nanmax(np.abs(zeta)))
+        print(disp_lines.max_upper)
+        xi[np.abs(xi) > disp_lines.max_upper] = np.nan
+        zeta[np.abs(zeta) > disp_lines.max_upper] = np.nan
         for i, line in enumerate(disp_lines.lines):
             line.set_xdata(x + xi[i, :])
             line.set_ydata(z[i] + zeta[i, :])

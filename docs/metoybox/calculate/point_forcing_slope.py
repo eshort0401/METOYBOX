@@ -58,7 +58,6 @@ def calculate_fields_spatial(
     c_p = 1 - g_p * M
 
     psi = D * (-c_n / L_1 + c_n / L_2 + c_p / L_3 - c_p / L_4)
-    # psi = D * (c_n * (-1 / L_1 + 1 / L_2) + c_p * (1 / L_3 - 1 / L_4))
 
     u = D * (
         c_n * g_p / L_1**2
@@ -77,7 +76,7 @@ def calculate_fields_spatial(
     if "psi" in fields:
         fields_dict["psi"] = psi
     if "u" in fields:
-        fields_dict["u"] = -u
+        fields_dict["u"] = u
     if "w" in fields:
         fields_dict["w"] = w
 
