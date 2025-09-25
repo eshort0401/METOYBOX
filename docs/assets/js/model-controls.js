@@ -367,6 +367,8 @@ const NMax = 0.1 / Omega * Omega;
 const NValue = 1e-2 / Omega * Omega;
 const NDimStep = (NMax - NMin) * stepRatio;
 
+const HValue = 1e3;
+
 /**
  * Convenience function for core dimensional coordinate control configs for gravity wave models
  */
@@ -379,7 +381,7 @@ function coreWaveConfigsDim(overrides = {}) {
     const NArgs = ["\\(N:\\)", "N-slider", NMin, NMax, NValue, NDimStep, className, "s⁻¹"];
     // Let's leave omega out of the core controls for now, as most of the time omega = Omega
     // const omegaArgs = ["\\(\\omega:\\)", "omega-slider", 0.5 * Omega, 5 * Omega, Omega, 1e-2 * Omega, className];
-    const HArgs = ["\\(H:\\)", "H-slider", 100, 5e3, 1e3, 100, className, "m"];
+    const HArgs = ["\\(H:\\)", "H-slider", 100, 5e3, HValue, 100, className, "m"];
     const Q0Args = ["\\(Q_0:\\)", "Q_0-slider", 1e-6, 10e-5, 1.2e-5, 1e-6, className, "m s⁻³"];
     const configs = [sliderConfig(...tArgs), sliderConfig(...fArgs), sliderConfig(...alphaArgs)];
     configs.push(sliderConfig(...NArgs), sliderConfig(...HArgs));

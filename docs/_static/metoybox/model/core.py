@@ -29,12 +29,12 @@ def get_default_scalings(
     if coordinates == "non-dimensional":
         # If we are using non-dimensional coordinates, get N from N_omega * omega
         N_omega = non_dimensional_variables["N_omega"]
-        omega = dimensional_variables["omega"]  # Assume omega is constant
+        omega = dimensional_variables["omega"]
         N = N_omega * omega
     else:
         # If using dimensional coordinates, simply get N from dimensional variables
         N = dimensional_variables["N"]
-        omega = dimensional_variables["omega"]  # Assume omega is constant
+        omega = dimensional_variables["omega"]
     # Get the other dimensional parameters
     H, Q_0 = dimensional_variables["H"], dimensional_variables["Q_0"]
 
@@ -49,14 +49,17 @@ def get_default_scalings(
     t_scale = 1 / omega  # times t to redimensionalize
     b_scale = Q_0 / omega  # times b to redimensionalize
     phi_scale = Q_0 * H / omega  # times phi to redimensionalize
+    M_scale = omega / N
     scalings = {"x": x_scale, "y": y_scale, "z": z_scale, "psi": psi_scale}
     scalings.update({"xi": x_scale, "zeta": z_scale})
     scalings.update({"u": u_scale, "v": v_scale, "w": w_scale, "Q": Q_scale})
     scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale})
+    # Add some scalings for convenience
+    scalings.update({"z_f": z_scale, "M": M_scale, "L": x_scale})
     return scalings
 
 
-def default_match_non_dimensional(
+def match_non_dimensional(
     dimensional_variables: dict[str, float],
     non_dimensional_variables: dict[str, float],
 ) -> dict[str, float]:
@@ -66,16 +69,28 @@ def default_match_non_dimensional(
     coordinates.
     """
     omega = dimensional_variables["omega"]  # omega is usually constant
+    N = dimensional_variables["N"]
+    H = dimensional_variables["H"]
+    M = non_dimensional_variables["M"]
     f = non_dimensional_variables["f_omega"] * omega
     N = non_dimensional_variables["N_omega"] * omega
     alpha = non_dimensional_variables["alpha_omega"] * omega
     t_dim = non_dimensional_variables["t"] / omega
-    dimensional_variables.update({"f": f, "N": N, "alpha": alpha, "t_dim": t_dim})
+
+    # THe following variables are used by the subclass models. Define the
+    # matching here for convenience.
+    M_dim = M * omega / N
+    z_f_dim = non_dimensional_variables["z_f"] * H
+    L_dim = non_dimensional_variables["L"] * H * N / omega
+
+    variables = {"f": f, "N": N, "alpha": alpha, "t_dim": t_dim, "M_dim": M_dim}
+    variables.update({"z_f_dim": z_f_dim, "L_dim": L_dim})
+    dimensional_variables.update(variables)
 
     return dimensional_variables
 
 
-def default_match_dimensional(
+def match_dimensional(
     dimensional_variables: dict[str, float],
     non_dimensional_variables: dict[str, float],
 ) -> dict[str, float]:
@@ -85,12 +100,23 @@ def default_match_dimensional(
     coordinates.
     """
     omega = dimensional_variables["omega"]  # omega is usually constant
-    f_omega = dimensional_variables["f"] / omega
-    N_omega = dimensional_variables["N"] / omega
+    N = dimensional_variables["N"]
+    H = dimensional_variables["H"]
+    f = dimensional_variables["f"]
+    f_omega = f / omega
+    N_omega = N / omega
     alpha_omega = dimensional_variables["alpha"] / omega
     t = dimensional_variables["t_dim"] * omega
+
+    # The following variables are used by the subclass models. Define the
+    # matching here for convenience.
+    M = dimensional_variables["M_dim"] * N / omega
+    z_f = dimensional_variables["z_f_dim"] / H
+    L = dimensional_variables["L_dim"] * omega / (H * N)
+
     variables = {"f_omega": f_omega, "N_omega": N_omega}
-    variables.update({"alpha_omega": alpha_omega, "t": t})
+    variables.update({"alpha_omega": alpha_omega, "t": t, "M": M, "z_f": z_f, "L": L})
+
     non_dimensional_variables.update(variables)
 
     return non_dimensional_variables
@@ -298,11 +324,16 @@ MatchVariablesFunction = Callable[
     dict[str, float],
 ]
 
-Omega = 2 * np.pi / (24 * 3600)  # Earth's rotation rate in rad/s
-default_dimensional = {"t_dim": 0.0, "N": 1e-2, "H": 1e3, "omega": Omega}
-default_dimensional.update({"Q_0": 1.2e-5, "alpha": 0.2 * Omega, "f": 0.5 * Omega})
-default_non_dimensional = {"t": 0.0, "N_omega": 1e-2 / Omega}
+_Omega = 2 * np.pi / (24 * 3600)  # Earth's rotation rate in rad/s
+_H, _N, _L = 1e3, 1e-2, 0.2
+_L_dim = _L * _H * _N / _Omega
+default_dimensional = {"t_dim": 0.0, "N": 1e-2, "H": 1e3, "omega": _Omega}
+default_dimensional.update({"Q_0": 1.2e-5, "alpha": 0.2 * _Omega, "f": 0.5 * _Omega})
+default_dimensional.update({"M_dim": _Omega * 1e2, "z_f_dim": 1e3, "L_dim": _L_dim})
+
+default_non_dimensional = {"t": 0.0, "N_omega": 1e-2 / _Omega}
 default_non_dimensional.update({"alpha_omega": 0.2, "f_omega": 0.5})
+default_non_dimensional.update({"M": 0.2, "z_f": 1.0, "L": _L})
 
 
 class DisplacementLines:
@@ -350,8 +381,8 @@ class BaseWaveModel:
         suptitle_height: float = 1.0,
         fields: dict[str, BaseField] | None = None,
         get_scalings: GetScalingsFunction = get_default_scalings,
-        match_dimensional: MatchVariablesFunction = default_match_dimensional,
-        match_non_dimensional: MatchVariablesFunction = default_match_non_dimensional,
+        match_dimensional: MatchVariablesFunction = match_dimensional,
+        match_non_dimensional: MatchVariablesFunction = match_non_dimensional,
         scalings: dict[str, float] = {},
     ):
         """Initialize the model."""
@@ -663,9 +694,6 @@ class BaseWaveModel:
         t = self.non_dimensional_variables["t"]
         xi = np.real(xi * np.exp(1j * t))
         zeta = np.real(zeta * np.exp(1j * t))
-        print(np.nanmax(np.abs(xi)))
-        print(np.nanmax(np.abs(zeta)))
-        print(disp_lines.max_upper)
         xi[np.abs(xi) > disp_lines.max_upper] = np.nan
         zeta[np.abs(zeta) > disp_lines.max_upper] = np.nan
         for i, line in enumerate(disp_lines.lines):

@@ -6,13 +6,13 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Point Forcing Over Slope &mdash; metoybox 0.0.1 documentation</title>
+  <title>Localized Line Forcing &mdash; metoybox 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
 
   
-    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/point_forcing_over_slope.html" />
+    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/localized_line_forcing.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=d45e8c67"></script>
@@ -21,8 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Localized Line Forcing" href="localized_line_forcing.html" />
-    <link rel="prev" title="Gaussian Temporal Forcing" href="gaussian_forcing.html" /> 
+    <link rel="next" title="Heaviside Sea-breeze Forcing" href="heaviside_seabreeze.html" />
+    <link rel="prev" title="Point Forcing Over Slope" href="point_forcing_over_slope.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -47,8 +47,8 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="mountain_valley.html">Mountain-Valley Breeze, Low-Level Jet</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Point Forcing Over Slope</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Localized Line Forcing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="heaviside_seabreeze.html">Heaviside Sea-breeze Forcing</a></li>
 </ul>
 
@@ -66,9 +66,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Point Forcing Over Slope</li>
+      <li class="breadcrumb-item active">Localized Line Forcing</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/point_forcing_over_slope.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/localized_line_forcing.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -76,8 +76,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="point-forcing-over-slope">
-<h1>Point Forcing Over Slope<a class="headerlink" href="#point-forcing-over-slope" title="Link to this heading"></a></h1>
+  <section id="localized-line-forcing">
+<h1>Localized Line Forcing<a class="headerlink" href="#localized-line-forcing" title="Link to this heading"></a></h1>
 <!-- Note we only need a snippet that will get put in the rst generated html file.-->
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
 <link rel="stylesheet" href="_static/assets/css/mathjax.css" />
@@ -108,31 +108,31 @@
         const labels = ["\\(\\psi\\)", "\\(v\\)", "\\(\\phi\\)"]
         const imshow_sel_config = imshowSelectionConfig(fields, labels);
         configs.unshift(imshow_sel_config);
-        const MStep = 3 * stepRatio
-        const MDimMax = 1e-2
-        const MDimStep = MDimMax * stepRatio
         const zFStep = 3 * stepRatio
-        let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
-        configs.push(sliderConfig(...args));
+        const LStep = 1 * stepRatio
+        const LValue = 0.2
+        const LDimValue = LValue * NValue * HValue / Omega
         args = ["\\(z_f:\\)", "z_f-slider", 0, 3, 1, zFStep, "non-dimensional"];
         configs.push(sliderConfig(...args));
         args = ["\\(z_f:\\)", "z_f_dim-slider", 0, 3e3, 1e3, zFStep * 1e3, "dimensional", "m"];
         configs.push(sliderConfig(...args));
-        args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep, "dimensional", "m m⁻¹"];
-        configs.push(sliderConfig(...args));
         args = ["\\(\\omega:\\)", "omega-slider", Omega * stepRatio, 2 * Omega, Omega, Omega * stepRatio, "dimensional", "s⁻¹"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(L:\\)", "L-slider", 0, 1, LValue, LStep, "non-dimensional"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(L:\\)", "L_dim-slider", 0, 100e3, LDimValue, LStep * 100e3, "dimensional", "m"];
         configs.push(sliderConfig(...args));
         createModelControls(configs, "controls");
     </script>
-    <py-script src="_static/point_forcing_over_slope.py" config="_static/assets/pyscript.toml"></py-script>
+    <py-script src="_static/localized_line_forcing.py" config="_static/assets/pyscript.toml"></py-script>
 </div></section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="gaussian_forcing.html" class="btn btn-neutral float-left" title="Gaussian Temporal Forcing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="localized_line_forcing.html" class="btn btn-neutral float-right" title="Localized Line Forcing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="point_forcing_over_slope.html" class="btn btn-neutral float-left" title="Point Forcing Over Slope" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="heaviside_seabreeze.html" class="btn btn-neutral float-right" title="Heaviside Sea-breeze Forcing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
