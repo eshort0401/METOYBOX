@@ -345,7 +345,7 @@ class DisplacementLines:
         self.subset = slice(int(self.step / 3), None, self.step)
         self.base_heights = z[self.subset]
         dz = self.base_heights[1] - self.base_heights[0]
-        self.max_upper = 5 * dz
+        self.max_upper = 1.5 * dz
         self.lines: list[plt.Line2D] = []
         self.visible: bool = False
         self.fields = fields
@@ -692,11 +692,20 @@ class BaseWaveModel:
         zeta = self.fields[disp_lines.fields[1]].field[disp_lines.subset, :]
         z = z[disp_lines.subset]
         t = self.non_dimensional_variables["t"]
+        xi_mag = np.abs(xi)
+        zeta_mag = np.abs(zeta)
         xi = np.real(xi * np.exp(1j * t))
         zeta = np.real(zeta * np.exp(1j * t))
-        xi[np.abs(xi) > disp_lines.max_upper] = np.nan
-        zeta[np.abs(zeta) > disp_lines.max_upper] = np.nan
+
         for i, line in enumerate(disp_lines.lines):
+            zeta_i = zeta_mag[i, :]
+            xi_i = xi_mag[i, :]
+            # If any part of the displacement is too big, set the whole line to nan
+            cond_1 = np.any(np.abs(zeta_i) > disp_lines.max_upper)
+            cond_2 = np.any(np.abs(xi_i) > disp_lines.max_upper)
+            if cond_1 or cond_2:
+                zeta[i, :] = np.nan
+                xi[i, :] = np.nan
             line.set_xdata(x + xi[i, :])
             line.set_ydata(z[i] + zeta[i, :])
 

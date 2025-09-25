@@ -3,6 +3,7 @@
 from metoybox.model import core
 from metoybox.calculate import mountain_valley, point_forcing_slope
 import matplotlib.colors as mcolors
+import numpy as np
 
 
 class BaseSlopedModel(core.BaseWaveModel):
@@ -35,6 +36,19 @@ class BaseSlopedModel(core.BaseWaveModel):
         """Update the extra slope line element for sloped models."""
         super().update_figure_data()
         self.plot.set_ydata(self.x * self.non_dimensional_variables["M"])
+
+    def update_displacement_lines(self):
+        """Update the displacement lines for sloped models."""
+        super().update_displacement_lines()
+        # Mask out any displacement lines below the slope
+        for line in self.displacement_lines.lines:
+            x_data, y_data = line.get_xdata(), line.get_ydata()
+            M = self.non_dimensional_variables["M"]
+            cond = y_data < M * x_data
+            x_data[cond] = np.nan
+            y_data[cond] = np.nan
+            line.set_xdata(x_data)
+            line.set_ydata(y_data)
 
 
 class MountainValleyModel(BaseSlopedModel):
