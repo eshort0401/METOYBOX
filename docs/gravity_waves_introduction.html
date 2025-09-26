@@ -6,23 +6,24 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Slope Breeze, Low-Level Jet &mdash; metoybox 0.0.1 documentation</title>
+  <title>Inertia Gravity Waves &mdash; metoybox 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
 
   
-    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/mountain_valley.html" />
+    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/gravity_waves_introduction.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=d45e8c67"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Gaussian Temporal Forcing" href="gaussian_forcing.html" />
-    <link rel="prev" title="Inertia Gravity Waves" href="gravity_waves_introduction.html" /> 
+    <link rel="next" title="Slope Breeze, Low-Level Jet" href="mountain_valley.html" />
+    <link rel="prev" title="Meteorological Toybox" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -45,8 +46,8 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="gravity_waves_introduction.html">Inertia Gravity Waves</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Slope Breeze, Low-Level Jet</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Inertia Gravity Waves</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mountain_valley.html">Slope Breeze, Low-Level Jet</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
@@ -69,10 +70,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="gravity_waves_introduction.html">Inertia Gravity Waves</a></li>
-      <li class="breadcrumb-item active">Slope Breeze, Low-Level Jet</li>
+      <li class="breadcrumb-item active">Inertia Gravity Waves</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/mountain_valley.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/gravity_waves_introduction.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -80,55 +80,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="slope-breeze-low-level-jet">
-<h1>Slope Breeze, Low-Level Jet<a class="headerlink" href="#slope-breeze-low-level-jet" title="Link to this heading"></a></h1>
-<!-- Note we only need a snippet that will get put in the rst generated html file.-->
-<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<link rel="stylesheet" href="_static/assets/css/mathjax.css" />
-<link rel="stylesheet" href="_static/assets/css/base.css" />
-<link rel="stylesheet" href="_static/assets/css/controls.css" />
-<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-<script src="_static/assets/js/mathjax-config.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-<div id="loading-screen">
-    <div class="spinner"></div>
-    <p>Loading...</p>
-    <p><small>This can take a few minutes!</small></p>
+  <section id="inertia-gravity-waves">
+<h1>Inertia Gravity Waves<a class="headerlink" href="#inertia-gravity-waves" title="Link to this heading"></a></h1>
+<p>Introduction to inertia gravity waves. We typically use some version of the following equation set;</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+u_t &amp;= \frac{f}{\omega}v - p_x - \frac{\alpha}{\omega}u \tag{1} \\
+v_t &amp;= -\frac{f}{\omega}u - \frac{\alpha}{\omega}v \tag{2} \\
+\frac{\omega^2}{N^2}w_t &amp;= b - p_z - \frac{\omega^2}{N^2}\frac{\alpha}{\omega}w \tag{3} \\
+b_t + w &amp;= Q - \frac{\alpha}{\omega} b \tag{4} \\
+u_x + w_z &amp;= 0 \tag{5} \\
+w(z=0) &amp;= 0 \tag{6}.
+\end{align}\end{split}\]</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="mountain_valley.html">Slope Breeze, Low-Level Jet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
+<li class="toctree-l1"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="heaviside_seabreeze.html">Heaviside Sea-breeze Forcing</a></li>
+</ul>
 </div>
-
-<div id="main-content">
-    <div id="figure-output"></div>
-    <div id="controls"></div>
-    <script src="_static/assets/js/model-controls.js"></script>
-    <script>
-        const configs = coreWaveConfigs();
-        // Add a displacement toggle checkbox row above the sliders
-        const displacement_config = displacementToggleConfig();
-        configs.unshift(displacement_config);
-
-        // Add an imshow selection control row above the sliders
-        const imshow_sel_config = imshowSelectionConfig();
-        configs.unshift(imshow_sel_config);
-        const MStep = 3 * stepRatio
-        const MDimMax = 1e-2
-        const MDimStep = MDimMax * stepRatio
-        let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
-        configs.push(sliderConfig(...args));
-        args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep]
-        args.push("dimensional", "m m⁻¹");
-        configs.push(sliderConfig(...args));
-        createModelControls(configs, "controls");
-    </script>
-    <py-script src="_static/mountain_valley.py" config="_static/assets/pyscript.toml"></py-script>
-</div></section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="gravity_waves_introduction.html" class="btn btn-neutral float-left" title="Inertia Gravity Waves" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="gaussian_forcing.html" class="btn btn-neutral float-right" title="Gaussian Temporal Forcing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Meteorological Toybox" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mountain_valley.html" class="btn btn-neutral float-right" title="Slope Breeze, Low-Level Jet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

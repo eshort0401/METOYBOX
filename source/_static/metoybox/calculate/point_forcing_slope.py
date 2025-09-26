@@ -84,12 +84,18 @@ def calculate_fields_spatial(
     polarized_fields = recover_polarized_default(*args)
     fields_dict.update(polarized_fields)
 
+    sigma_hat = 1j + alpha_omega
+
     if "phi" in fields:
-        phi = -D * (
-            c_n * g_p / L_1 / (-g_p * M + 1)
-            - c_n * g_n / L_2 / (-g_n * M + 1)
-            - c_p * g_p / L_3 / (-g_p * M + 1)
-            + c_p * g_n / L_4 / (-g_n * M + 1)
+        phi = (
+            -D
+            * (sigma_hat + 1 / sigma_hat * f_omega**2)
+            * (
+                c_n * g_p / L_1 / (-g_p * M + 1)
+                - c_n * g_n / L_2 / (-g_n * M + 1)
+                - c_p * g_p / L_3 / (-g_p * M + 1)
+                + c_p * g_n / L_4 / (-g_n * M + 1)
+            )
         )
         fields_dict["phi"] = phi
 

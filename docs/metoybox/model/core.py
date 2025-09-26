@@ -339,13 +339,13 @@ default_non_dimensional.update({"M": 0.2, "z_f": 1.0, "L": _L})
 class DisplacementLines:
     """Convenience class to cleanly manage lists of displacement lines."""
 
-    def __init__(self, z, number_lines=8, fields=["xi", "zeta"]):
+    def __init__(self, z, number_lines=8, fields=["xi", "zeta"], max_upper_scale=1.5):
         """Initialize the displacement lines."""
         self.step = len(z) // number_lines
         self.subset = slice(int(self.step / 3), None, self.step)
         self.base_heights = z[self.subset]
         dz = self.base_heights[1] - self.base_heights[0]
-        self.max_upper = 1.5 * dz
+        self.max_upper = max_upper_scale * dz
         self.lines: list[plt.Line2D] = []
         self.visible: bool = False
         self.fields = fields
@@ -384,6 +384,7 @@ class BaseWaveModel:
         match_dimensional: MatchVariablesFunction = match_dimensional,
         match_non_dimensional: MatchVariablesFunction = match_non_dimensional,
         scalings: dict[str, float] = {},
+        max_upper_scale: float = 1.5,
     ):
         """Initialize the model."""
         self.name = name
@@ -424,7 +425,7 @@ class BaseWaveModel:
         coord = self.coordinates
         dim, non_dim = self.dimensional_variables, self.non_dimensional_variables
         self.scalings = self.get_scalings(coord, dim, non_dim)
-        self.displacement_lines = DisplacementLines(z)
+        self.displacement_lines = DisplacementLines(z, max_upper_scale=max_upper_scale)
 
     def initialize_figure(self):
         """Initialize the figure with the fields."""

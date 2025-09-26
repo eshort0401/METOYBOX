@@ -1,4 +1,4 @@
-Mountain-Valley Breeze, Low-Level Jet
+Slope Breeze, Low-Level Jet
 ================================================
 
 .. raw:: html
