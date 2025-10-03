@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Heaviside Sea-breeze Forcing &mdash; metoybox 0.0.1 documentation</title>
+  <title>Land-Sea Breeze &mdash; metoybox 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
@@ -49,7 +49,7 @@
 <li class="toctree-l2"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Heaviside Sea-breeze Forcing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Land-Sea Breeze</a></li>
 </ul>
 </li>
 </ul>
@@ -69,7 +69,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="gravity_waves_introduction.html">Inertia Gravity Waves</a></li>
-      <li class="breadcrumb-item active">Heaviside Sea-breeze Forcing</li>
+      <li class="breadcrumb-item active">Land-Sea Breeze</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/heaviside_seabreeze.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -79,9 +79,46 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="heaviside-sea-breeze-forcing">
-<h1>Heaviside Sea-breeze Forcing<a class="headerlink" href="#heaviside-sea-breeze-forcing" title="Link to this heading"></a></h1>
-<iframe src="_static/heaviside_seabreeze.html" width="100%" height="800"></iframe></section>
+  <section id="land-sea-breeze">
+<h1>Land-Sea Breeze<a class="headerlink" href="#land-sea-breeze" title="Link to this heading"></a></h1>
+<!-- Note we only need a snippet that will get put in the rst generated html file.-->
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+<link rel="stylesheet" href="_static/assets/css/mathjax.css" />
+<link rel="stylesheet" href="_static/assets/css/base.css" />
+<link rel="stylesheet" href="_static/assets/css/controls.css" />
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<script src="_static/assets/js/mathjax-config.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<div id="loading-screen">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+    <p><small>This can take a few minutes!</small></p>
+</div>
+
+<div id="main-content">
+    <div id="figure-output"></div>
+    <div id="controls"></div>
+    <script src="_static/assets/js/model-controls.js"></script>
+    <script>
+        const configs = coreWaveConfigs();
+        // Add a displacement toggle checkbox row above the sliders
+        const displacement_config = displacementToggleConfig();
+        configs.unshift(displacement_config);
+
+        // Add an imshow selection control row above the sliders
+        configs.unshift(imshowSelectionConfig());
+        const LStep = 1 * stepRatio
+        const LValue = 0.2
+        const LDimValue = LValue * NValue * HValue / Omega
+        args = ["\\(L:\\)", "L-slider", 0, 1, LValue, LStep, "non-dimensional"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(L:\\)", "L_dim-slider", 0, 100e3, LDimValue, LStep * 100e3, "dimensional", "m"];
+        configs.push(sliderConfig(...args));
+        createModelControls(configs, "controls");
+    </script>
+    <py-script src="_static/land_sea.py" config="_static/assets/pyscript.toml"></py-script>
+</div></section>
 
 
            </div>
