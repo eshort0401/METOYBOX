@@ -55,7 +55,7 @@ def get_default_scalings(
     scalings.update({"u": u_scale, "v": v_scale, "w": w_scale, "Q": Q_scale})
     scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale})
     # Add some scalings for convenience
-    scalings.update({"z_f": z_scale, "M": M_scale, "L": x_scale})
+    scalings.update({"z_f": z_scale, "M": M_scale, "L": x_scale, "sigma": 1})
     return scalings
 
 
@@ -76,6 +76,7 @@ def match_non_dimensional(
     N = non_dimensional_variables["N_omega"] * omega
     alpha = non_dimensional_variables["alpha_omega"] * omega
     t_dim = non_dimensional_variables["t"] / omega
+    sigma = non_dimensional_variables["sigma"]
 
     # THe following variables are used by the subclass models. Define the
     # matching here for convenience.
@@ -84,7 +85,7 @@ def match_non_dimensional(
     L_dim = non_dimensional_variables["L"] * H * N / omega
 
     variables = {"f": f, "N": N, "alpha": alpha, "t_dim": t_dim, "M_dim": M_dim}
-    variables.update({"z_f_dim": z_f_dim, "L_dim": L_dim})
+    variables.update({"z_f_dim": z_f_dim, "L_dim": L_dim, "sigma_dim": sigma})
     dimensional_variables.update(variables)
 
     return dimensional_variables
@@ -107,6 +108,7 @@ def match_dimensional(
     N_omega = N / omega
     alpha_omega = dimensional_variables["alpha"] / omega
     t = dimensional_variables["t_dim"] * omega
+    sigma_dim = dimensional_variables["sigma_dim"]
 
     # The following variables are used by the subclass models. Define the
     # matching here for convenience.
@@ -114,7 +116,7 @@ def match_dimensional(
     z_f = dimensional_variables["z_f_dim"] / H
     L = dimensional_variables["L_dim"] * omega / (H * N)
 
-    variables = {"f_omega": f_omega, "N_omega": N_omega}
+    variables = {"f_omega": f_omega, "N_omega": N_omega, "sigma": sigma_dim}
     variables.update({"alpha_omega": alpha_omega, "t": t, "M": M, "z_f": z_f, "L": L})
 
     non_dimensional_variables.update(variables)
@@ -330,10 +332,12 @@ _L_dim = _L * _H * _N / _Omega
 default_dimensional = {"t_dim": 0.0, "N": 1e-2, "H": 1e3, "omega": _Omega}
 default_dimensional.update({"Q_0": 1.2e-5, "alpha": 0.2 * _Omega, "f": 0.5 * _Omega})
 default_dimensional.update({"M_dim": _Omega * 1e2, "z_f_dim": 1e3, "L_dim": _L_dim})
+default_dimensional.update({"sigma_dim": 1.0})
 
 default_non_dimensional = {"t": 0.0, "N_omega": 1e-2 / _Omega}
 default_non_dimensional.update({"alpha_omega": 0.2, "f_omega": 0.5})
 default_non_dimensional.update({"M": 0.2, "z_f": 1.0, "L": _L})
+default_non_dimensional.update({"sigma": 1.0})
 
 
 class DisplacementLines:

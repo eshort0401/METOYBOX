@@ -2,6 +2,7 @@
 # First add the project root to the path
 import sys
 from pathlib import Path
+import shutil
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
@@ -77,11 +78,6 @@ autodoc_pydantic_model_show_config_summary = False
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
-    # "pydantic": ("https://docs.pydantic.dev/latest/", None),
-    # "pylint": ("https://pylint.pycqa.org/en/latest/", None),
-    # "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
-    # "xarray": ("https://docs.xarray.dev/en/stable/", None),
-    # "numpy": ("https://numpy.org/doc/stable/", None),
 }
 intersphinx_disabled_domains = ["std"]
 
@@ -96,3 +92,37 @@ html_theme = "sphinx_rtd_theme"
 # -- Options for EPUB output
 epub_show_urls = "footnote"
 html_baseurl = "https://eshort0401.github.io/METOYBOX/"
+
+
+def setup(app):
+    def copy_metoybox_to_build(app, docname, source):
+        # Only run once during the build (not for every document)
+        if not hasattr(app.env, "_metoybox_copied"):
+            # Path to your metoybox code (outside source)
+            repo_root = Path(__file__).resolve().parents[1]
+            metoybox_src = repo_root / "metoybox"
+
+            # Destination in the built output
+            build_dir = Path(app.outdir)  # This is _build/html
+            metoybox_dst = build_dir / "metoybox"
+
+            # Only copy if source exists
+            if metoybox_src.exists():
+                # Ensure _static directory exists in build output
+                metoybox_dst.parent.mkdir(parents=True, exist_ok=True)
+
+                # Remove old copy if it exists
+                if metoybox_dst.exists():
+                    shutil.rmtree(metoybox_dst)
+
+                # Copy the whole folder
+                shutil.copytree(metoybox_src, metoybox_dst)
+                print(f"Copied {metoybox_src} to {metoybox_dst}")
+
+                # Mark as done so we don't copy multiple times
+                app.env._metoybox_copied = True
+            else:
+                print(f"Source directory {metoybox_src} does not exist. Skipping copy.")
+
+    # Connect to the source-read event (runs early in the build)
+    app.connect("source-read", copy_metoybox_to_build)

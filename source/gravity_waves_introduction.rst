@@ -1,4 +1,4 @@
-Inertia Gravity Waves
+Inertia-Gravity Waves
 =======================================================
 
 Introduction to inertia gravity waves. We typically use some version of the following equation set;
@@ -20,4 +20,4 @@ Introduction to inertia gravity waves. We typically use some version of the foll
    gaussian_forcing.rst
    point_forcing_over_slope.rst
    localized_line_forcing.rst
-   heaviside_seabreeze.rst
+   land_sea.rst

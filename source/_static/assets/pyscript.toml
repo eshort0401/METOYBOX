@@ -20,5 +20,6 @@ packages = ["numpy", "matplotlib", "scipy"]
 "{CALCULATE}/point_forcing_slope.py" = "{DEST}/calculate/"
 "{CALCULATE}/localized_line_forcing.py" = "{DEST}/calculate/"
 "{CALCULATE}/land_sea.py" = "{DEST}/calculate/"
+"{CALCULATE}/gaussian_forcing.py" = "{DEST}/calculate/"
 "{CTRL}/__init__.py" = "{DEST}/pyscript_controllers/"
 "{CTRL}/core.py" = "{DEST}/pyscript_controllers/"

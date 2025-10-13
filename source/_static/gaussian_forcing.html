@@ -1,77 +1,51 @@
-<!DOCTYPE html>
-<html lang="en">
+<!-- Note we only need a snippet that will get put in the rst generated html file.-->
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+<link rel="stylesheet" href="_static/assets/css/mathjax.css" />
+<link rel="stylesheet" href="_static/assets/css/base.css" />
+<link rel="stylesheet" href="_static/assets/css/controls.css" />
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<script src="_static/assets/js/mathjax-config.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gaussian Time Forcing Toy-Model</title>
-  <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-  <link rel="stylesheet" href="assets/css/mathjax.css" />
-  <link rel="stylesheet" href="assets/css/base.css" />
-  <link rel="stylesheet" href="assets/css/controls.css" />
-  <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <p>Loading...</p>
+  <p><small>This can take a few minutes!</small></p>
+</div>
 
-  <script src="assets/js/mathjax-config.js"></script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-</head>
+<div id="main-content">
+  <div id="figure-output"></div>
+  <div id="controls"></div>
+  <script src="_static/assets/js/model-controls.js"></script>
+  <script>
+    const configs = coreWaveConfigs();
+    // Add a displacement toggle checkbox row above the sliders
+    const displacement_config = displacementToggleConfig();
+    configs.unshift(displacement_config);
 
-<body>
-
-  <div id="loading-screen">
-    <div class="spinner"></div>
-    <p>Loading...</p>
-    <p><small>This can take a few minutes!</small></p>
-  </div>
-
-  <div id="main-content">
-    <div id="figure-output"></div>
-    <div class="controls">
-      <label>\(\frac{f}{\omega}\):</label>
-      <input type="range" id="f-omega-slider" min="0" max="2" value="0.05" step="0.01">
-      <output id="f-omega-out">0.05</output>
-
-      <label>\(\frac{\alpha}{\omega}\):</label>
-      <input type="range" id="alpha-omega-slider" min="0.01" max="1" value="0.3" step="0.01">
-      <output id="alpha-omega-out">0.30</output>
-
-      <label>\(\frac{N}{\omega}\):</label>
-      <input type="range" id="N-omega-slider" min="0.1" max="150" value="5.72957795131" step="0.1">
-      <output id="N-omega-out">5.72957795131</output>
-
-      <label>\(z_f\):</label>
-      <input type="range" id="zf-slider" min="0.01" max="2" value="1" step="0.01">
-      <output id="zf-out">1.00</output>
-
-      <label>\(\sigma\):</label>
-      <input type="range" id="sigma-slider" min="0" max="5" value="0.2" step="0.01">
-      <output id="sigma-out">1.00</output>
-
-      <label>\(t\):</label>
-      <input type="range" id="t-slider" min="0" max="12.56637" value="0.0" step="0.01">
-      <output id="t-out">0.00</output>
-
-      <label>Scale:</label>
-      <input type="checkbox" id="dimensional_checkbox">
-      <span></span>
-
-      <label class="dimensional-param">\(H\):</label>
-      <input type="range" id="H-slider" min="100" max="5000" value="1000" step="10" class="dimensional-param" disabled>
-      <output id="H-out" class="dimensional-param">1000</output>
-
-      <label class="dimensional-param">\(\omega\):</label>
-      <input type="range" id="omega-slider" min="0.0001" max="0.01" value="0.00174532925" step="0.0001"
-        class="dimensional-param" disabled>
-      <output id="omega-out" class="dimensional-param">0.00174532925</output>
-
-      <label class="dimensional-param">\(Q_0\):</label>
-      <input type="range" id="Q0-slider" min="0.000001" max="0.00005" value=".000012" step="0.000001"
-        class="dimensional-param" disabled>
-      <output id="Q0-out" class="dimensional-param">0.000012</output>
-
-    </div>
-  </div>
-
-  <py-script src="gaussian_forcing.py" config="assets/pyscript.toml"></py-script>
-</body>
-
-</html>
+    // Add an imshow selection control row above the sliders
+    const fields = ["psi", "v", "phi"]
+    const labels = ["\\(\\psi\\)", "\\(v\\)", "\\(\\phi\\)"]
+    const imshow_sel_config = imshowSelectionConfig(fields, labels);
+    configs.unshift(imshow_sel_config);
+    const zFStep = 3 * stepRatio
+    const LStep = 1 * stepRatio
+    const LValue = 0.2
+    const LDimValue = LValue * NValue * HValue / Omega
+    args = ["\\(z_f:\\)", "z_f-slider", 0, 3, 1, zFStep, "non-dimensional"];
+    configs.push(sliderConfig(...args));
+    args = ["\\(z_f:\\)", "z_f_dim-slider", 0, 3e3, 1e3, zFStep * 1e3, "dimensional", "m"];
+    configs.push(sliderConfig(...args));
+    args = ["\\(\\omega:\\)", "omega-slider", Omega * stepRatio, 2 * Omega, Omega, Omega * stepRatio, "dimensional", "s⁻¹"];
+    configs.push(sliderConfig(...args));
+    const sigmaMin = 0.1
+    const sigmaMax = 96
+    const sigmaStep = (sigmaMax - sigmaMin) * stepRatio
+    args = ["\\(\\sigma:\\)", "sigma-slider", sigmaMin, sigmaMax, 1, sigmaStep, "non-dimensional"];
+    configs.push(sliderConfig(...args));
+    args = ["\\(\\sigma:\\)", "sigma_dim-slider", sigmaMin, sigmaMax, 1, sigmaStep, "dimensional"];
+    configs.push(sliderConfig(...args));
+    createModelControls(configs, "controls");
+  </script>
+  <py-script src="_static/gaussian_forcing.py" config="_static/assets/pyscript.toml"></py-script>
+</div>

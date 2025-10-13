@@ -1,7 +1,7 @@
 """Extensions of the BaseWaveModel elevated forcings."""
 
 from metoybox.model import core
-from metoybox.calculate import localized_line_forcing
+from metoybox.calculate import localized_line_forcing, gaussian_forcing
 
 
 class LocalizedLineForcingModel(core.BaseWaveModel):
@@ -18,6 +18,28 @@ class LocalizedLineForcingModel(core.BaseWaveModel):
             self.Z,
             self.non_dimensional_variables["L"],
             self.non_dimensional_variables["z_f"],
+            self.non_dimensional_variables["f_omega"],
+            self.non_dimensional_variables["alpha_omega"],
+            self.non_dimensional_variables["N_omega"],
+            fields=names,
+        )
+        return new_fields
+
+
+class GaussianTemporalForcingModel(core.BaseWaveModel):
+    """
+    A linear theory model for an elevated Gaussian temporal forcing.
+    """
+
+    def calculate_fields(self, names):
+        """Calculate the fields for the elevated Gaussian temporal forcing model."""
+
+        # Update imshow field
+        new_fields = gaussian_forcing.calculate_fields_spatial(
+            self.X,
+            self.Z,
+            self.non_dimensional_variables["z_f"],
+            self.non_dimensional_variables["sigma"],
             self.non_dimensional_variables["f_omega"],
             self.non_dimensional_variables["alpha_omega"],
             self.non_dimensional_variables["N_omega"],
