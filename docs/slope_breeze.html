@@ -6,13 +6,13 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Slope Breeze, Low-Level Jet &mdash; metoybox 0.0.1 documentation</title>
+  <title>Slope Breeze &mdash; metoybox 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="_static/autodoc_pydantic.css" />
 
   
-    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/mountain_valley.html" />
+    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/slope_breeze.html" />
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="_static/documentation_options.js?v=d45e8c67"></script>
@@ -46,7 +46,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="gravity_waves_introduction.html">Inertia-Gravity Waves</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Slope Breeze, Low-Level Jet</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Slope Breeze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
@@ -70,9 +70,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="gravity_waves_introduction.html">Inertia-Gravity Waves</a></li>
-      <li class="breadcrumb-item active">Slope Breeze, Low-Level Jet</li>
+      <li class="breadcrumb-item active">Slope Breeze</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/mountain_valley.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/slope_breeze.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -80,8 +80,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="slope-breeze-low-level-jet">
-<h1>Slope Breeze, Low-Level Jet<a class="headerlink" href="#slope-breeze-low-level-jet" title="Link to this heading"></a></h1>
+  <section id="slope-breeze">
+<h1>Slope Breeze<a class="headerlink" href="#slope-breeze" title="Link to this heading"></a></h1>
 <!-- Note we only need a snippet that will get put in the rst generated html file.-->
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
 <link rel="stylesheet" href="_static/assets/css/mathjax.css" />
@@ -98,7 +98,10 @@
 </div>
 
 <div id="main-content">
-    <div id="figure-output"></div>
+    <div id="figure-output">
+        <div id="figure-output-A" class="figure-layer is-active"></div>
+        <div id="figure-output-B" class="figure-layer is-passive"></div>
+    </div>
     <div id="controls"></div>
     <script src="_static/assets/js/model-controls.js"></script>
     <script>
@@ -120,7 +123,7 @@
         configs.push(sliderConfig(...args));
         createModelControls(configs, "controls");
     </script>
-    <py-script src="_static/mountain_valley.py" config="_static/assets/pyscript.toml"></py-script>
+    <py-script src="_static/slope_breeze.py" config="_static/assets/pyscript.toml"></py-script>
 </div></section>
 
 

@@ -14,7 +14,10 @@
 </div>
 
 <div id="main-content">
-    <div id="figure-output"></div>
+    <div id="figure-output">
+        <div id="figure-output-A" class="figure-layer is-active"></div>
+        <div id="figure-output-B" class="figure-layer is-passive"></div>
+    </div>
     <div id="controls"></div>
     <script src="_static/assets/js/model-controls.js"></script>
     <script>
@@ -36,5 +39,5 @@
         configs.push(sliderConfig(...args));
         createModelControls(configs, "controls");
     </script>
-    <py-script src="_static/mountain_valley.py" config="_static/assets/pyscript.toml"></py-script>
+    <py-script src="_static/slope_breeze.py" config="_static/assets/pyscript.toml"></py-script>
 </div>

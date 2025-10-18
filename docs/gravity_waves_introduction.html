@@ -22,7 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Slope Breeze, Low-Level Jet" href="mountain_valley.html" />
+    <link rel="next" title="Slope Breeze" href="slope_breeze.html" />
     <link rel="prev" title="Meteorological Toybox" href="index.html" /> 
 </head>
 
@@ -47,7 +47,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Inertia-Gravity Waves</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="mountain_valley.html">Slope Breeze, Low-Level Jet</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
 <li class="toctree-l2"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
@@ -82,19 +82,43 @@
              
   <section id="inertia-gravity-waves">
 <h1>Inertia-Gravity Waves<a class="headerlink" href="#inertia-gravity-waves" title="Link to this heading"></a></h1>
-<p>Introduction to inertia gravity waves. We typically use some version of the following equation set;</p>
+<p>We first linearize the governing equations and make the <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Boussinesq/shallow-anelastic</a> and <span class="math notranslate nohighlight">\(f\)</span>-plane approximations, using <span class="math notranslate nohighlight">\(*\)</span> to denote dimensional variables;</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
-u_t &amp;= \frac{f}{\omega}v - p_x - \frac{\alpha}{\omega}u, \tag{1} \\
-v_t &amp;= -\frac{f}{\omega}u - \frac{\alpha}{\omega}v, \tag{2} \\
-\frac{\omega^2}{N^2}w_t &amp;= b - p_z - \frac{\omega^2}{N^2}\frac{\alpha}{\omega}w, \tag{3} \\
-b_t + w &amp;= Q - \frac{\alpha}{\omega} b, \tag{4} \\
-u_x + w_z &amp;= 0, \tag{5} \\
-w(z=0) &amp;= 0. \tag{6}
+\frac{\partial u_*}{\partial t_*} &amp;= fv_* - \frac{\partial p_*}{\partial x_*} - \alpha u_*, \\
+\frac{\partial v_*}{\partial t_*} &amp;= -fu_* - \alpha v_*, \\
+\frac{\partial w_*}{\partial t_*} &amp;= b_* - \frac{\partial p_*}{\partial z_*} - \alpha w_*, \\
+\frac{\partial b_*}{\partial t_*} + N^2 w_* &amp;= Q_* - \alpha b_*, \\
+\frac{\partial u_*}{\partial x_*} + \frac{\partial w_*}{\partial z_*} &amp;= 0, \\
+w_*(z_*=0) &amp;= 0.
 \end{align}\end{split}\]</div>
+<p>Note <span class="math notranslate nohighlight">\(Q\)</span> represents a forcing on the Buoyancy tendency. For instance, Rotunno (1983), <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>, and many subsequent papers have considered the forcing</p>
+<div class="math notranslate nohighlight">
+\[Q = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right)\exp\left(-\frac{z_*}{H}\right)\cos(\omega t_*),\]</div>
+<p>which emulates the heating/cooling of a land-surface <span class="math notranslate nohighlight">\(x&gt;0\)</span> as compared to an ocean surface <span class="math notranslate nohighlight">\(x&lt;0\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(H\)</span> are horizontal and vertical length scales, respectively, and <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency.</p>
+<p>Next we scale variables to remove units. Such scaling is called nondimensionalization. An immediate reason for doing this is that units can be mathematically inconvenient; for instance, what are the units of <span class="math notranslate nohighlight">\(\ln(10 \text{ m})\)</span>? Better to scale out the units at the start to avoid such ambiguity. Another reason is that nondimensionalization typically <a class="reference external" href="https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem">reduces the parameter space</a>, and reveals how the solution scales with different parameters. For the models in this section we use the following scalings from <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>;</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\begin{split}
+&amp;x^*=\frac{NH}{\omega}x, \quad y^*=\frac{NH}{\omega}y, \quad z^*=Hz,\quad t^*=\frac{t}{\omega}, \\
+&amp;Q^*=Q_0Q,\quad u^*=\frac{Q_0}{N\omega}u, \quad v^*=\frac{Q_0}{N\omega}v, \quad w^* = \frac{Q_0}{N^2}w, \\
+&amp;b^* = \frac{Q_0}{\omega} b,\quad p^*= \frac{Q_0H}{\omega}p,
+\end{split}
+\end{align}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is a representative height scale, <span class="math notranslate nohighlight">\(\omega\)</span> a representative frequency, and <span class="math notranslate nohighlight">\(Q_0\)</span> a representative amplitude of the forcing <span class="math notranslate nohighlight">\(Q\)</span>. These scales are not particularly important; they are simply chosen to ensure the numbers in our solution are not prohibitively small or large. Note these scales can often be chosen directly from the forcing function. With the land-sea breeze <span class="math notranslate nohighlight">\(Q\)</span> given above <span class="math notranslate nohighlight">\(\omega=\frac{2\pi}{24\cdot 3600}\)</span> is the diurnal frequency, but in general <span class="math notranslate nohighlight">\(\omega\)</span> can be any frequency of interest. Substituting the above expressions into our governing equations and simplifying we get</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+u_t &amp;= \frac{f}{\omega}v - p_x - \frac{\alpha}{\omega}u, \\
+v_t &amp;= -\frac{f}{\omega}u - \frac{\alpha}{\omega}v, \\
+\frac{\omega^2}{N^2}w_t &amp;= b - p_z - \frac{\omega^2}{N^2}\frac{\alpha}{\omega}w, \\
+b_t + w &amp;= Q - \frac{\alpha}{\omega} b, \\
+u_x + w_z &amp;= 0, \\
+w(z=0) &amp;= 0.
+\end{align}\end{split}\]</div>
+<p>Note that for some of the models we will consider <span class="math notranslate nohighlight">\(\omega\)</span> will be the diurnal frequency <span class="math notranslate nohighlight">\(\frac{2\pi}{24\cdot 3600}\)</span>, and hence <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2}\)</span> will be tiny and can be neglected. Wave solutions for which <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2}\)</span></p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="mountain_valley.html">Slope Breeze, Low-Level Jet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
 <li class="toctree-l1"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
@@ -108,7 +132,7 @@ w(z=0) &amp;= 0. \tag{6}
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Meteorological Toybox" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="mountain_valley.html" class="btn btn-neutral float-right" title="Slope Breeze, Low-Level Jet" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="slope_breeze.html" class="btn btn-neutral float-right" title="Slope Breeze" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

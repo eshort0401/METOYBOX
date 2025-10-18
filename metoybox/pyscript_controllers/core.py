@@ -5,6 +5,8 @@ from typing import Iterable
 
 # Import pyscript. Note these are not normal imports and typically confuse IDE linters!
 from pyscript import document, display, when
+from pyodide.ffi import create_proxy
+from js import window
 
 
 class WebCache:
@@ -38,14 +40,16 @@ class BaseWaveController:
         model: BaseWaveModel,
         dimensional_variables: Iterable[str] = default_dimensional,
         non_dimensional_variables: Iterable[str] = default_non_dimensional,
-        target: str = "figure-output",
+        active_target: str = "figure-output-A",
+        inactive_target: str = "figure-output-B",
     ):
         """
         Initialize the controller. This sets up the web cache and registers all the
         event handlers with pyscript.
         """
         self.cache = WebCache()
-        self.target = target
+        self.active_target = active_target
+        self.inactive_target = inactive_target
         self.model = model
         self.dimensional_variables = dimensional_variables
         self.non_dimensional_variables = non_dimensional_variables
@@ -59,7 +63,46 @@ class BaseWaveController:
         self.model.update_fields()
         self.model.update_suptitle()
         self.model.update_figure_data()
-        display(self.model.fig, target="figure-output", append=False)
+        display(self.model.fig, target="figure-output-A", append=False)
+
+    def redraw(self):
+        """Swap active target and redraw the figure."""
+        active = self.active_target
+        inactive = self.inactive_target
+        display(self.model.fig, target=inactive, append=False)
+
+        active_element = self.cache.get(active)
+        inactive_element = self.cache.get(inactive)
+
+        def is_ready(node) -> bool:
+            if not node:
+                return False
+            child = node.firstElementChild or node.lastElementChild
+            if not child:
+                return False
+            tag = (child.tagName or "").lower()
+            if tag == "img":
+                # Image decoded and sized
+                complete = bool(getattr(child, "complete", False))
+                width = int(getattr(child, "naturalWidth", 0) or 0)
+                height = int(getattr(child, "naturalHeight", 0) or 0)
+                return complete and width > 0 and height > 0
+            # SVG/others: ensure it laid out and has size/content
+            rect = child.getBoundingClientRect()
+            return rect.width > 0 and rect.height > 0 and child.childNodes.length > 0
+
+        def poll(timestamp: float):
+            if is_ready(inactive_element):
+                # Flip visibility (no fade), then swap IDs
+                inactive_element.classList.remove("is-passive")
+                inactive_element.classList.add("is-active")
+                active_element.classList.remove("is-active")
+                active_element.classList.add("is-passive")
+                self.active_target, self.inactive_target = inactive, active
+            else:
+                window.requestAnimationFrame(create_proxy(poll))
+
+        window.requestAnimationFrame(create_proxy(poll))
 
     def _check_variables(self):
         """Check that the model contains the required variables."""
@@ -129,7 +172,7 @@ class BaseWaveController:
         self.model.update_fields(force_update_norm=True)
         self.model.update_labels()
         self.model.update_figure_data()
-        display(self.model.fig, target="figure-output", append=False)
+        self.redraw()
 
     def toggle_displacement_lines(self, event):
         """Toggle the visibility of the displacement lines."""
@@ -141,7 +184,7 @@ class BaseWaveController:
             self.model.update_fields()
             self.model.update_displacement_lines()
         self.model.update_figure_data()
-        display(self.model.fig, target="figure-output", append=False)
+        self.redraw()
 
     def _update_values(
         self, new_values: dict[str, float], control_suffix: str = "-slider"
@@ -194,7 +237,7 @@ class BaseWaveController:
         self.model.update_fields()
         self.model.update_figure_data()
         self.model.update_suptitle()
-        display(self.model.fig, target="figure-output", append=False)
+        self.redraw()
 
     def update_model_variables(self, event, control_suffix: str = "-slider"):
         """Update the model variables based on the controller inputs."""
@@ -210,7 +253,7 @@ class BaseWaveController:
         self._update_outputs([key])
         self.model.update_fields()
         self.model.update_figure_data()
-        display(self.model.fig, target="figure-output", append=False)
+        self.redraw()
 
     def update_time(self, event):
         """Update the time variable."""
@@ -227,7 +270,7 @@ class BaseWaveController:
             self._update_outputs(["t"])
         self.model.update_figure_data()
         self.model.update_suptitle()
-        display(self.model.fig, target="figure-output", append=False)
+        self.redraw()
 
 
 def hide_loading_screen():
