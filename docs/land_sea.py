@@ -14,8 +14,8 @@ x_ticks = np.arange(-4, 5, 2)
 z_ticks = np.arange(0, 9, 2)
 x_limits = (-4, 4)
 z_limits = (0, 8)
-fields = {"psi": core.Psi(percentile=90), "velocity": core.Velocity(percentile=90)}
-fields.update({"v": core.V(percentile=90), "Q": core.Q()})
+fields = {"psi": core.Psi(), "velocity": core.Velocity(percentile=90)}
+fields.update({"v": core.V(), "Q": core.Q()})
 fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
 args = ["land_sea", x, z, x_ticks, z_ticks, x_limits, z_limits]
 model = land_sea.LandSeaBreezeModel(*args, fields=fields)

@@ -2,11 +2,11 @@
 
 from metoybox.model.core import BaseWaveModel
 from typing import Iterable
+import io
+import base64
 
 # Import pyscript. Note these are not normal imports and typically confuse IDE linters!
 from pyscript import document, display, when
-from pyodide.ffi import create_proxy
-from js import window
 
 
 class WebCache:
@@ -40,16 +40,14 @@ class BaseWaveController:
         model: BaseWaveModel,
         dimensional_variables: Iterable[str] = default_dimensional,
         non_dimensional_variables: Iterable[str] = default_non_dimensional,
-        active_target: str = "figure-output-A",
-        inactive_target: str = "figure-output-B",
+        target: str = "figure-output",
     ):
         """
         Initialize the controller. This sets up the web cache and registers all the
         event handlers with pyscript.
         """
         self.cache = WebCache()
-        self.active_target = active_target
-        self.inactive_target = inactive_target
+        self.target = target
         self.model = model
         self.dimensional_variables = dimensional_variables
         self.non_dimensional_variables = non_dimensional_variables
@@ -63,46 +61,21 @@ class BaseWaveController:
         self.model.update_fields()
         self.model.update_suptitle()
         self.model.update_figure_data()
-        display(self.model.fig, target="figure-output-A", append=False)
+        self.model.fig.dpi = 120
+        self._initialize_img()
+        self.redraw()
 
-    def redraw(self):
-        """Swap active target and redraw the figure."""
-        active = self.active_target
-        inactive = self.inactive_target
-        display(self.model.fig, target=inactive, append=False)
-
-        active_element = self.cache.get(active)
-        inactive_element = self.cache.get(inactive)
-
-        def is_ready(node) -> bool:
-            if not node:
-                return False
-            child = node.firstElementChild or node.lastElementChild
-            if not child:
-                return False
-            tag = (child.tagName or "").lower()
-            if tag == "img":
-                # Image decoded and sized
-                complete = bool(getattr(child, "complete", False))
-                width = int(getattr(child, "naturalWidth", 0) or 0)
-                height = int(getattr(child, "naturalHeight", 0) or 0)
-                return complete and width > 0 and height > 0
-            # SVG/others: ensure it laid out and has size/content
-            rect = child.getBoundingClientRect()
-            return rect.width > 0 and rect.height > 0 and child.childNodes.length > 0
-
-        def poll(timestamp: float):
-            if is_ready(inactive_element):
-                # Flip visibility (no fade), then swap IDs
-                inactive_element.classList.remove("is-passive")
-                inactive_element.classList.add("is-active")
-                active_element.classList.remove("is-active")
-                active_element.classList.add("is-passive")
-                self.active_target, self.inactive_target = inactive, active
-            else:
-                window.requestAnimationFrame(create_proxy(poll))
-
-        window.requestAnimationFrame(create_proxy(poll))
+    def _initialize_img(self):
+        """Initialize the figure image in the target element."""
+        figure_output = self.cache.get(self.target)
+        img = figure_output.querySelector("img")
+        img = document.createElement("img")
+        img.style.width = "auto"
+        img.style.height = "auto"
+        img.style.display = "block"
+        # img.style.imageRendering = "auto"
+        figure_output.innerHTML = ""
+        figure_output.appendChild(img)
 
     def _check_variables(self):
         """Check that the model contains the required variables."""
@@ -209,6 +182,17 @@ class BaseWaveController:
             else:
                 out.textContent = f"{value:.2f}"
 
+    def redraw(self):
+        """Update the figure."""
+        byte_buffer = io.BytesIO()
+        kwargs = {"format": "png", "dpi": self.model.fig.dpi, "bbox_inches": None}
+        kwargs.update({"pad_inches": 0})
+        self.model.fig.savefig(byte_buffer, **kwargs)
+        data_url = "data:image/png;base64,"
+        data_url += base64.b64encode(byte_buffer.getvalue()).decode("ascii")
+        figure_image = self.cache.get(self.target).querySelector("img")
+        figure_image.setAttribute("src", data_url)
+
     def change_coordinates(self, event):
         """Handle coordinate system change."""
         dim_var = self.model.dimensional_variables
@@ -237,6 +221,7 @@ class BaseWaveController:
         self.model.update_fields()
         self.model.update_figure_data()
         self.model.update_suptitle()
+        # display(self.model.fig, target="figure-output", append=False)
         self.redraw()
 
     def update_model_variables(self, event, control_suffix: str = "-slider"):

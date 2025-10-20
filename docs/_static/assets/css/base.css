@@ -44,26 +44,9 @@ body {
 }
 
 #figure-output {
-    position: relative;
-    min-height: 420px;
-    /* keep layout stable */
-}
-
-#figure-output>.figure-layer {
-    position: absolute;
-    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 100%;
-}
-
-.figure-layer.is-active {
-    opacity: 1;
-    pointer-events: auto;
-    z-index: 2;
-}
-
-.figure-layer.is-passive {
-    opacity: 1;
-    pointer-events: none;
-    z-index: 1;
+    padding: 5px 0 10px 0;
 }
