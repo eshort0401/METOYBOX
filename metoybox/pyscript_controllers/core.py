@@ -2,8 +2,6 @@
 
 from metoybox.model.core import BaseWaveModel
 from typing import Iterable
-import io
-import base64
 
 # Import pyscript. Note these are not normal imports and typically confuse IDE linters!
 from pyscript import document, display, when
@@ -61,21 +59,7 @@ class BaseWaveController:
         self.model.update_fields()
         self.model.update_suptitle()
         self.model.update_figure_data()
-        self.model.fig.dpi = 120
-        self._initialize_img()
-        self.redraw()
-
-    def _initialize_img(self):
-        """Initialize the figure image in the target element."""
-        figure_output = self.cache.get(self.target)
-        img = figure_output.querySelector("img")
-        img = document.createElement("img")
-        img.style.width = "auto"
-        img.style.height = "auto"
-        img.style.display = "block"
-        # img.style.imageRendering = "auto"
-        figure_output.innerHTML = ""
-        figure_output.appendChild(img)
+        display(self.model.fig, target="figure-output", append=False)
 
     def _check_variables(self):
         """Check that the model contains the required variables."""
@@ -145,7 +129,7 @@ class BaseWaveController:
         self.model.update_fields(force_update_norm=True)
         self.model.update_labels()
         self.model.update_figure_data()
-        self.redraw()
+        display(self.model.fig, target="figure-output", append=False)
 
     def toggle_displacement_lines(self, event):
         """Toggle the visibility of the displacement lines."""
@@ -157,7 +141,7 @@ class BaseWaveController:
             self.model.update_fields()
             self.model.update_displacement_lines()
         self.model.update_figure_data()
-        self.redraw()
+        display(self.model.fig, target="figure-output", append=False)
 
     def _update_values(
         self, new_values: dict[str, float], control_suffix: str = "-slider"
@@ -181,17 +165,6 @@ class BaseWaveController:
                 out.textContent = f"{value:.1e}" + f" {out.units}"
             else:
                 out.textContent = f"{value:.2f}"
-
-    def redraw(self):
-        """Update the figure."""
-        byte_buffer = io.BytesIO()
-        kwargs = {"format": "png", "dpi": self.model.fig.dpi, "bbox_inches": None}
-        kwargs.update({"pad_inches": 0})
-        self.model.fig.savefig(byte_buffer, **kwargs)
-        data_url = "data:image/png;base64,"
-        data_url += base64.b64encode(byte_buffer.getvalue()).decode("ascii")
-        figure_image = self.cache.get(self.target).querySelector("img")
-        figure_image.setAttribute("src", data_url)
 
     def change_coordinates(self, event):
         """Handle coordinate system change."""
@@ -221,8 +194,7 @@ class BaseWaveController:
         self.model.update_fields()
         self.model.update_figure_data()
         self.model.update_suptitle()
-        # display(self.model.fig, target="figure-output", append=False)
-        self.redraw()
+        display(self.model.fig, target="figure-output", append=False)
 
     def update_model_variables(self, event, control_suffix: str = "-slider"):
         """Update the model variables based on the controller inputs."""
@@ -238,7 +210,7 @@ class BaseWaveController:
         self._update_outputs([key])
         self.model.update_fields()
         self.model.update_figure_data()
-        self.redraw()
+        display(self.model.fig, target="figure-output", append=False)
 
     def update_time(self, event):
         """Update the time variable."""
@@ -255,7 +227,7 @@ class BaseWaveController:
             self._update_outputs(["t"])
         self.model.update_figure_data()
         self.model.update_suptitle()
-        self.redraw()
+        display(self.model.fig, target="figure-output", append=False)
 
 
 def hide_loading_screen():
