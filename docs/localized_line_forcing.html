@@ -122,9 +122,9 @@
         configs.push(sliderConfig(...args));
         args = ["\\(\\omega:\\)", "omega-slider", Omega * stepRatio, 2 * Omega, Omega, Omega * stepRatio, "dimensional", "s⁻¹"];
         configs.push(sliderConfig(...args));
-        args = ["\\(L:\\)", "L-slider", 0, 1, LValue, LStep, "non-dimensional"];
+        args = ["\\(L:\\)", "L-slider", LStep, 1, LValue, LStep, "non-dimensional"];
         configs.push(sliderConfig(...args));
-        args = ["\\(L:\\)", "L_dim-slider", 0, 100e3, LDimValue, LStep * 100e3, "dimensional", "m"];
+        args = ["\\(L:\\)", "L_dim-slider", LStep * 100e3, 100e3, LDimValue, LStep * 100e3, "dimensional", "m"];
         configs.push(sliderConfig(...args));
         createModelControls(configs, "controls");
     </script>
