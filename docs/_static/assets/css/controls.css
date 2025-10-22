@@ -13,10 +13,15 @@ input[type="range"] {
 
 .control-row .checkbox-button {
     display: flex;
-    flex-direction: row-reverse;
-    /* align-items: center; */
+    /* flex-direction: row-reverse; */
+    align-items: center;
     gap: 0.2em;
     font-size: small;
+}
+
+.control-row .checkbox-group {
+    display: flex;
+    align-items: center;
 }
 
 .control-row .checkbox-button input[type="checkbox"] {

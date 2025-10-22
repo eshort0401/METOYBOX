@@ -210,12 +210,14 @@ function coordinatesConfig() {
 /**
  * Convenience function to create displacement toggle checkbox
  */
-function displacementToggleConfig() {
+function overlayToggleConfig() {
     return {
         type: "checkbox",
-        label: "",
+        label: "Show:",
         checkboxes: [
-            { id: "displacement-checkbox", label: "Show displacement:", checked: false },
+            { id: "displacement-checkbox", label: "Displacement", checked: false },
+            { id: "quiver-checkbox", label: "Quiver", checked: true },
+            { id: "imshow-checkbox", label: "Shading", checked: true },
         ]
     };
 }
@@ -224,8 +226,8 @@ function displacementToggleConfig() {
  * Convenience function to create imshow field selection radio button group
  */
 function imshowSelectionConfig(
-    fields = ["psi", "Q", "v", "phi"],
-    labels = ["\\(\\psi\\)", "\\(Q\\)", "\\(v\\)", "\\(\\phi\\)"]
+    fields = ["psi", "u", "v", "w", "Q", "phi"],
+    labels = ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(Q\\)", "\\(\\phi\\)"]
 ) {
     // Create a list of radio button configs
     const buttons = fields.map((field, index) => {

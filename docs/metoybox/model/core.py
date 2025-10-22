@@ -586,14 +586,16 @@ class BaseWaveModel:
 
         field = self.fields[self.active_imshow_field]
         if self.coordinates == "dimensional":
-            # Next scale the cbar ticks of the active imshow field
+            scale = self.scalings[field.name]
+            figure_unit_scaler = field.unit_formatter.figure_unit_scaler
+            # Scale the cbar ticks of the active imshow field
             cbar_tick_lab = field.colorbar_tick_labels
             # Redimensionalize
-            cbar_tick_lab = cbar_tick_lab * self.scalings[field.name]
+            cbar_tick_lab = cbar_tick_lab * scale
             # Scale for plot units
-            cbar_tick_lab = cbar_tick_lab * field.unit_formatter.figure_unit_scaler
+            cbar_tick_lab = cbar_tick_lab * figure_unit_scaler
             # Scale the field max
-            field_max_dim = field.max_upper * self.scalings[field.name]
+            field_max_dim = field.max_upper * scale * figure_unit_scaler
             exp = int(np.floor(np.log10(field_max_dim)))
             unit_label = field.unit_formatter.figure_unit_label
             args = [cbar_tick_lab, exp, field.label, unit_label]

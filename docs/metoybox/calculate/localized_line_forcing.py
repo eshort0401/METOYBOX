@@ -64,12 +64,9 @@ def calculate_fields_spatial(
     w[cond_2] = -D * (1 / L_5**2 - 1 / L_6**2 - 1 / L_7**2 + 1 / L_8**2)
 
     fields_dict = {}
-    if "psi" in fields:
-        fields_dict["psi"] = psi
-    if "u" in fields:
-        fields_dict["u"] = u
-    if "w" in fields:
-        fields_dict["w"] = w
+    fields_dict["psi"] = psi
+    fields_dict["u"] = u
+    fields_dict["w"] = w
 
     args = [u, w, f_omega, alpha_omega, fields]
     polarized_fields = recover_polarized_default(*args)

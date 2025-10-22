@@ -1,5 +1,6 @@
 """Code for calculating mountain-valley wave solutions."""
 
+from attr import fields_dict
 import numpy as np
 from typing import List
 from numpy.typing import NDArray
@@ -34,12 +35,9 @@ def calculate_fields_spatial(
     u = -M / B_sq * exp_Z_sigma
     w = -(M**2) / B_sq * exp_Z_sigma
 
-    if "psi" in fields:
-        fields_dict["psi"] = psi
-    if "u" in fields:
-        fields_dict["u"] = u
-    if "w" in fields:
-        fields_dict["w"] = w
+    fields_dict["psi"] = psi
+    fields_dict["u"] = u
+    fields_dict["w"] = w
 
     args = [u, w, f_omega, alpha_omega, fields]
     polarized_fields = recover_polarized_default(*args)

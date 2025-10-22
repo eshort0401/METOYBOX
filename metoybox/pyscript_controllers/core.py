@@ -1,5 +1,6 @@
 """Base classes for building pyscript controllers."""
 
+from typing import Literal
 from metoybox.model.core import BaseWaveModel
 from typing import Iterable
 
@@ -135,6 +136,12 @@ class BaseWaveController:
             """Handle displacement lines visibility change."""
             self.toggle_displacement_lines(event)
 
+        @when("change", "#quiver-checkbox, #imshow-checkbox")
+        def _toggle_feature(event):
+            """Handle feature visibility change."""
+            feature = event.target.id.split("-")[0]
+            self.toggle_feature(event, feature)
+
         time_sliders = ["t-slider", "t_dim-slider"]
         model_sliders = self.dimensional_sliders + self.non_dimensional_sliders
         model_sliders = [s for s in model_sliders if s not in time_sliders]
@@ -184,6 +191,27 @@ class BaseWaveController:
         if visible:
             self.model.update_fields()
             self.model.update_displacement_lines()
+        self.model.update_figure_data()
+        self.redraw()
+
+    def toggle_feature(self, event, feature: Literal["quiver", "imshow"]):
+        """Toggle the visibility of a feature plot."""
+        checkbox = event.target
+        visible = checkbox.checked
+        feature = getattr(self.model, feature)
+        feature.set_visible(visible)
+        if visible:
+            self.model.update_fields()
+        self.model.update_figure_data()
+        self.redraw()
+
+    def toggle_quiver(self, event):
+        """Toggle the visibility of the quiver plot."""
+        checkbox = event.target
+        visible = checkbox.checked
+        self.model.quiver.set_visible(visible)
+        if visible:
+            self.model.update_fields()
         self.model.update_figure_data()
         self.redraw()
 

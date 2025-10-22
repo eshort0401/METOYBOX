@@ -1,7 +1,7 @@
 """Extensions of the BaseWaveModel to flows over sloping topography."""
 
 from metoybox.model import core
-from metoybox.calculate import mountain_valley, point_forcing_slope
+from metoybox.calculate import slope_breeze, point_forcing_slope
 import matplotlib.colors as mcolors
 import numpy as np
 
@@ -60,7 +60,7 @@ class MountainValleyModel(BaseSlopedModel):
         """Calculate the fields for the mountain-valley model."""
 
         # Update imshow field
-        new_fields = mountain_valley.calculate_fields_spatial(
+        new_fields = slope_breeze.calculate_fields_spatial(
             self.X,
             self.Z,
             self.non_dimensional_variables["M"],

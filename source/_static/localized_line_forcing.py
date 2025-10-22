@@ -14,7 +14,10 @@ x_ticks = np.arange(-2, 3, 1)
 z_ticks = np.arange(0, 5, 1)
 x_limits = (-2, 2)
 z_limits = (0, 4)
-fields = {"psi": core.Psi(percentile=90), "velocity": core.Velocity(percentile=90)}
+u = core.Velocity(percentile=90).fields["u"]
+w = core.Velocity(percentile=90).fields["w"]
+fields = {"psi": core.Psi(percentile=90), "u": u, "w": w}
+fields.update({"velocity": core.Velocity(percentile=90)})
 fields.update({"v": core.V(percentile=90), "phi": core.Phi(percentile=90)})
 fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
 args = ["point_forcing", x, z, x_ticks, z_ticks, x_limits, z_limits]
