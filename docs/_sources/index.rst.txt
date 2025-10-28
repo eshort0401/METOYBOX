@@ -6,7 +6,7 @@ Welcome to the Meteorological Toybox! This site explores some "toy models", i.e.
 The models on this site have been coded up in Python, and are presented interactively in your browser using `pyscript`_. Chrome is the recommended browser, noting the models are particularly slow to interactive with in Firefox. 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    gravity_waves_introduction.rst
 

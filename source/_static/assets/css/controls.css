@@ -51,6 +51,7 @@ input[type="range"] {
     text-align: left;
     font-size: small;
     white-space: nowrap;
+    font-family: serif;
 }
 
 .control-row span {

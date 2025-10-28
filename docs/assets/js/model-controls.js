@@ -194,10 +194,10 @@ function radioConfig(label, id, value, checked, className = null) {
 /**
  * Convenience function to create coordinate options radio button group
  */
-function coordinatesConfig() {
-    let args = ["Non-dimensional", "non-dimensional-button", "non-dimensional", true];
+function coordinatesConfig(starting_coordinates = "non-dimensional") {
+    let args = ["Non-dimensional", "non-dimensional-button", "non-dimensional", starting_coordinates === "non-dimensional"];
     const nonDimButton = radioConfig(...args);
-    args = ["Dimensional", "dimensional-button", "dimensional", false];
+    args = ["Dimensional", "dimensional-button", "dimensional", starting_coordinates === "dimensional"];
     const dimButton = radioConfig(...args);
     return {
         type: "radio",
@@ -268,11 +268,11 @@ function createControlRow(config) {
 /**
  * Create stacked model control rows based on config
  */
-function createModelControls(configs, containerId = "controls") {
+function createModelControls(configs, containerId = "controls", starting_coordinates = "non-dimensional") {
     const container = document.getElementById(containerId);
 
     // Create coordinate selection control row first
-    const coordControl = coordinatesConfig();
+    const coordControl = coordinatesConfig(starting_coordinates);
     const coordElement = createRadioGroupRow(coordControl);
     container.appendChild(coordElement);
 
@@ -301,7 +301,7 @@ function createModelControls(configs, containerId = "controls") {
     });
 
     // Set initial state
-    document.body.classList.add('non-dimensional-mode');
+    document.body.classList.add(starting_coordinates + '-mode');
 
     // Re-render MathJax once for all elements
     if (window.MathJax && window.MathJax.typesetPromise) {
@@ -371,6 +371,10 @@ const NDimStep = (NMax - NMin) * stepRatio;
 
 const HValue = 1e3;
 
+/*
+*test whether edit triggers rebuild
+*/
+
 /**
  * Convenience function for core dimensional coordinate control configs for gravity wave models
  */
@@ -386,8 +390,7 @@ function coreWaveConfigsDim(overrides = {}) {
     const HArgs = ["\\(H:\\)", "H-slider", 100, 5e3, HValue, 100, className, "m"];
     const Q0Args = ["\\(Q_0:\\)", "Q_0-slider", 1e-6, 10e-5, 1.2e-5, 1e-6, className, "m s⁻³"];
     const configs = [sliderConfig(...tArgs), sliderConfig(...fArgs), sliderConfig(...alphaArgs)];
-    configs.push(sliderConfig(...NArgs), sliderConfig(...HArgs));
-    configs.push(sliderConfig(...Q0Args));
+    configs.push(sliderConfig(...NArgs), sliderConfig(...Q0Args), sliderConfig(...HArgs));
     applyOverrides(configs, overrides);
     return configs;
 }

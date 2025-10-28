@@ -1,6 +1,12 @@
 Inertia-Gravity Waves
 =======================================================
 
+Introduction
+----------------
+On this page we introduce a class of linear models originating from the work of `Rotunno (1983)`_. We can often solve these models purely analytically, sometimes discovering interesting connections between the maths, logic and physics. We will use the original `Rotunno (1983)`_ to motivate our discussion and derivations; comment on the unique features of the `Rotunno (1983)`_ can be found on its dedicated page :doc:`land_sea`.
+
+Governing equations
+---------------------
 We first linearize the governing equations and make the `Boussinesq/shallow-anelastic`_ and :math:`f`-plane approximations, using :math:`*` to denote dimensional variables;
 
 .. math::
@@ -13,14 +19,21 @@ We first linearize the governing equations and make the `Boussinesq/shallow-anel
    w_*(z_*=0) &= 0. 
    \end{align}
 
-Note :math:`Q` represents a forcing on the Buoyancy tendency. For instance, Rotunno (1983), `Qian et al. (2009)`_, and many subsequent papers have considered the forcing 
+The function :math:`Q_*` represents a forcing on the buoyancy tendency we might loosely call "heating". `Rotunno (1983)`_, `Qian et al. (2009)`_, and many subsequent papers considered
 
 .. math::
    Q = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right)\exp\left(-\frac{z_*}{H}\right)\cos(\omega t_*),
    
-which emulates the heating/cooling of a land-surface :math:`x>0` as compared to an ocean surface :math:`x<0`, where :math:`L` and :math:`H` are horizontal and vertical length scales, respectively, and :math:`\omega` is the diurnal frequency. 
+which emulates the heating/cooling of a land-surface :math:`x>0` as compared to an ocean surface :math:`x<0`, where :math:`L` and :math:`H` are horizontal and vertical length scales, respectively, and :math:`\omega` is the diurnal frequency. The interactive model below provides a visualization of this choice of :math:`Q`; in our interactive figures we omit the :math:`*` subscripts for the dimensional coordinates, as the coordinate type is clear from the radio button.
 
-Next we scale variables to remove units. Such scaling is called nondimensionalization. An immediate reason for doing this is that units can be mathematically inconvenient; for instance, what are the units of :math:`\ln(10 \text{ m})`? Better to scale out the units at the start to avoid such ambiguity. Another reason is that nondimensionalization typically `reduces the parameter space`_, and reveals how the solution scales with different parameters. For the models in this section we use the following scalings from `Qian et al. (2009)`_;
+.. raw:: html
+   :file: ./_static/land_sea_intro.html
+
+You should play with the :math:`t`, :math:`Q_0`, :math:`H` and :math:`L` sliders to see how the forcing :math:`Q` changes. If you switch on the quiver plot you will be able to see the winds overlaid on :math:`Q`. You can also switch the shading to one of the other variables, e.g. :math:`u`, to study the response in more detail. If the interactive figure is laggy, try using Chrome!
+
+Non-Dimensionalization
+-------------------------
+Next we scale variables to remove units. Such scaling is called non-dimensionalization. An immediate reason to non-dimensionalize is that units are often mathematically inconvenient; for instance, what are the units of :math:`\ln(10 \text{ m})`? Another reason to non-dimensionalize is to `reduce the number of independent variables`_ in our models. Yet another reason to non-dimensionalize is to ensure we can always choose axis limits in our plots so that the interesting part of the model is visible. For the models in this section we use the following scalings from `Qian et al. (2009)`_;
 
 .. math::
    \begin{align}
@@ -31,7 +44,9 @@ Next we scale variables to remove units. Such scaling is called nondimensionaliz
    \end{split}
    \end{align}
 
-where :math:`H` is a representative height scale, :math:`\omega` a representative frequency, and :math:`Q_0` a representative amplitude of the forcing :math:`Q`. These scales are not particularly important; they are simply chosen to ensure the numbers in our solution are not prohibitively small or large. Note these scales can often be chosen directly from the forcing function. With the land-sea breeze :math:`Q` given above :math:`\omega=\frac{2\pi}{24\cdot 3600}` is the diurnal frequency, but in general :math:`\omega` can be any frequency of interest. Substituting the above expressions into our governing equations and simplifying we get
+where :math:`H` is a representative height scale, :math:`\omega` a representative frequency, and :math:`Q_0` a representative amplitude of the forcing :math:`Q`. These scales can often be inferred from the forcing function :math:`Q`. Note with the land-sea breeze :math:`Q` given above, :math:`\omega=\frac{2\pi}{24\cdot 3600}` is the diurnal frequency. In general however, :math:`\omega` can be any representative frequency appropriate for the given problem.
+
+Substituting the above scaling expressions into our governing equations and simplifying we get
 
 .. math::
    \begin{align}
@@ -43,19 +58,41 @@ where :math:`H` is a representative height scale, :math:`\omega` a representativ
    w(z=0) &= 0.
    \end{align}
 
-Note that for some of the models we will consider :math:`\omega` will be the diurnal frequency :math:`\frac{2\pi}{24\cdot 3600}`, and hence :math:`\frac{\omega^2}{N^2}` will be tiny and can be neglected. Wave solutions for which :math:`\frac{\omega^2}{N^2}`
+The `Rotunno (1983)`_ :math:`Q` function becomes
+
+.. math::
+   Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\right)\exp\left(-z\right)\cos(t),
+
+where :math:`\mathcal{L} = \frac{\omega}{NH}L` is the non-dimensional horizontal length scale. 
+
+Scrolling back up to the interactive figure (or opening in other window), you should click the radio button to switch to non-dimensional coordinates. Note in our interactive figures we write the horizontal length scale simply as :math:`L` for both dimensional and non-dimensional coordinates, as javascript struggles with calligraphic math symbols, and the meaning of :math:`L` is clear from the context. Notice how the number of sliders decreases by two when using non-dimensional coordinates compared to dimensional coordinates. As noted above, non-dimensionalization lets us reduce the number of independent variables, or in fancy language, "reduce the dimension of the parameter space" of our models. Switching back to dimensional coordinates, notice how variables like :math:`N` don't change the core structure of the response, but do scale the tick labels on the :math:`x` axis, ensuring our figure always contains the interesting part of the solution.
+
+Hydrostatic Waves
+----------------------------
+When :math:`\omega = \frac{2\pi}{24\cdot 3600}` is the diurnal frequency, :math:`\frac{\omega^2}{N^2}` is tiny, and terms containing this factor can be neglected. Wave solutions for which :math:`\frac{\omega^2}{N^2} \approx 0` are, somewhat confusingly, called hydrostatic waves. The adjective "hydrostatic" reflects :math:`\frac{\omega^2}{N^2} \approx 0 \Rightarrow b \approx p_z`, i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply :math:`w=0`. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of "hydrostatic waves" is thus distinct from the usual "hydrostatic balance" condition :math:`\frac{\partial p}{\partial z} = -\rho g` we encounter in synoptic meteorology, which does imply :math:`w=0`.
+
+In the land-sea breeze model above, :math:`\omega` is indeed the diurnal frequency, and so the model is mostly unresponsive to :math:`\frac{N}{\omega}`, except for the very smallest values. Later we will consider models that are responsive to :math:`\frac{N}{\omega}`. Switching back to dimensional coordinates however, we see that varying :math:`N` changes the tick labels on the :math:`x` axis, in accordance with the scalings given above. 
+
+Solution Method
+------------------------------
+Forthcoming.
+
+Models
+-----------------
 
 .. toctree::
    :maxdepth: 1
 
-   slope_breeze.rst
-   gaussian_forcing.rst
-   point_forcing_over_slope.rst
-   localized_line_forcing.rst
    land_sea.rst
-
+   gaussian_forcing.rst
+   localized_line_forcing.rst
+   slope_breeze.rst
+   point_forcing_over_slope.rst
+   
 .. _Boussinesq/shallow-anelastic: https://doi.org/10.1175/1520-0469(1962)019<0173:SAODAS>2.0.CO;2
 
-.. _reduces the parameter space: https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem
+.. _reduce the number of independent variables: https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem
 
 .. _Qian et al. (2009): https://doi.org/10.1175/2008JAS2851.1
+
+.. _Rotunno (1983): https://doi.org/10.1175/1520-0469(1983)040<1999:OTLTOT>2.0.CO;2

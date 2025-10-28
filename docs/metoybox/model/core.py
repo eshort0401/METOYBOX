@@ -78,7 +78,7 @@ def match_non_dimensional(
     t_dim = non_dimensional_variables["t"] / omega
     sigma = non_dimensional_variables["sigma"]
 
-    # THe following variables are used by the subclass models. Define the
+    # The following variables are used by the subclass models. Define the
     # matching here for convenience.
     M_dim = M * omega / N
     z_f_dim = non_dimensional_variables["z_f"] * H
@@ -403,8 +403,8 @@ class BaseWaveModel:
         self.x_limits, self.z_limits = x_limits, z_limits
         self.x_unit_formatter = x_unit_formatter
         self.z_unit_formatter = z_unit_formatter
-        self.X: NDArray[np.complex128] = None
-        self.Z: NDArray[np.complex128] = None
+        self.X: NDArray[np.float64] | None = None
+        self.Z: NDArray[np.float64] | None = None
         self.X, self.Z = np.meshgrid(x, z)
         self.fields = fields
         self.active_imshow_field = active_imshow_field
@@ -412,6 +412,8 @@ class BaseWaveModel:
         self.active_quiver_field = active_quiver_field
         self.imshow, self.quiver, self.contour = None, None, None
         self.quiver_key, self.colorbar_ax, self.colorbar = None, None, None
+        self.quiver_visible = False
+        self.imshow_visible = False
         # Choose quiver steps so we get approx 10 arrows in each direction
         self.quiver_step_x = len(x) // 10
         self.quiver_step_z = len(z) // 10
@@ -433,6 +435,15 @@ class BaseWaveModel:
 
     def initialize_figure(self):
         """Initialize the figure with the fields."""
+
+        # Initialize the figure fonts. Use default sans fonts, except for latex math text.
+        fonts = {
+            "font.family": "DejaVu Serif",
+            "font.serif": ["DejaVu Serif", "Nimbus Roman", "Times New Roman", "Times"],
+            "mathtext.fontset": "cm",
+            "font.size": 11,
+        }
+        plt.rcParams.update(fonts)
 
         # Initialize the figure, axes and layout
         self.fig, self.ax = plt.subplots(1, 1, figsize=self.figure_size)
@@ -461,7 +472,7 @@ class BaseWaveModel:
         extent = [self.x.min(), self.x.max(), self.z.min(), self.z.max()]
         kwargs.update({"extent": extent, "norm": field.norm})
         kwargs.update({"rasterized": True})
-        dummy_data = np.ones_like(self.Z) * np.nan
+        dummy_data = (np.ones_like(self.Z) * np.nan).astype(np.float64)
         self.imshow = self.ax.imshow(dummy_data, **kwargs)
         divider = make_axes_locatable(self.ax)
         self.colorbar_ax = divider.append_axes("right", size="5.5%", pad=0.25)
@@ -472,6 +483,7 @@ class BaseWaveModel:
         self.colorbar.set_ticks(cbar_ticks)
         cbar_ticklabels = [f"{val:.2f}" for val in cbar_ticks]
         self.colorbar.set_ticklabels(cbar_ticklabels)
+        self.colorbar.ax.set_visible(self.imshow_visible)
 
         # Initialize the quiver
         field = self.fields[self.active_quiver_field]
@@ -547,6 +559,8 @@ class BaseWaveModel:
 
     def update_quiver_key_label(self):
         """Get the quiver key label for the appropriate coordinate system."""
+        if self.quiver_visible is False or self.quiver_key is None:
+            return
         # Next scale the quiver key labels
         if self.coordinates == "dimensional":
             vector_field = self.fields[self.active_quiver_field]
@@ -570,9 +584,13 @@ class BaseWaveModel:
             mag = self.fields[self.active_quiver_field].quiver_key_magnitude
             quiver_key_label = rf"{mag:0.2f} [-]"
         self.quiver_key_label = quiver_key_label
+        self.quiver_key.text.set_text(self.quiver_key_label)
 
     def update_colorbar_labels(self):
         """Update the colorbar labels based on active coordinate system."""
+
+        if self.imshow_visible is False or self.colorbar is None:
+            return
 
         def format_labels(ticks, exp, field_label, unit_label="-"):
             """Format the the colorbar ticks and labels using exponent."""
@@ -641,7 +659,6 @@ class BaseWaveModel:
             z_axis_lab = r"$z$ [-]"
 
         self.update_quiver_key_label()
-        self.quiver_key.text.set_text(self.quiver_key_label)
         self.update_colorbar_labels()
         self.ax.set_xticklabels(x_tick_lab)
         self.ax.set_yticklabels(z_tick_lab)
@@ -797,14 +814,23 @@ class BaseWaveModel:
             kwargs.update({"angles": "xy", "zorder": 2, "rasterized": True})
             kwargs.update({"scale_units": "xy"})
             self.quiver = self.ax.quiver(*args, **kwargs)
+            self.quiver.set_visible(self.quiver_visible)
 
-            self.quiver_key.remove()
-            quiver_key_mag = self.fields[name].quiver_key_magnitude
-            args = [self.quiver, 0.09, 1.05, quiver_key_mag, f"{quiver_key_mag} [-]"]
-            kwargs = {"labelpos": "E", "coordinates": "axes"}
-            self.quiver_key = self.ax.quiverkey(*args, **kwargs)
-            self.update_quiver_key_label()
-            self.quiver_key.text.set_text(self.quiver_key_label)
+            if self.quiver_key is not None:
+                try:
+                    self.quiver_key.remove()
+                except ValueError:
+                    print("Quiver key already removed.")
+
+            if self.quiver_visible:
+                quiver_key_mag = self.fields[name].quiver_key_magnitude
+                args = [self.quiver, 0.09, 1.05, quiver_key_mag]
+                args += [f"{quiver_key_mag} [-]"]
+                kwargs = {"labelpos": "E", "coordinates": "axes"}
+                self.quiver_key = self.ax.quiverkey(*args, **kwargs)
+                self.update_quiver_key_label()
+                self.quiver_key.text.set_text(self.quiver_key_label)
+                self.quiver_key.set_visible(self.quiver_visible)
 
 
 def bounds_half_order_magnitude(value):

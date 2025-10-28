@@ -1,5 +1,6 @@
 """Base classes for building pyscript controllers."""
 
+from os import name
 from typing import Literal
 from metoybox.model.core import BaseWaveModel
 from typing import Iterable
@@ -60,11 +61,40 @@ class BaseWaveController:
         ]
         self._check_variables()
         self._register_event_handlers()
+        name = self._get_active_imshow_field()
+        self.model.active_imshow_field = name
         self.model.initialize_figure()
+        self.initialize_coordinates()
         self.model.update_fields()
         self.model.update_suptitle()
+        self.initialize_feature_visibility()
         self.model.update_figure_data()
         display(self.model.fig, target="figure-output-A", append=False)
+        self.change_coordinates(None)
+
+    def initialize_feature_visibility(self):
+        """Initialize the visibility of features based on checkbox/button states."""
+        quiver_checkbox = self.cache.get("quiver-checkbox")
+        imshow_checkbox = self.cache.get("imshow-checkbox")
+        displacement_checkbox = self.cache.get("displacement-checkbox")
+
+        self.model.quiver.set_visible(quiver_checkbox.checked)
+        self.model.quiver_key.set_visible(quiver_checkbox.checked)
+        self.model.quiver_visible = quiver_checkbox.checked
+
+        self.model.imshow.set_visible(imshow_checkbox.checked)
+        self.model.colorbar.ax.set_visible(imshow_checkbox.checked)
+        self.model.imshow_visible = imshow_checkbox.checked
+
+        self.model.displacement_lines.visible = displacement_checkbox.checked
+        self.model.displacement_lines.set_visibility()
+
+    def initialize_coordinates(self):
+        """Initialize the coordinate system based on button states."""
+        if self._is_dimensional_mode():
+            self.model.coordinates = "dimensional"
+        else:
+            self.model.coordinates = "non-dimensional"
 
     def redraw(self):
         """Swap active target and redraw the figure."""
@@ -198,18 +228,26 @@ class BaseWaveController:
         """Toggle the visibility of a feature plot."""
         checkbox = event.target
         visible = checkbox.checked
-        feature = getattr(self.model, feature)
-        feature.set_visible(visible)
-        if visible:
-            self.model.update_fields()
-        self.model.update_figure_data()
-        self.redraw()
-
-    def toggle_quiver(self, event):
-        """Toggle the visibility of the quiver plot."""
-        checkbox = event.target
-        visible = checkbox.checked
-        self.model.quiver.set_visible(visible)
+        feature_handler = getattr(self.model, feature)
+        feature_handler.set_visible(visible)
+        if feature == "quiver":
+            self.model.quiver_visible = visible
+            if visible:
+                # Rebuild the quiver key
+                name = self.model.active_quiver_field
+                quiver_key_mag = self.model.fields[name].quiver_key_magnitude
+                args = [self.model.quiver, 0.09, 1.05, quiver_key_mag]
+                args += [f"{quiver_key_mag} [-]"]
+                kwargs = {"labelpos": "E", "coordinates": "axes"}
+                self.model.quiver_key = self.model.ax.quiverkey(*args, **kwargs)
+                self.model.update_quiver_key_label()
+                self.model.quiver_key.text.set_text(self.model.quiver_key_label)
+            else:
+                # Remove the quiver key
+                self.model.quiver_key.remove()
+        elif feature == "imshow":
+            self.model.colorbar.ax.set_visible(visible)
+            self.model.imshow_visible = visible
         if visible:
             self.model.update_fields()
         self.model.update_figure_data()

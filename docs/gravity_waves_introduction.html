@@ -22,7 +22,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Slope Breeze" href="slope_breeze.html" />
+    <link rel="next" title="Land-Sea Breeze" href="land_sea.html" />
     <link rel="prev" title="Meteorological Toybox" href="index.html" /> 
 </head>
 
@@ -47,11 +47,19 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Inertia-Gravity Waves</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
-<li class="toctree-l2"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="land_sea.html">Land-Sea Breeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#governing-equations">Governing equations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#non-dimensionalization">Non-Dimensionalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hydrostatic-waves">Hydrostatic Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solution-method">Solution Method</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="land_sea.html">Land-Sea Breeze</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
+<li class="toctree-l3"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -82,6 +90,12 @@
              
   <section id="inertia-gravity-waves">
 <h1>Inertia-Gravity Waves<a class="headerlink" href="#inertia-gravity-waves" title="Link to this heading"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>On this page we introduce a class of linear models originating from the work of <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno (1983)</a>. We can often solve these models purely analytically, sometimes discovering interesting connections between the maths, logic and physics. We will use the original <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno (1983)</a> to motivate our discussion and derivations; comment on the unique features of the <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno (1983)</a> can be found on its dedicated page <a class="reference internal" href="land_sea.html"><span class="doc">Land-Sea Breeze</span></a>.</p>
+</section>
+<section id="governing-equations">
+<h2>Governing equations<a class="headerlink" href="#governing-equations" title="Link to this heading"></a></h2>
 <p>We first linearize the governing equations and make the <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Boussinesq/shallow-anelastic</a> and <span class="math notranslate nohighlight">\(f\)</span>-plane approximations, using <span class="math notranslate nohighlight">\(*\)</span> to denote dimensional variables;</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
@@ -92,11 +106,64 @@
 \frac{\partial u_*}{\partial x_*} + \frac{\partial w_*}{\partial z_*} &amp;= 0, \\
 w_*(z_*=0) &amp;= 0.
 \end{align}\end{split}\]</div>
-<p>Note <span class="math notranslate nohighlight">\(Q\)</span> represents a forcing on the Buoyancy tendency. For instance, Rotunno (1983), <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>, and many subsequent papers have considered the forcing</p>
+<p>The function <span class="math notranslate nohighlight">\(Q_*\)</span> represents a forcing on the buoyancy tendency we might loosely call “heating”. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno (1983)</a>, <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>, and many subsequent papers considered</p>
 <div class="math notranslate nohighlight">
 \[Q = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right)\exp\left(-\frac{z_*}{H}\right)\cos(\omega t_*),\]</div>
-<p>which emulates the heating/cooling of a land-surface <span class="math notranslate nohighlight">\(x&gt;0\)</span> as compared to an ocean surface <span class="math notranslate nohighlight">\(x&lt;0\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(H\)</span> are horizontal and vertical length scales, respectively, and <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency.</p>
-<p>Next we scale variables to remove units. Such scaling is called nondimensionalization. An immediate reason for doing this is that units can be mathematically inconvenient; for instance, what are the units of <span class="math notranslate nohighlight">\(\ln(10 \text{ m})\)</span>? Better to scale out the units at the start to avoid such ambiguity. Another reason is that nondimensionalization typically <a class="reference external" href="https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem">reduces the parameter space</a>, and reveals how the solution scales with different parameters. For the models in this section we use the following scalings from <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>;</p>
+<p>which emulates the heating/cooling of a land-surface <span class="math notranslate nohighlight">\(x&gt;0\)</span> as compared to an ocean surface <span class="math notranslate nohighlight">\(x&lt;0\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(H\)</span> are horizontal and vertical length scales, respectively, and <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency. The interactive model below provides a visualization of this choice of <span class="math notranslate nohighlight">\(Q\)</span>; in our interactive figures we omit the <span class="math notranslate nohighlight">\(*\)</span> subscripts for the dimensional coordinates, as the coordinate type is clear from the radio button.</p>
+<!-- Note we only need a snippet that will get put in the rst generated html file.-->
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+<!-- <link rel="stylesheet" href="_static/assets/css/mathjax.css" /> -->
+<link rel="stylesheet" href="_static/assets/css/base.css" />
+<link rel="stylesheet" href="_static/assets/css/controls.css" />
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+<!-- <script src="_static/assets/js/mathjax-config.js"></script> -->
+<!-- <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
+
+<div id="loading-screen">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+    <p><small>This can take a few minutes!</small></p>
+</div>
+
+<div id="main-content">
+    <div id="figure-output"></div>
+    <div id="figure-output">
+        <!-- Use two layers to prevent flickering in firefox -->
+        <div id="figure-output-A" class="figure-layer is-active"></div>
+        <div id="figure-output-B" class="figure-layer is-passive"></div>
+    </div>
+    <div id="controls"></div>
+    <script src="_static/assets/js/model-controls.js"></script>
+    <script>
+        const configs = coreWaveConfigs();
+
+        // Add a displacement toggle checkbox row above the sliders
+        const overlay_toggle_config = overlayToggleConfig();
+        // Switch off the quiver upon loading
+        overlay_toggle_config.checkboxes[1].checked = false;
+        configs.unshift(overlay_toggle_config);
+
+        // Add an imshow selection control row above the sliders
+        const fields = ["Q", "psi", "u", "v", "w"]
+        const labels = ["\\(Q\\)", "\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)"]
+        imshow_selection_config = imshowSelectionConfig(fields, labels);
+
+        configs.unshift(imshow_selection_config);
+        const LStep = 1 * stepRatio
+        const LValue = 0.2
+        const LDimValue = LValue * NValue * HValue / Omega
+        args = ["\\(L:\\)", "L-slider", LStep, 1, LValue, LStep, "non-dimensional"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(L:\\)", "L_dim-slider", LStep * 100e3, 100e3, LDimValue, LStep * 100e3, "dimensional", "m"];
+        configs.push(sliderConfig(...args));
+        createModelControls(configs, "controls", "dimensional");
+    </script>
+    <py-script src="_static/land_sea_intro.py" config="_static/assets/pyscript.toml"></py-script>
+</div><p>You should play with the <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(Q_0\)</span>, <span class="math notranslate nohighlight">\(H\)</span> and <span class="math notranslate nohighlight">\(L\)</span> sliders to see how the forcing <span class="math notranslate nohighlight">\(Q\)</span> changes. If you switch on the quiver plot you will be able to see the winds overlaid on <span class="math notranslate nohighlight">\(Q\)</span>. You can also switch the shading to one of the other variables, e.g. <span class="math notranslate nohighlight">\(u\)</span>, to study the response in more detail. If the interactive figure is laggy, try using Chrome!</p>
+</section>
+<section id="non-dimensionalization">
+<h2>Non-Dimensionalization<a class="headerlink" href="#non-dimensionalization" title="Link to this heading"></a></h2>
+<p>Next we scale variables to remove units. Such scaling is called non-dimensionalization. An immediate reason to non-dimensionalize is that units are often mathematically inconvenient; for instance, what are the units of <span class="math notranslate nohighlight">\(\ln(10 \text{ m})\)</span>? Another reason to non-dimensionalize is to <a class="reference external" href="https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem">reduce the number of independent variables</a> in our models. Yet another reason to non-dimensionalize is to ensure we can always choose axis limits in our plots so that the interesting part of the model is visible. For the models in this section we use the following scalings from <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>;</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
 \begin{split}
@@ -105,7 +172,8 @@ w_*(z_*=0) &amp;= 0.
 &amp;b^* = \frac{Q_0}{\omega} b,\quad p^*= \frac{Q_0H}{\omega}p,
 \end{split}
 \end{align}\end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(H\)</span> is a representative height scale, <span class="math notranslate nohighlight">\(\omega\)</span> a representative frequency, and <span class="math notranslate nohighlight">\(Q_0\)</span> a representative amplitude of the forcing <span class="math notranslate nohighlight">\(Q\)</span>. These scales are not particularly important; they are simply chosen to ensure the numbers in our solution are not prohibitively small or large. Note these scales can often be chosen directly from the forcing function. With the land-sea breeze <span class="math notranslate nohighlight">\(Q\)</span> given above <span class="math notranslate nohighlight">\(\omega=\frac{2\pi}{24\cdot 3600}\)</span> is the diurnal frequency, but in general <span class="math notranslate nohighlight">\(\omega\)</span> can be any frequency of interest. Substituting the above expressions into our governing equations and simplifying we get</p>
+<p>where <span class="math notranslate nohighlight">\(H\)</span> is a representative height scale, <span class="math notranslate nohighlight">\(\omega\)</span> a representative frequency, and <span class="math notranslate nohighlight">\(Q_0\)</span> a representative amplitude of the forcing <span class="math notranslate nohighlight">\(Q\)</span>. These scales can often be inferred from the forcing function <span class="math notranslate nohighlight">\(Q\)</span>. Note with the land-sea breeze <span class="math notranslate nohighlight">\(Q\)</span> given above, <span class="math notranslate nohighlight">\(\omega=\frac{2\pi}{24\cdot 3600}\)</span> is the diurnal frequency. In general however, <span class="math notranslate nohighlight">\(\omega\)</span> can be any representative frequency appropriate for the given problem.</p>
+<p>Substituting the above scaling expressions into our governing equations and simplifying we get</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
 u_t &amp;= \frac{f}{\omega}v - p_x - \frac{\alpha}{\omega}u, \\
@@ -115,16 +183,33 @@ b_t + w &amp;= Q - \frac{\alpha}{\omega} b, \\
 u_x + w_z &amp;= 0, \\
 w(z=0) &amp;= 0.
 \end{align}\end{split}\]</div>
-<p>Note that for some of the models we will consider <span class="math notranslate nohighlight">\(\omega\)</span> will be the diurnal frequency <span class="math notranslate nohighlight">\(\frac{2\pi}{24\cdot 3600}\)</span>, and hence <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2}\)</span> will be tiny and can be neglected. Wave solutions for which <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2}\)</span></p>
+<p>The <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno (1983)</a> <span class="math notranslate nohighlight">\(Q\)</span> function becomes</p>
+<div class="math notranslate nohighlight">
+\[Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\right)\exp\left(-z\right)\cos(t),\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{L} = \frac{\omega}{NH}L\)</span> is the non-dimensional horizontal length scale.</p>
+<p>Scrolling back up to the interactive figure (or opening in other window), you should click the radio button to switch to non-dimensional coordinates. Note in our interactive figures we write the horizontal length scale simply as <span class="math notranslate nohighlight">\(L\)</span> for both dimensional and non-dimensional coordinates, as javascript struggles with calligraphic math symbols, and the meaning of <span class="math notranslate nohighlight">\(L\)</span> is clear from the context. Notice how the number of sliders decreases by two when using non-dimensional coordinates compared to dimensional coordinates. As noted above, non-dimensionalization lets us reduce the number of independent variables, or in fancy language, “reduce the dimension of the parameter space” of our models. Switching back to dimensional coordinates, notice how variables like <span class="math notranslate nohighlight">\(N\)</span> don’t change the core structure of the response, but do scale the tick labels on the <span class="math notranslate nohighlight">\(x\)</span> axis, ensuring our figure always contains the interesting part of the solution.</p>
+</section>
+<section id="hydrostatic-waves">
+<h2>Hydrostatic Waves<a class="headerlink" href="#hydrostatic-waves" title="Link to this heading"></a></h2>
+<p>When <span class="math notranslate nohighlight">\(\omega = \frac{2\pi}{24\cdot 3600}\)</span> is the diurnal frequency, <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2}\)</span> is tiny, and terms containing this factor can be neglected. Wave solutions for which <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2} \approx 0\)</span> are, somewhat confusingly, called hydrostatic waves. The adjective “hydrostatic” reflects <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2} \approx 0 \Rightarrow b \approx p_z\)</span>, i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply <span class="math notranslate nohighlight">\(w=0\)</span>. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of “hydrostatic waves” is thus distinct from the usual “hydrostatic balance” condition <span class="math notranslate nohighlight">\(\frac{\partial p}{\partial z} = -\rho g\)</span> we encounter in synoptic meteorology, which does imply <span class="math notranslate nohighlight">\(w=0\)</span>.</p>
+<p>In the land-sea breeze model above, <span class="math notranslate nohighlight">\(\omega\)</span> is indeed the diurnal frequency, and so the model is mostly unresponsive to <span class="math notranslate nohighlight">\(\frac{N}{\omega}\)</span>, except for the very smallest values. Later we will consider models that are responsive to <span class="math notranslate nohighlight">\(\frac{N}{\omega}\)</span>. Switching back to dimensional coordinates however, we see that varying <span class="math notranslate nohighlight">\(N\)</span> changes the tick labels on the <span class="math notranslate nohighlight">\(x\)</span> axis, in accordance with the scalings given above.</p>
+</section>
+<section id="solution-method">
+<h2>Solution Method<a class="headerlink" href="#solution-method" title="Link to this heading"></a></h2>
+<p>Forthcoming.</p>
+</section>
+<section id="models">
+<h2>Models<a class="headerlink" href="#models" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="land_sea.html">Land-Sea Breeze</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
+<li class="toctree-l1"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
 </ul>
 </div>
+</section>
 </section>
 
 
@@ -132,7 +217,7 @@ w(z=0) &amp;= 0.
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="index.html" class="btn btn-neutral float-left" title="Meteorological Toybox" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="slope_breeze.html" class="btn btn-neutral float-right" title="Slope Breeze" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="land_sea.html" class="btn btn-neutral float-right" title="Land-Sea Breeze" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
