@@ -2,11 +2,11 @@ Inertia-Gravity Waves
 =======================================================
 
 Introduction
-----------------
-On this page we introduce a class of linear models originating from the work of `Rotunno (1983)`_. We can often solve these models purely analytically, sometimes discovering interesting connections between the maths, logic and physics. We will use the original `Rotunno (1983)`_ to motivate our discussion and derivations; comment on the unique features of the `Rotunno (1983)`_ can be found on its dedicated page :doc:`land_sea`.
+-------------------------
+On this page we introduce a class of linear models originating from the work of `Rotunno (1983)`_. We can often solve these models purely analytically, sometimes discovering interesting connections between the maths, logic and physics. We will use the original `Rotunno (1983)`_ model to contextualize the ideas presented in this introduction; further details on the `Rotunno (1983)`_ model itself can be found on its dedicated page :doc:`land_sea`.
 
 Governing equations
----------------------
+----------------------------
 We first linearize the governing equations and make the `Boussinesq/shallow-anelastic`_ and :math:`f`-plane approximations, using :math:`*` to denote dimensional variables;
 
 .. math::
