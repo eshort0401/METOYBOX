@@ -16,6 +16,16 @@ release = "0.0.1"
 version = "0.0.1"
 numfig = True
 
+math_numfig = True
+mathjax3_config = {
+    "tex": {
+        "tags": "ams",  # auto-number AMS-style
+        "useLabelIds": True,  # allow :label: / \label cross refs
+    },
+    "chtml": {"displayAlign": "center"},
+}
+
+
 # -- General configuration
 extensions = [
     "sphinx.ext.duration",

@@ -412,6 +412,7 @@ class BaseWaveModel:
         self.active_quiver_field = active_quiver_field
         self.imshow, self.quiver, self.contour = None, None, None
         self.quiver_key, self.colorbar_ax, self.colorbar = None, None, None
+        self.quiver_key_label = ""
         self.quiver_visible = False
         self.imshow_visible = False
         # Choose quiver steps so we get approx 10 arrows in each direction
@@ -816,21 +817,26 @@ class BaseWaveModel:
             self.quiver = self.ax.quiver(*args, **kwargs)
             self.quiver.set_visible(self.quiver_visible)
 
-            if self.quiver_key is not None:
-                try:
-                    self.quiver_key.remove()
-                except ValueError:
-                    print("Quiver key already removed.")
-
             if self.quiver_visible:
-                quiver_key_mag = self.fields[name].quiver_key_magnitude
-                args = [self.quiver, 0.09, 1.05, quiver_key_mag]
-                args += [f"{quiver_key_mag} [-]"]
-                kwargs = {"labelpos": "E", "coordinates": "axes"}
-                self.quiver_key = self.ax.quiverkey(*args, **kwargs)
-                self.update_quiver_key_label()
-                self.quiver_key.text.set_text(self.quiver_key_label)
-                self.quiver_key.set_visible(self.quiver_visible)
+                self.rebuild_quiver_key()
+
+    def rebuild_quiver_key(self):
+        """Rebuild the quiver key."""
+
+        name = self.active_quiver_field
+        try:
+            self.quiver_key.remove()
+        except ValueError:
+            pass
+
+        quiver_key_mag = self.fields[name].quiver_key_magnitude
+        args = [self.quiver, 0.09, 1.05, quiver_key_mag]
+        args += [f"{quiver_key_mag} [-]"]
+        kwargs = {"labelpos": "E", "coordinates": "axes"}
+        self.quiver_key = self.ax.quiverkey(*args, **kwargs)
+        self.update_quiver_key_label()
+        self.quiver_key.text.set_text(self.quiver_key_label)
+        self.quiver_key.set_visible(self.quiver_visible)
 
 
 def bounds_half_order_magnitude(value):

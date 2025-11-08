@@ -1,6 +1,5 @@
 """Code for calculating mountain-valley wave solutions."""
 
-from attr import fields_dict
 import numpy as np
 from typing import List
 from numpy.typing import NDArray

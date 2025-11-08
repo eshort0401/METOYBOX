@@ -8,6 +8,7 @@ The models on this site have been coded up in Python, and are presented interact
 .. toctree::
    :maxdepth: 3
 
+   fundamentals_introduction.rst
    gravity_waves_introduction.rst
 
 

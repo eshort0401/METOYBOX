@@ -17,8 +17,10 @@ z_limits = (0, 4)
 u = core.Velocity(percentile=95).fields["u"]
 w = core.Velocity(percentile=95).fields["w"]
 fields = {"psi": core.Psi(percentile=85), "u": u, "w": w}
-fields.update({"velocity": core.Velocity(percentile=85)})
-fields.update({"v": core.V(percentile=99), "Q": core.Q()})
+fields.update({"velocity": core.Velocity(percentile=99)})
+fields["velocity"].fields["u"].percentile = 85
+fields["velocity"].fields["w"].percentile = 85
+fields.update({"v": core.V(percentile=85), "Q": core.Q()})
 fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
 args = ["land_sea", x, z, x_ticks, z_ticks, x_limits, z_limits]
 model = land_sea.LandSeaBreezeModel(*args, fields=fields)

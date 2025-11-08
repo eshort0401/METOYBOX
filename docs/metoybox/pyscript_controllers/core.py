@@ -68,6 +68,7 @@ class BaseWaveController:
         self.model.update_fields()
         self.model.update_suptitle()
         self.initialize_feature_visibility()
+        self.model.update_labels()
         self.model.update_figure_data()
         display(self.model.fig, target="figure-output-A", append=False)
         self.change_coordinates(None)
@@ -79,7 +80,11 @@ class BaseWaveController:
         displacement_checkbox = self.cache.get("displacement-checkbox")
 
         self.model.quiver.set_visible(quiver_checkbox.checked)
-        self.model.quiver_key.set_visible(quiver_checkbox.checked)
+        if not quiver_checkbox.checked:
+            try:
+                self.model.quiver_key.remove()
+            except ValueError:
+                pass
         self.model.quiver_visible = quiver_checkbox.checked
 
         self.model.imshow.set_visible(imshow_checkbox.checked)
@@ -233,18 +238,12 @@ class BaseWaveController:
         if feature == "quiver":
             self.model.quiver_visible = visible
             if visible:
-                # Rebuild the quiver key
-                name = self.model.active_quiver_field
-                quiver_key_mag = self.model.fields[name].quiver_key_magnitude
-                args = [self.model.quiver, 0.09, 1.05, quiver_key_mag]
-                args += [f"{quiver_key_mag} [-]"]
-                kwargs = {"labelpos": "E", "coordinates": "axes"}
-                self.model.quiver_key = self.model.ax.quiverkey(*args, **kwargs)
-                self.model.update_quiver_key_label()
-                self.model.quiver_key.text.set_text(self.model.quiver_key_label)
+                self.model.rebuild_quiver_key()
             else:
-                # Remove the quiver key
-                self.model.quiver_key.remove()
+                try:
+                    self.model.quiver_key.remove()
+                except ValueError:
+                    pass
         elif feature == "imshow":
             self.model.colorbar.ax.set_visible(visible)
             self.model.imshow_visible = visible
