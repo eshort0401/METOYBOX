@@ -243,7 +243,34 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u = -\frac{f^2}{\omega^2}u - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)p_x.
 \label{u_mom_alt}
 \end{equation}\]</div>
-<p>To eliminate <span class="math notranslate nohighlight">\(p\)</span> from equation <span class="math notranslate nohighlight">\(\eqref{u_mom_alt}\)</span>.</p>
+<p>Then take <span class="math notranslate nohighlight">\(\frac{\partial}{\partial z}\)</span> of both sides of <span class="math notranslate nohighlight">\(\eqref{u_mom_alt}\)</span> to get</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z = -\frac{f^2}{\omega^2}u_z - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)p_{xz}.
+\label{u_mom_alt_z}
+\end{equation}\]</div>
+<p>Next, rearrange <span class="math notranslate nohighlight">\(\eqref{w_mom}\)</span> and take <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\frac{\partial}{\partial x}\)</span> of both sides to get</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x = \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x - \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)p_{zx}.\label{w_mom_alt_x}
+\end{equation}\]</div>
+<p>Now use <span class="math notranslate nohighlight">\(\eqref{w_mom_alt_x}\)</span> to eliminate <span class="math notranslate nohighlight">\(-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)p_{zx}\)</span> in <span class="math notranslate nohighlight">\(\eqref{u_mom_alt_z}\)</span> to get</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z + \frac{f^2}{\omega^2}u_z = \frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x - \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x.
+\label{u_w}
+\end{equation}\]</div>
+<p>Next, rearrange <span class="math notranslate nohighlight">\(\eqref{b}\)</span> and take an <span class="math notranslate nohighlight">\(x\)</span> derivative of both sides to get</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x = -Q_x + w_x \label{b_x}.
+\end{equation}\]</div>
+<p>Now substitute <span class="math notranslate nohighlight">\(\eqref{b_x}\)</span> into <span class="math notranslate nohighlight">\(\eqref{u_w}\)</span> and rearrange to get</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z + \frac{f^2}{\omega^2}u_z - \frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x - w_x = -Q_x.
+\label{u_w_alt}
+\end{equation}\]</div>
 </section>
 <section id="models">
 <h2>Models<a class="headerlink" href="#models" title="Link to this heading"></a></h2>

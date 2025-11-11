@@ -136,8 +136,44 @@ Take :math:`\left(\frac{\partial }{\partial t} + \frac{\alpha}{\omega}\right)` o
     \label{u_mom_alt}
     \end{equation}
 
+Then take :math:`\frac{\partial}{\partial z}` of both sides of :math:`\eqref{u_mom_alt}` to get
 
-To eliminate :math:`p` from equation :math:`\eqref{u_mom_alt}`. 
+.. math::
+    \begin{equation}
+    \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z = -\frac{f^2}{\omega^2}u_z - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)p_{xz}.
+    \label{u_mom_alt_z}
+    \end{equation}
+
+Next, rearrange :math:`\eqref{w_mom}` and take :math:`\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\frac{\partial}{\partial x}` of both sides to get
+
+.. math::
+    \begin{equation}
+    \frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x = \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x - \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)p_{zx}.\label{w_mom_alt_x}
+    \end{equation}
+
+Now use :math:`\eqref{w_mom_alt_x}` to eliminate :math:`-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)p_{zx}` in :math:`\eqref{u_mom_alt_z}` to get
+
+.. math::
+    \begin{equation}
+    \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z + \frac{f^2}{\omega^2}u_z = \frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x - \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x.
+    \label{u_w}
+    \end{equation}
+
+Next, rearrange :math:`\eqref{b}` and take an :math:`x` derivative of both sides to get
+
+.. math::
+    \begin{equation}
+    -\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x = -Q_x + w_x \label{b_x}.
+    \end{equation}
+
+Now substitute :math:`\eqref{b_x}` into :math:`\eqref{u_w}` and rearrange to get
+
+.. math::
+    \begin{equation}
+    \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z + \frac{f^2}{\omega^2}u_z - \frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x - w_x = -Q_x.
+    \label{u_w_alt}
+    \end{equation}
+    
 
 Models
 -----------------
