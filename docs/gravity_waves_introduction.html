@@ -63,7 +63,7 @@
 <li class="toctree-l3"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#appendix-operators">Appendix: Operators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#appendix-a-operators">Appendix A: Operators</a></li>
 </ul>
 </li>
 </ul>
@@ -101,6 +101,8 @@
 <section id="governing-equations">
 <h2>Governing equations<a class="headerlink" href="#governing-equations" title="Link to this heading"></a></h2>
 <p>We first linearize the governing equations and make the <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Boussinesq/shallow-anelastic</a> and <span class="math notranslate nohighlight">\(f\)</span>-plane approximations. The symbol <span class="math notranslate nohighlight">\(*\)</span> indicates our variables our “dimensional”, i.e. they have physical units. Below we introduce the corresponding unit-less “non-dimensional” variables, which simplify the maths.</p>
+<div class="admonition-dimensional-governing-equations admonition">
+<p class="admonition-title">Dimensional Governing Equations</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
 \frac{\partial u_*}{\partial t_*} &amp;= fv_* - \frac{\partial p_*}{\partial x_*} - \alpha u_*, \label{u_mom_dim} \\
@@ -110,6 +112,7 @@
 \frac{\partial u_*}{\partial x_*} + \frac{\partial w_*}{\partial z_*} &amp;= 0, \label{cont_dim} \\
 w_*(z_*=0) &amp;= 0. \label{boundary_dim}
 \end{align}\end{split}\]</div>
+</div>
 <p>The function <span class="math notranslate nohighlight">\(Q_*\)</span> represents a forcing on the buoyancy tendency we might loosely call “heating”. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno (1983)</a>, <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>, and many subsequent papers consider</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
@@ -117,6 +120,7 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
 \label{Q_sea_breeze_dim}
 \end{equation}\]</div>
 <p>which emulates the heating/cooling of a land-surface <span class="math notranslate nohighlight">\(x&gt;0\)</span> as compared to an ocean surface <span class="math notranslate nohighlight">\(x&lt;0\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(H\)</span> are horizontal and vertical length scales, respectively, and <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency. The applet below visualizes this choice of <span class="math notranslate nohighlight">\(Q_*\)</span> <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p id="igw-intro-applet"><strong>Rotunno (1983) Applet</strong></p>
 <!-- Note we only need a snippet that will get put in the rst generated html file.-->
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
 <!-- <link rel="stylesheet" href="_static/assets/css/mathjax.css" /> -->
@@ -170,7 +174,7 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
 </section>
 <section id="non-dimensionalization">
 <span id="non-dim"></span><h2>Non-Dimensionalization<a class="headerlink" href="#non-dimensionalization" title="Link to this heading"></a></h2>
-<p>Next we scale variables to remove units, i.e. we non-dimensionalize. One reason to non-dimensionalize is that units are mathematically annoying; what are the units of <span class="math notranslate nohighlight">\(\ln(10 \text{ m})\)</span>? Another reason to non-dimensionalize is to <a class="reference external" href="https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem">reduce the number of independent variables</a> in our models. Yet another reason is to ensure the interesting parts of our models are always visible in our figures!</p>
+<p>Next we scale variables to remove units, i.e. we non-dimensionalize. One reason to non-dimensionalize is that units are mathematically annoying; what are the units of <span class="math notranslate nohighlight">\(\ln(10 \text{ m})\)</span>? Another reason to non-dimensionalize is to <a class="reference external" href="https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem">reduce the number of independent variables</a> in our models. Yet another reason is to ensure the interesting parts of our models are always visible in our figures as we mess with the parameters!</p>
 <p>Here we use the scalings from <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>;</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
@@ -183,6 +187,8 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
 \end{align}\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(H\)</span> is a representative height scale, <span class="math notranslate nohighlight">\(\omega\)</span> a representative frequency, and <span class="math notranslate nohighlight">\(Q_0\)</span> a representative amplitude of the forcing <span class="math notranslate nohighlight">\(Q\)</span>. These scales can often be inferred from the forcing function <span class="math notranslate nohighlight">\(Q\)</span>. Note with the land-sea breeze <span class="math notranslate nohighlight">\(Q\)</span> given above, <span class="math notranslate nohighlight">\(\omega=\frac{2\pi}{24\cdot 3600} \text{ s}^{-1}\approx 7.272 \times 10^{-5} \text{ s}^{-1}\)</span> is the diurnal frequency. In general however, <span class="math notranslate nohighlight">\(\omega\)</span> can be any representative frequency appropriate for the given problem.</p>
 <p>Substituting the above scaling expressions into our governing equations and simplifying we get</p>
+<div class="admonition-non-dimensional-governing-equations admonition">
+<p class="admonition-title">Non-Dimensional Governing Equations</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
 u_t &amp;= \frac{f}{\omega}v - p_x - \frac{\alpha}{\omega}u, \label{u_mom} \\
@@ -192,13 +198,14 @@ b_t + w &amp;= Q - \frac{\alpha}{\omega} b, \label{b} \\
 u_x + w_z &amp;= 0, \label{cont} \\
 w(z=0) &amp;= 0. \label{boundary}
 \end{align}\end{split}\]</div>
+</div>
 <p>The <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno (1983)</a> <span class="math notranslate nohighlight">\(Q_*\)</span> function <span class="math notranslate nohighlight">\(\eqref{Q_sea_breeze_dim}\)</span> becomes</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
 Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\right)\exp\left(-z\right)\cos(t), \label{Q_sea_breeze}
 \end{equation}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mathcal{L} = \frac{\omega}{NH}L\)</span> is the non-dimensional horizontal length scale. <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
-<p>Scroll back up to the applet (or open it in other window) and click the radio button to switch to non-dimensional coordinates. Notice the number of sliders decreases by two. As noted above, non-dimensionalization often reduces the number of independent variables we need to completely describe our model, a result expressed more formally by the <a href="https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem">Buckingham \(\pi\) Theorem</a>.</p>
+<p>Scroll back up to the <a class="reference internal" href="#igw-intro-applet"><span class="std std-ref">applet</span></a> (or open it in another window) and click the radio button to switch to non-dimensional coordinates. Notice the number of sliders decreases by two. As noted above, non-dimensionalization typically reduces the number of independent variables needed to completely describe all the possible behaviours of our model, reflecting a result called the <a href="https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem">Buckingham \(\pi\) Theorem</a>.</p>
 </section>
 <section id="hydrostatic-waves">
 <h2>Hydrostatic Waves<a class="headerlink" href="#hydrostatic-waves" title="Link to this heading"></a></h2>
@@ -226,18 +233,27 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 &amp;= -w(x,z,t) + w(x,z_0,t) + f_x(x,t),
 \end{align}\end{split}\]</div>
 <p>where the second line follows from the <a class="reference external" href="https://en.wikipedia.org/wiki/Fundamental_theorem_of_calculus#Second_part">second part of the fundamental theorem of calculus</a>, which holds provided <span class="math notranslate nohighlight">\(w(x,z',t)\)</span> is continuous for <span class="math notranslate nohighlight">\(z\in [z_0,z]\)</span>. Now, so far <span class="math notranslate nohighlight">\(f(x,t)\)</span> has been arbitrary, but let’s impose the additional condition that <span class="math notranslate nohighlight">\(f_x(x,t):= -w(x,z_0,t)\)</span>. Then <span class="math notranslate nohighlight">\(w=-\psi_x\)</span>.</p>
-<p>We have therefore found a scalar function <span class="math notranslate nohighlight">\(\psi(x,z,t)\)</span>, which we call a stream function, which satisfies <span class="math notranslate nohighlight">\((u,w) = (\psi_z, -\psi_x)\)</span>. Stream functions simplify things considerably; it’s easier to solve for one scalar field <span class="math notranslate nohighlight">\(\psi\)</span> than a vector field <span class="math notranslate nohighlight">\((u,w)\)</span>. Note stream functions are in general not unique; we can add any function <span class="math notranslate nohighlight">\(g(t)\)</span> of <span class="math notranslate nohighlight">\(t\)</span> alone to <span class="math notranslate nohighlight">\(f(x,t)\)</span> and still have <span class="math notranslate nohighlight">\(f_x(x,t):= -w(x,z_0,t)\)</span> and <span class="math notranslate nohighlight">\((u,w) = (\psi_z, -\psi_x)\)</span>.</p>
+<p>We have therefore found a scalar function <span class="math notranslate nohighlight">\(\psi(x,z,t)\)</span>, which we call a stream function, which satisfies</p>
+<div class="admonition-core-property-of-stream-functions admonition">
+<p class="admonition-title">Core Property of Stream Functions</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+(u,w) = (\psi_z, -\psi_x).
+\end{equation}\]</div>
+</div>
+<p>Stream functions simplify things considerably. It’s easier to solve for one scalar field <span class="math notranslate nohighlight">\(\psi\)</span> than a vector field <span class="math notranslate nohighlight">\((u,w)\)</span>. Stream functions are also physically interpretable. In our case the <span class="math notranslate nohighlight">\((u,w)\)</span> winds are tangential to the contours of <span class="math notranslate nohighlight">\(\psi\)</span> at all times, and the more closely packed the contours, the stronger the winds. Note that this does not imply parcel trajectories follow streamlines! You can study the relationship between <span class="math notranslate nohighlight">\(\psi\)</span> and <span class="math notranslate nohighlight">\((u,w)\)</span> using the <a class="reference internal" href="#igw-intro-applet"><span class="std std-ref">applet</span></a> by switching the shading to <span class="math notranslate nohighlight">\(\psi\)</span> and turning on the quiver plot.</p>
+<p>Note stream functions are in general not unique; we can add any function <span class="math notranslate nohighlight">\(g(t)\)</span> of <span class="math notranslate nohighlight">\(t\)</span> alone to <span class="math notranslate nohighlight">\(f(x,t)\)</span> and still have <span class="math notranslate nohighlight">\(f_x(x,t):= -w(x,z_0,t)\)</span> and <span class="math notranslate nohighlight">\((u,w) = (\psi_z, -\psi_x)\)</span>.</p>
 <p>The preceding argument shows stream functions exist provided <span class="math notranslate nohighlight">\(u_x + w_z = 0\)</span>, and continuity conditions on <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(w\)</span> are satisfied. This is a special case of the <a class="reference external" href="https://en.wikipedia.org/wiki/Poincar%C3%A9_lemma">Poincaré lemma</a>, typically taught in graduate <a class="reference external" href="https://en.wikipedia.org/wiki/Differential_geometry">differential geometry</a> courses. <a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p>
 </section>
 <section id="an-ordinary-differential-equation">
 <h2>An Ordinary Differential Equation<a class="headerlink" href="#an-ordinary-differential-equation" title="Link to this heading"></a></h2>
-<p>We now derive a single ordinary differential equation (ODE) for <span class="math notranslate nohighlight">\(\psi\)</span>. We include some gore as it’s our first time. To start, rewrite <span class="math notranslate nohighlight">\(\text{\eqref{u_mom}-\eqref{b}}\)</span> by grouping the time tendency and diffusion terms; equations <span class="math notranslate nohighlight">\(\eqref{u_mom}\)</span> and <span class="math notranslate nohighlight">\(\eqref{v_mom}\)</span> become</p>
+<p>We now derive a single ordinary differential equation (ODE) for the stream function <span class="math notranslate nohighlight">\(\psi\)</span>. We’ll include some algebraic gore as it’s our first time. To start, rewrite <span class="math notranslate nohighlight">\(\text{\eqref{u_mom}-\eqref{b}}\)</span> by grouping the time tendency and diffusion terms; equations <span class="math notranslate nohighlight">\(\eqref{u_mom}\)</span> and <span class="math notranslate nohighlight">\(\eqref{v_mom}\)</span> become</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u = \frac{f}{\omega}v-p_x, \label{u_mom_grouped} \\
-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)v = -\frac{f}{\omega}u. \label{v_mom_grouped}
+\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u &amp;= \frac{f}{\omega}v-p_x, \label{u_mom_grouped} \\
+\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)v &amp;= -\frac{f}{\omega}u. \label{v_mom_grouped}
 \end{align}\end{split}\]</div>
-<p>Take <span class="math notranslate nohighlight">\(\left(\frac{\partial }{\partial t} + \frac{\alpha}{\omega}\right)\)</span> of <span class="math notranslate nohighlight">\(\eqref{u_mom_grouped}\)</span> and substitute in <span class="math notranslate nohighlight">\(\eqref{v_mom_grouped}\)</span> to get</p>
+<p>If expressions like <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span> disturb you, you’re not alone! Have a look at :ref:``   Take <span class="math notranslate nohighlight">\(\left(\frac{\partial }{\partial t} + \frac{\alpha}{\omega}\right)\)</span> of <span class="math notranslate nohighlight">\(\eqref{u_mom_grouped}\)</span> and substitute in <span class="math notranslate nohighlight">\(\eqref{v_mom_grouped}\)</span> to get</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
 \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u = -\frac{f^2}{\omega^2}u - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)p_x.
@@ -271,6 +287,15 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z + \frac{f^2}{\omega^2}u_z - \frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x - w_x = -Q_x.
 \label{u_w_alt}
 \end{equation}\]</div>
+<p>Finally, substitute <span class="math notranslate nohighlight">\((u_z,w_x) = (\psi_{zz}, -\psi_{xx})\)</span> into <span class="math notranslate nohighlight">\(\eqref{u_w_alt}\)</span> and group terms to get</p>
+<div class="admonition-governing-equation-for-math-psi admonition">
+<p class="admonition-title">Governing Equation for <span class="math notranslate nohighlight">\(\psi\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\left[\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 + \frac{f^2}{\omega^2} \right] \psi_{xx} + \left[\frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 + 1\right] \psi_{xx}  = -Q_x.
+\label{psi_ode}
+\end{equation}\]</div>
+</div>
 </section>
 <section id="models">
 <h2>Models<a class="headerlink" href="#models" title="Link to this heading"></a></h2>
@@ -284,15 +309,15 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 </ul>
 </div>
 </section>
-<section id="appendix-operators">
-<h2>Appendix: Operators<a class="headerlink" href="#appendix-operators" title="Link to this heading"></a></h2>
+<section id="appendix-a-operators">
+<h2>Appendix A: Operators<a class="headerlink" href="#appendix-a-operators" title="Link to this heading"></a></h2>
 <p>To get equation <span class="math notranslate nohighlight">\(\eqref{u_mom_grouped}\)</span>, we implicitly used the fact that</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
 \frac{\partial u}{\partial t} + \frac{\alpha}{\omega}u = \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u. \label{grouped_terms}
 \end{equation}\]</div>
 <p>Equations like <span class="math notranslate nohighlight">\(\eqref{grouped_terms}\)</span> freaked me out when I first encountered them. For numbers <span class="math notranslate nohighlight">\(a, b, c\)</span> we know multiplication distributes over addition, i.e. <span class="math notranslate nohighlight">\(ac + bc = (a+b)c\)</span>, and equation <span class="math notranslate nohighlight">\(\eqref{grouped_terms}\)</span> may therefore feel intuitive. However, <span class="math notranslate nohighlight">\(\frac{\partial u}{\partial t}, u\)</span> and <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t}\)</span> are functions, not numbers! Even worse, <span class="math notranslate nohighlight">\(\frac{\partial u}{\partial t}\)</span> and <span class="math notranslate nohighlight">\(u\)</span> are functions mapping real vectors to real numbers, but <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t}\)</span> is a function mapping one function to another function, e.g. <span class="math notranslate nohighlight">\(u \mapsto \frac{\partial u}{\partial t}\)</span>. So the distributive law for numbers isn’t actually relevant here.</p>
-<p>To make sense of equations like <span class="math notranslate nohighlight">\(\eqref{grouped_terms}\)</span>, note that they express equalities of functions, not numbers. Indeed, most of the equations on this page express equalities of functions. Two functions are equal if their domains and co-domains are the same, and they map the same points in the domain to the same points in the co-domain. Furthermore, the additions and multiplications you see in equations like <span class="math notranslate nohighlight">\(\eqref{grouped_terms}\)</span> actually express addition of functions, and multiplication of functions by numbers. For arbitrary functions <span class="math notranslate nohighlight">\(f:A\to B\)</span> and <span class="math notranslate nohighlight">\(g:A\to B\)</span>, we define <span class="math notranslate nohighlight">\(f+g:A\to B\)</span> as the new function <span class="math notranslate nohighlight">\((f+g):A\to B\)</span> satisfying <span class="math notranslate nohighlight">\((f+g)(x) = f(x) + g(x)\)</span> for all <span class="math notranslate nohighlight">\(x\in A\)</span>. In an analogous way, for a number <span class="math notranslate nohighlight">\(a\)</span>, we define <span class="math notranslate nohighlight">\((af)(x) = af(x)\)</span>. You’re probably used to doing all this without even thinking about it!</p>
+<p>To make sense of equations like <span class="math notranslate nohighlight">\(\eqref{grouped_terms}\)</span>, note that they express equalities of functions, not numbers; the same is true of most other equations on this page. Two functions are equal if their domains and co-domains are the same, and they map the same points in the domain to the same points in the co-domain. Furthermore, the additions and multiplications you see in equations like <span class="math notranslate nohighlight">\(\eqref{grouped_terms}\)</span> actually express addition of functions, and multiplication of functions by numbers. For arbitrary functions <span class="math notranslate nohighlight">\(f:A\to B\)</span> and <span class="math notranslate nohighlight">\(g:A\to B\)</span>, we define <span class="math notranslate nohighlight">\(f+g:A\to B\)</span> as the new function <span class="math notranslate nohighlight">\((f+g):A\to B\)</span> satisfying <span class="math notranslate nohighlight">\((f+g)(x) = f(x) + g(x)\)</span> for all <span class="math notranslate nohighlight">\(x\in A\)</span>. In an analogous way, for a number <span class="math notranslate nohighlight">\(a\)</span>, we define <span class="math notranslate nohighlight">\((af)(x) = af(x)\)</span>. You’re probably used to doing all this without even thinking about it!</p>
 <p>Things get confusing with expressions like <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\)</span>. As noted above, <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t}\)</span> is really a function which acts on functions; such objects are typically called <a class="reference external" href="https://en.wikipedia.org/wiki/Operator_(mathematics)">operators</a>. Analogously to above, we can define what it means to sum two operators, and multiply an operator by a function. Thus the expression <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\)</span> is really a sum of two operators, where we must interpret <span class="math notranslate nohighlight">\(\frac{\alpha}{\omega}\)</span> as the operator which sends a function, say <span class="math notranslate nohighlight">\(u\)</span>, to the function <span class="math notranslate nohighlight">\(\frac{\alpha}{\omega}u\)</span>. Using square brackets to enclose the function being fed into the given operator, we thus have</p>
 <div class="math notranslate nohighlight">
 \[\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\left[u\right] = \frac{\partial}{\partial t}[u] + \frac{\alpha}{\omega}[u],\]</div>
@@ -302,8 +327,8 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 <p>means the same thing as</p>
 <div class="math notranslate nohighlight">
 \[\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u = \frac{\partial u}{\partial t} + \frac{\alpha}{\omega}u.\]</div>
-<p>However, suppressing the square brackets can be deceptive, as it may appear we are  “multiplying” terms like <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span> and <span class="math notranslate nohighlight">\(u\)</span>, rather than feeding <span class="math notranslate nohighlight">\(u\)</span> into the operator <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span>. Indeed, sometimes you will see expressions like <span class="math notranslate nohighlight">\(u\frac{\partial}{\partial t}\)</span>, which multiplies the function <span class="math notranslate nohighlight">\(u\)</span> by the operator <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t}\)</span> to produce another operator. The operator <span class="math notranslate nohighlight">\(u\frac{\partial}{\partial t}\)</span> is therefore a completely different object to <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t}u\)</span>, which is a function!</p>
-<p>The ideas sketched above are made rigorous in <a class="reference external" href="https://en.wikipedia.org/wiki/Abstract_algebra">abstract algebra</a> and <a class="reference external" href="https://en.wikipedia.org/wiki/Functional_analysis">functional analysis</a> courses.</p>
+<p>However, suppressing the square brackets can be deceptive, as it may appear we are  “multiplying” terms like <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span> and <span class="math notranslate nohighlight">\(u\)</span>, rather than feeding <span class="math notranslate nohighlight">\(u\)</span> into the operator <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span>. Sometimes we really are multiplying though, in the sense of multiplying an operator by a function. For instance, you may see expressions like <span class="math notranslate nohighlight">\(u\frac{\partial}{\partial t}\)</span>, which multiplies the function <span class="math notranslate nohighlight">\(u\)</span> by the operator <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t}\)</span> to produce another operator; this operator is thus a completely different mathematical object to <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t}u\)</span>, which is a function! Similarly, you may see expressions like <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2\)</span>, which should be interpreted as a composition of operators, i.e. <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\circ \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span>.</p>
+<p>The ideas sketched in this appendix are made rigorous in <a class="reference external" href="https://en.wikipedia.org/wiki/Abstract_algebra">abstract algebra</a> and <a class="reference external" href="https://en.wikipedia.org/wiki/Functional_analysis">functional analysis</a> courses.</p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id4" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>

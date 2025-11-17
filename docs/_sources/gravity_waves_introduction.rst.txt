@@ -9,15 +9,17 @@ Governing equations
 ---------------------------------------
 We first linearize the governing equations and make the `Boussinesq/shallow-anelastic`_ and :math:`f`-plane approximations. The symbol :math:`*` indicates our variables our "dimensional", i.e. they have physical units. Below we introduce the corresponding unit-less "non-dimensional" variables, which simplify the maths.
 
-.. math:: 
-    \begin{align}
-    \frac{\partial u_*}{\partial t_*} &= fv_* - \frac{\partial p_*}{\partial x_*} - \alpha u_*, \label{u_mom_dim} \\
-    \frac{\partial v_*}{\partial t_*} &= -fu_* - \alpha v_*, \label{v_mom_dim} \\
-    \frac{\partial w_*}{\partial t_*} &= b_* - \frac{\partial p_*}{\partial z_*} - \alpha w_*, \label{w_mom_dim} \\
-    \frac{\partial b_*}{\partial t_*} + N^2 w_* &= Q_* - \alpha b_*, \label{b_dim} \\
-    \frac{\partial u_*}{\partial x_*} + \frac{\partial w_*}{\partial z_*} &= 0, \label{cont_dim} \\
-    w_*(z_*=0) &= 0. \label{boundary_dim}
-    \end{align}
+.. admonition:: Dimensional Governing Equations
+
+    .. math:: 
+        \begin{align}
+        \frac{\partial u_*}{\partial t_*} &= fv_* - \frac{\partial p_*}{\partial x_*} - \alpha u_*, \label{u_mom_dim} \\
+        \frac{\partial v_*}{\partial t_*} &= -fu_* - \alpha v_*, \label{v_mom_dim} \\
+        \frac{\partial w_*}{\partial t_*} &= b_* - \frac{\partial p_*}{\partial z_*} - \alpha w_*, \label{w_mom_dim} \\
+        \frac{\partial b_*}{\partial t_*} + N^2 w_* &= Q_* - \alpha b_*, \label{b_dim} \\
+        \frac{\partial u_*}{\partial x_*} + \frac{\partial w_*}{\partial z_*} &= 0, \label{cont_dim} \\
+        w_*(z_*=0) &= 0. \label{boundary_dim}
+        \end{align}
     
 The function :math:`Q_*` represents a forcing on the buoyancy tendency we might loosely call "heating". `Rotunno (1983)`_, `Qian et al. (2009)`_, and many subsequent papers consider
 
@@ -30,6 +32,10 @@ The function :math:`Q_*` represents a forcing on the buoyancy tendency we might 
    
 which emulates the heating/cooling of a land-surface :math:`x>0` as compared to an ocean surface :math:`x<0`, where :math:`L` and :math:`H` are horizontal and vertical length scales, respectively, and :math:`\omega` is the diurnal frequency. The applet below visualizes this choice of :math:`Q_*` [#]_.
 
+.. _igw_intro_applet:
+
+**Rotunno (1983) Applet**
+
 .. raw:: html
     :file: ./_static/land_sea_intro.html
 
@@ -39,7 +45,7 @@ The idea is that we have chosen our coordinates :math:`(x_*, y_*, z_*)` so that 
 
 Non-Dimensionalization
 -------------------------------------
-Next we scale variables to remove units, i.e. we non-dimensionalize. One reason to non-dimensionalize is that units are mathematically annoying; what are the units of :math:`\ln(10 \text{ m})`? Another reason to non-dimensionalize is to `reduce the number of independent variables`_ in our models. Yet another reason is to ensure the interesting parts of our models are always visible in our figures! 
+Next we scale variables to remove units, i.e. we non-dimensionalize. One reason to non-dimensionalize is that units are mathematically annoying; what are the units of :math:`\ln(10 \text{ m})`? Another reason to non-dimensionalize is to `reduce the number of independent variables`_ in our models. Yet another reason is to ensure the interesting parts of our models are always visible in our figures as we mess with the parameters!
 
 Here we use the scalings from `Qian et al. (2009)`_;
 
@@ -57,15 +63,17 @@ where :math:`H` is a representative height scale, :math:`\omega` a representativ
 
 Substituting the above scaling expressions into our governing equations and simplifying we get
 
-.. math::
-    \begin{align}
-    u_t &= \frac{f}{\omega}v - p_x - \frac{\alpha}{\omega}u, \label{u_mom} \\
-    v_t &= -\frac{f}{\omega}u - \frac{\alpha}{\omega}v, \label{v_mom} \\
-    \frac{\omega^2}{N^2}w_t &= b - p_z - \frac{\omega^2}{N^2}\frac{\alpha}{\omega}w, \label{w_mom} \\
-    b_t + w &= Q - \frac{\alpha}{\omega} b, \label{b} \\
-    u_x + w_z &= 0, \label{cont} \\
-    w(z=0) &= 0. \label{boundary}
-    \end{align}
+.. admonition:: Non-Dimensional Governing Equations
+
+    .. math::
+        \begin{align}
+        u_t &= \frac{f}{\omega}v - p_x - \frac{\alpha}{\omega}u, \label{u_mom} \\
+        v_t &= -\frac{f}{\omega}u - \frac{\alpha}{\omega}v, \label{v_mom} \\
+        \frac{\omega^2}{N^2}w_t &= b - p_z - \frac{\omega^2}{N^2}\frac{\alpha}{\omega}w, \label{w_mom} \\
+        b_t + w &= Q - \frac{\alpha}{\omega} b, \label{b} \\
+        u_x + w_z &= 0, \label{cont} \\
+        w(z=0) &= 0. \label{boundary}
+        \end{align}
 
 The `Rotunno (1983)`_ :math:`Q_*` function :math:`\eqref{Q_sea_breeze_dim}` becomes
 
@@ -76,7 +84,7 @@ The `Rotunno (1983)`_ :math:`Q_*` function :math:`\eqref{Q_sea_breeze_dim}` beco
 
 where :math:`\mathcal{L} = \frac{\omega}{NH}L` is the non-dimensional horizontal length scale. [#]_
 
-Scroll back up to the applet (or open it in other window) and click the radio button to switch to non-dimensional coordinates. Notice the number of sliders decreases by two. As noted above, non-dimensionalization often reduces the number of independent variables we need to completely describe our model, a result expressed more formally by the |Buckingham pi theorem|.
+Scroll back up to the :ref:`applet <igw_intro_applet>` (or open it in another window) and click the radio button to switch to non-dimensional coordinates. Notice the number of sliders decreases by two. As noted above, non-dimensionalization typically reduces the number of independent variables needed to completely describe all the possible behaviours of our model, reflecting a result called the |Buckingham pi theorem|.
 
 Hydrostatic Waves
 ----------------------------
@@ -114,21 +122,32 @@ where the second line follows from the `Leibniz integral rule`_, noting neither 
 
 where the second line follows from the `second part of the fundamental theorem of calculus`_, which holds provided :math:`w(x,z',t)` is continuous for :math:`z\in [z_0,z]`. Now, so far :math:`f(x,t)` has been arbitrary, but let's impose the additional condition that :math:`f_x(x,t):= -w(x,z_0,t)`. Then :math:`w=-\psi_x`. 
 
-We have therefore found a scalar function :math:`\psi(x,z,t)`, which we call a stream function, which satisfies :math:`(u,w) = (\psi_z, -\psi_x)`. Stream functions simplify things considerably; it's easier to solve for one scalar field :math:`\psi` than a vector field :math:`(u,w)`. Note stream functions are in general not unique; we can add any function :math:`g(t)` of :math:`t` alone to :math:`f(x,t)` and still have :math:`f_x(x,t):= -w(x,z_0,t)` and :math:`(u,w) = (\psi_z, -\psi_x)`.
+We have therefore found a scalar function :math:`\psi(x,z,t)`, which we call a stream function, which satisfies 
+
+.. admonition:: Core Property of Stream Functions
+    
+    .. math::
+        \begin{equation}
+        (u,w) = (\psi_z, -\psi_x). 
+        \end{equation}
+
+Stream functions simplify things considerably. It's easier to solve for one scalar field :math:`\psi` than a vector field :math:`(u,w)`. Stream functions are also physically interpretable. In our case the :math:`(u,w)` winds are tangential to the contours of :math:`\psi` at all times, and the more closely packed the contours, the stronger the winds. Note that this does not imply parcel trajectories follow streamlines! You can study the relationship between :math:`\psi` and :math:`(u,w)` using the :ref:`applet <igw_intro_applet>` by switching the shading to :math:`\psi` and turning on the quiver plot.
+
+Note stream functions are in general not unique; we can add any function :math:`g(t)` of :math:`t` alone to :math:`f(x,t)` and still have :math:`f_x(x,t):= -w(x,z_0,t)` and :math:`(u,w) = (\psi_z, -\psi_x)`.
 
 The preceding argument shows stream functions exist provided :math:`u_x + w_z = 0`, and continuity conditions on :math:`u` and :math:`w` are satisfied. This is a special case of the `Poincaré lemma`_, typically taught in graduate `differential geometry`_ courses. [#]_
 
 An Ordinary Differential Equation
---------------------------------------------------------
-We now derive a single ordinary differential equation (ODE) for :math:`\psi`. We include some gore as it's our first time. To start, rewrite :math:`\text{\eqref{u_mom}-\eqref{b}}` by grouping the time tendency and diffusion terms; equations :math:`\eqref{u_mom}` and :math:`\eqref{v_mom}` become
+------------------------------------------------------------------------
+We now derive a single ordinary differential equation (ODE) for the stream function :math:`\psi`. We'll include some algebraic gore as it's our first time. To start, rewrite :math:`\text{\eqref{u_mom}-\eqref{b}}` by grouping the time tendency and diffusion terms; equations :math:`\eqref{u_mom}` and :math:`\eqref{v_mom}` become
 
 .. math::
     \begin{align}
-    \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u = \frac{f}{\omega}v-p_x, \label{u_mom_grouped} \\
-    \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)v = -\frac{f}{\omega}u. \label{v_mom_grouped}
+    \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u &= \frac{f}{\omega}v-p_x, \label{u_mom_grouped} \\
+    \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)v &= -\frac{f}{\omega}u. \label{v_mom_grouped}
     \end{align}
 
-Take :math:`\left(\frac{\partial }{\partial t} + \frac{\alpha}{\omega}\right)` of :math:`\eqref{u_mom_grouped}` and substitute in :math:`\eqref{v_mom_grouped}` to get
+If expressions like :math:`\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)` disturb you, you're not alone! Have a look at :ref:``   Take :math:`\left(\frac{\partial }{\partial t} + \frac{\alpha}{\omega}\right)` of :math:`\eqref{u_mom_grouped}` and substitute in :math:`\eqref{v_mom_grouped}` to get
 
 .. math::
     \begin{equation}
@@ -174,6 +193,15 @@ Now substitute :math:`\eqref{b_x}` into :math:`\eqref{u_w}` and rearrange to get
     \label{u_w_alt}
     \end{equation}
     
+Finally, substitute :math:`(u_z,w_x) = (\psi_{zz}, -\psi_{xx})` into :math:`\eqref{u_w_alt}` and group terms to get
+
+.. admonition:: Governing Equation for :math:`\psi`
+    
+    .. math::
+        \begin{equation}
+        \left[\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 + \frac{f^2}{\omega^2} \right] \psi_{xx} + \left[\frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 + 1\right] \psi_{xx}  = -Q_x.
+        \label{psi_ode}
+        \end{equation}
 
 Models
 -----------------
@@ -188,8 +216,9 @@ Models
     point_forcing_over_slope.rst
 
 
-Appendix: Operators
--------------------------------------------------
+
+Appendix A: Operators
+-----------------------------------------------------------------------------
 
 To get equation :math:`\eqref{u_mom_grouped}`, we implicitly used the fact that
 
@@ -200,7 +229,7 @@ To get equation :math:`\eqref{u_mom_grouped}`, we implicitly used the fact that
 
 Equations like :math:`\eqref{grouped_terms}` freaked me out when I first encountered them. For numbers :math:`a, b, c` we know multiplication distributes over addition, i.e. :math:`ac + bc = (a+b)c`, and equation :math:`\eqref{grouped_terms}` may therefore feel intuitive. However, :math:`\frac{\partial u}{\partial t}, u` and :math:`\frac{\partial}{\partial t}` are functions, not numbers! Even worse, :math:`\frac{\partial u}{\partial t}` and :math:`u` are functions mapping real vectors to real numbers, but :math:`\frac{\partial}{\partial t}` is a function mapping one function to another function, e.g. :math:`u \mapsto \frac{\partial u}{\partial t}`. So the distributive law for numbers isn't actually relevant here.
 
-To make sense of equations like :math:`\eqref{grouped_terms}`, note that they express equalities of functions, not numbers. Indeed, most of the equations on this page express equalities of functions. Two functions are equal if their domains and co-domains are the same, and they map the same points in the domain to the same points in the co-domain. Furthermore, the additions and multiplications you see in equations like :math:`\eqref{grouped_terms}` actually express addition of functions, and multiplication of functions by numbers. For arbitrary functions :math:`f:A\to B` and :math:`g:A\to B`, we define :math:`f+g:A\to B` as the new function :math:`(f+g):A\to B` satisfying :math:`(f+g)(x) = f(x) + g(x)` for all :math:`x\in A`. In an analogous way, for a number :math:`a`, we define :math:`(af)(x) = af(x)`. You're probably used to doing all this without even thinking about it!
+To make sense of equations like :math:`\eqref{grouped_terms}`, note that they express equalities of functions, not numbers; the same is true of most other equations on this page. Two functions are equal if their domains and co-domains are the same, and they map the same points in the domain to the same points in the co-domain. Furthermore, the additions and multiplications you see in equations like :math:`\eqref{grouped_terms}` actually express addition of functions, and multiplication of functions by numbers. For arbitrary functions :math:`f:A\to B` and :math:`g:A\to B`, we define :math:`f+g:A\to B` as the new function :math:`(f+g):A\to B` satisfying :math:`(f+g)(x) = f(x) + g(x)` for all :math:`x\in A`. In an analogous way, for a number :math:`a`, we define :math:`(af)(x) = af(x)`. You're probably used to doing all this without even thinking about it!
 
 Things get confusing with expressions like :math:`\frac{\partial}{\partial t} + \frac{\alpha}{\omega}`. As noted above, :math:`\frac{\partial}{\partial t}` is really a function which acts on functions; such objects are typically called `operators`_. Analogously to above, we can define what it means to sum two operators, and multiply an operator by a function. Thus the expression :math:`\frac{\partial}{\partial t} + \frac{\alpha}{\omega}` is really a sum of two operators, where we must interpret :math:`\frac{\alpha}{\omega}` as the operator which sends a function, say :math:`u`, to the function :math:`\frac{\alpha}{\omega}u`. Using square brackets to enclose the function being fed into the given operator, we thus have
 
@@ -217,9 +246,9 @@ means the same thing as
 .. math::
     \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u = \frac{\partial u}{\partial t} + \frac{\alpha}{\omega}u.
 
-However, suppressing the square brackets can be deceptive, as it may appear we are  "multiplying" terms like :math:`\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)` and :math:`u`, rather than feeding :math:`u` into the operator :math:`\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)`. Indeed, sometimes you will see expressions like :math:`u\frac{\partial}{\partial t}`, which multiplies the function :math:`u` by the operator :math:`\frac{\partial}{\partial t}` to produce another operator. The operator :math:`u\frac{\partial}{\partial t}` is therefore a completely different object to :math:`\frac{\partial}{\partial t}u`, which is a function!
+However, suppressing the square brackets can be deceptive, as it may appear we are  "multiplying" terms like :math:`\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)` and :math:`u`, rather than feeding :math:`u` into the operator :math:`\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)`. Sometimes we really are multiplying though, in the sense of multiplying an operator by a function. For instance, you may see expressions like :math:`u\frac{\partial}{\partial t}`, which multiplies the function :math:`u` by the operator :math:`\frac{\partial}{\partial t}` to produce another operator; this operator is thus a completely different mathematical object to :math:`\frac{\partial}{\partial t}u`, which is a function! Similarly, you may see expressions like :math:`\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2`, which should be interpreted as a composition of operators, i.e. :math:`\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\circ \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)`.
 
-The ideas sketched above are made rigorous in `abstract algebra`_ and `functional analysis`_ courses. 
+The ideas sketched in this appendix are made rigorous in `abstract algebra`_ and `functional analysis`_ courses. 
 
 .. [#] In our applets we omit the :math:`*` subscripts, as the choice of dimensional or non-dimensional variables is clear from the radio button.
 
