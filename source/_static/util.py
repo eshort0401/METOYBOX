@@ -2,8 +2,8 @@ import glob
 from pathlib import Path
 
 _header = """<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<link rel="stylesheet" href="/_static/assets/css/base.css" />
-<link rel="stylesheet" href="/_static/assets/css/controls.css" />
+<link rel="stylesheet" href="_static/assets/css/base.css" />
+<link rel="stylesheet" href="_static/assets/css/controls.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
 <div id="loading-screen">
@@ -21,7 +21,7 @@ _div_open = """
         <div id="figure-output-B" class="figure-layer is-passive"></div>
     </div>
     <div id="controls"></div>
-    <script src="/_static/assets/js/model-controls.js"></script>
+    <script src="_static/assets/js/model-controls.js"></script>
     <script>
 """
 
