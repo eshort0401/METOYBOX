@@ -13,3 +13,4 @@ htmlcov
 conda_init_out.out
 *useful_scripts.txt
 source/_static/*.html
+!source/_static/assets/**/*.html
