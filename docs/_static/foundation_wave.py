@@ -1,7 +1,7 @@
 import numpy as np
 
 
-from metoybox.model import elevated
+from metoybox.model import foundation
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core
 
@@ -21,7 +21,7 @@ fields.update({"velocity": core.Velocity(percentile=95)})
 fields.update({"v": core.V(percentile=95), "phi": core.Phi(percentile=95)})
 fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
 args = ["point_forcing", x, z, x_ticks, z_ticks, x_limits, z_limits]
-model = elevated.GaussianTemporalForcingModel(*args, fields=fields)
+model = foundation.FoundationWaveModel(*args, fields=fields)
 
 dim_var = ctl_core.default_dimensional.copy() + ["z_f_dim", "omega", "sigma_dim"]
 non_dim_var = ctl_core.default_non_dimensional.copy() + ["z_f", "sigma"]

@@ -54,7 +54,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#non-dimensionalization">Non-Dimensionalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#hydrostatic-waves">Hydrostatic Waves</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#the-stream-function">The Stream Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#an-ordinary-differential-equation">An Ordinary Differential Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-partial-differential-equation">A Partial Differential Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-fourier-transform">The Fourier Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#solution">Solution</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#models">Models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="land_sea.html">Land-Sea Breeze</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
@@ -100,7 +102,7 @@
 </section>
 <section id="governing-equations">
 <h2>Governing equations<a class="headerlink" href="#governing-equations" title="Link to this heading"></a></h2>
-<p>We first linearize the governing equations and make the <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Boussinesq/shallow-anelastic</a> and <span class="math notranslate nohighlight">\(f\)</span>-plane approximations. The symbol <span class="math notranslate nohighlight">\(*\)</span> indicates our variables our “dimensional”, i.e. they have physical units. Below we introduce the corresponding unit-less “non-dimensional” variables, which simplify the maths.</p>
+<p>We first linearize the governing equations and make the <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Boussinesq/shallow-anelastic</a> and <span class="math notranslate nohighlight">\(f\)</span>-plane approximations. The symbol <span class="math notranslate nohighlight">\(*\)</span> indicates our variables our “dimensional”, i.e. they have physical units; we discuss the corresponding unit-less “non-dimensional” later.</p>
 <div class="admonition-dimensional-governing-equations admonition">
 <p class="admonition-title">Dimensional Governing Equations</p>
 <div class="math notranslate nohighlight">
@@ -113,22 +115,18 @@
 w_*(z_*=0) &amp;= 0. \label{boundary_dim}
 \end{align}\end{split}\]</div>
 </div>
-<p>The function <span class="math notranslate nohighlight">\(Q_*\)</span> represents a forcing on the buoyancy tendency we might loosely call “heating”. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno (1983)</a>, <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>, and many subsequent papers consider</p>
+<p>The function <span class="math notranslate nohighlight">\(Q_*\)</span> represents a forcing on the buoyancy tendency we loosely call “heating”. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno (1983)</a>, <a class="reference external" href="https://doi.org/10.1175/2008JAS2851.1">Qian et al. (2009)</a>, and many subsequent papers consider</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
 Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right)\exp\left(-\frac{z_*}{H}\right)\cos(\omega t_*),
 \label{Q_sea_breeze_dim}
 \end{equation}\]</div>
-<p>which emulates the heating/cooling of a land-surface <span class="math notranslate nohighlight">\(x&gt;0\)</span> as compared to an ocean surface <span class="math notranslate nohighlight">\(x&lt;0\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(H\)</span> are horizontal and vertical length scales, respectively, and <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency. The applet below visualizes this choice of <span class="math notranslate nohighlight">\(Q_*\)</span> <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
+<p>which emulates the heating/cooling of a land-surface <span class="math notranslate nohighlight">\(x&gt;0\)</span> as compared to an ocean surface <span class="math notranslate nohighlight">\(x&lt;0\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(H\)</span> are horizontal and vertical length scales, respectively, and <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency. The applet below visualizes this choice of <span class="math notranslate nohighlight">\(Q_*\)</span> <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p id="igw-intro-applet"><strong>Rotunno (1983) Applet</strong></p>
-<!-- Note we only need a snippet that will get put in the rst generated html file.-->
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<!-- <link rel="stylesheet" href="_static/assets/css/mathjax.css" /> -->
 <link rel="stylesheet" href="_static/assets/css/base.css" />
 <link rel="stylesheet" href="_static/assets/css/controls.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-<!-- <script src="_static/assets/js/mathjax-config.js"></script> -->
-<!-- <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> -->
 
 <div id="loading-screen">
     <div class="spinner"></div>
@@ -137,7 +135,6 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
 </div>
 
 <div id="main-content">
-    <div id="figure-output"></div>
     <div id="figure-output">
         <!-- Use two layers to prevent flickering in firefox -->
         <div id="figure-output-A" class="figure-layer is-active"></div>
@@ -147,18 +144,18 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
     <script src="_static/assets/js/model-controls.js"></script>
     <script>
         const configs = coreWaveConfigs();
-
+        
         // Add a displacement toggle checkbox row above the sliders
         const overlay_toggle_config = overlayToggleConfig();
         // Switch off the quiver upon loading
         overlay_toggle_config.checkboxes[1].checked = false;
         configs.unshift(overlay_toggle_config);
-
+        
         // Add an imshow selection control row above the sliders
         const fields = ["Q", "psi", "u", "v", "w"]
         const labels = ["\\(Q\\)", "\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)"]
         imshow_selection_config = imshowSelectionConfig(fields, labels);
-
+        
         configs.unshift(imshow_selection_config);
         const LStep = 1 * stepRatio
         const LValue = 0.2
@@ -170,7 +167,7 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
         createModelControls(configs, "controls", "dimensional");
     </script>
     <py-script src="_static/land_sea_intro.py" config="_static/assets/pyscript.toml"></py-script>
-</div><p>The idea is that we have chosen our coordinates <span class="math notranslate nohighlight">\((x_*, y_*, z_*)\)</span> so that <span class="math notranslate nohighlight">\(*x_*=0\)</span>, <span class="math notranslate nohighlight">\(z_*=0\)</span> represents a coastline, which extends infinitely far into and out of the screen in the <span class="math notranslate nohighlight">\(y_*\)</span> direction. The <span class="math notranslate nohighlight">\(z_*=0\)</span> lower boundary represents land and sea for <span class="math notranslate nohighlight">\(x_*&gt;0\)</span> and <span class="math notranslate nohighlight">\(x_*&lt;0\)</span>, respectively; imagine you’re at the beach, looking down the coastline, with sand to your right, and water to your left. The land surface changes temperature over the course of the day, but the ocean surface temperature is comparatively constant. You should play with the <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(Q_0\)</span>, <span class="math notranslate nohighlight">\(H\)</span> and <span class="math notranslate nohighlight">\(L\)</span> sliders to see how the forcing <span class="math notranslate nohighlight">\(Q_*\)</span> changes. Also, with <span class="math notranslate nohighlight">\(Q_*\)</span> given by <span class="math notranslate nohighlight">\(\eqref{Q_sea_breeze_dim}\)</span> we can solve <span class="math notranslate nohighlight">\(\text{\eqref{u_mom_dim}-\eqref{boundary_dim}}\)</span> analytically! Switching on the quiver plot shows the <span class="math notranslate nohighlight">\((u, w)\)</span> vectors overlaid on <span class="math notranslate nohighlight">\(Q\)</span>. You can also change the shading from <span class="math notranslate nohighlight">\(Q\)</span> to another variable, e.g. <span class="math notranslate nohighlight">\(v\)</span>. If the applets are laggy in Firefox, abandon computer communism, embrace digital counter-revolution, and try Chrome instead!</p>
+</div><p>The idea is that we have chosen our coordinates <span class="math notranslate nohighlight">\((x_*, y_*, z_*)\)</span> so that <span class="math notranslate nohighlight">\(x_*=0\)</span>, <span class="math notranslate nohighlight">\(z_*=0\)</span> represents a coastline, which extends infinitely far into and out of the screen in the <span class="math notranslate nohighlight">\(y_*\)</span> direction. The <span class="math notranslate nohighlight">\(z_*=0\)</span> lower boundary represents land and sea for <span class="math notranslate nohighlight">\(x_*&gt;0\)</span> and <span class="math notranslate nohighlight">\(x_*&lt;0\)</span>, respectively; imagine you’re at the beach, looking down the coastline, with sand to your right, and water to your left. The land surface changes temperature over the course of the day, but the ocean surface temperature is comparatively constant. You should play with the <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(Q_0\)</span>, <span class="math notranslate nohighlight">\(H\)</span> and <span class="math notranslate nohighlight">\(L\)</span> sliders to see how the forcing <span class="math notranslate nohighlight">\(Q_*\)</span> changes. Also, with <span class="math notranslate nohighlight">\(Q_*\)</span> given by <span class="math notranslate nohighlight">\(\eqref{Q_sea_breeze_dim}\)</span> we can solve <span class="math notranslate nohighlight">\(\text{\eqref{u_mom_dim}-\eqref{boundary_dim}}\)</span> analytically! Switching on the quiver plot shows the <span class="math notranslate nohighlight">\((u, w)\)</span> vectors overlaid on <span class="math notranslate nohighlight">\(Q\)</span>. You can also change the shading from <span class="math notranslate nohighlight">\(Q\)</span> to another variable, e.g. <span class="math notranslate nohighlight">\(v\)</span>. If the applets are laggy in Firefox, abandon computer communism, and embrace the Chrome counter-revolution instead.</p>
 </section>
 <section id="non-dimensionalization">
 <span id="non-dim"></span><h2>Non-Dimensionalization<a class="headerlink" href="#non-dimensionalization" title="Link to this heading"></a></h2>
@@ -179,9 +176,9 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
 \begin{split}
-&amp;x^*=\frac{NH}{\omega}x, \quad y^*=\frac{NH}{\omega}y, \quad z^*=Hz,\quad t^*=\frac{t}{\omega}, \\
-&amp;Q^*=Q_0Q,\quad u^*=\frac{Q_0}{N\omega}u, \quad v^*=\frac{Q_0}{N\omega}v, \quad w^* = \frac{Q_0}{N^2}w, \\
-&amp;b^* = \frac{Q_0}{\omega} b,\quad p^*= \frac{Q_0H}{\omega}p,
+&amp;x_*=\frac{NH}{\omega}x, \quad y_*=\frac{NH}{\omega}y, \quad z_*=Hz,\quad t_*=\frac{t}{\omega}, \\
+&amp;Q_*=Q_0Q,\quad u_*=\frac{Q_0}{N\omega}u, \quad v_*=\frac{Q_0}{N\omega}v, \quad w_* = \frac{Q_0}{N^2}w, \\
+&amp;b_* = \frac{Q_0}{\omega} b,\quad p_*= \frac{Q_0H}{\omega}p,
 \end{split}
 \label{scalings}
 \end{align}\end{split}\]</div>
@@ -204,7 +201,7 @@ w(z=0) &amp;= 0. \label{boundary}
 \[\begin{equation}
 Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\right)\exp\left(-z\right)\cos(t), \label{Q_sea_breeze}
 \end{equation}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathcal{L} = \frac{\omega}{NH}L\)</span> is the non-dimensional horizontal length scale. <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{L} = \frac{\omega}{NH}L\)</span> is the non-dimensional horizontal length scale. <a class="footnote-reference brackets" href="#id6" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
 <p>Scroll back up to the <a class="reference internal" href="#igw-intro-applet"><span class="std std-ref">applet</span></a> (or open it in another window) and click the radio button to switch to non-dimensional coordinates. Notice the number of sliders decreases by two. As noted above, non-dimensionalization typically reduces the number of independent variables needed to completely describe all the possible behaviours of our model, reflecting a result called the <a href="https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem">Buckingham \(\pi\) Theorem</a>.</p>
 </section>
 <section id="hydrostatic-waves">
@@ -243,11 +240,11 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 </div>
 <p>Stream functions simplify things considerably. It’s easier to solve for one scalar field <span class="math notranslate nohighlight">\(\psi\)</span> than a vector field <span class="math notranslate nohighlight">\((u,w)\)</span>. Stream functions are also physically interpretable. In our case the <span class="math notranslate nohighlight">\((u,w)\)</span> winds are tangential to the contours of <span class="math notranslate nohighlight">\(\psi\)</span> at all times, and the more closely packed the contours, the stronger the winds. Note that this does not imply parcel trajectories follow streamlines! You can study the relationship between <span class="math notranslate nohighlight">\(\psi\)</span> and <span class="math notranslate nohighlight">\((u,w)\)</span> using the <a class="reference internal" href="#igw-intro-applet"><span class="std std-ref">applet</span></a> by switching the shading to <span class="math notranslate nohighlight">\(\psi\)</span> and turning on the quiver plot.</p>
 <p>Note stream functions are in general not unique; we can add any function <span class="math notranslate nohighlight">\(g(t)\)</span> of <span class="math notranslate nohighlight">\(t\)</span> alone to <span class="math notranslate nohighlight">\(f(x,t)\)</span> and still have <span class="math notranslate nohighlight">\(f_x(x,t):= -w(x,z_0,t)\)</span> and <span class="math notranslate nohighlight">\((u,w) = (\psi_z, -\psi_x)\)</span>.</p>
-<p>The preceding argument shows stream functions exist provided <span class="math notranslate nohighlight">\(u_x + w_z = 0\)</span>, and continuity conditions on <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(w\)</span> are satisfied. This is a special case of the <a class="reference external" href="https://en.wikipedia.org/wiki/Poincar%C3%A9_lemma">Poincaré lemma</a>, typically taught in graduate <a class="reference external" href="https://en.wikipedia.org/wiki/Differential_geometry">differential geometry</a> courses. <a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p>
+<p>The preceding argument shows stream functions exist provided <span class="math notranslate nohighlight">\(u_x + w_z = 0\)</span>, and continuity conditions on <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(w\)</span> are satisfied. This is a special case of the <a class="reference external" href="https://en.wikipedia.org/wiki/Poincar%C3%A9_lemma">Poincaré lemma</a>, typically taught in graduate <a class="reference external" href="https://en.wikipedia.org/wiki/Differential_geometry">differential geometry</a> courses. <a class="footnote-reference brackets" href="#id7" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p>
 </section>
-<section id="an-ordinary-differential-equation">
-<h2>An Ordinary Differential Equation<a class="headerlink" href="#an-ordinary-differential-equation" title="Link to this heading"></a></h2>
-<p>We now derive a single ordinary differential equation (ODE) for the stream function <span class="math notranslate nohighlight">\(\psi\)</span>. We’ll include some algebraic gore as it’s our first time. To start, rewrite <span class="math notranslate nohighlight">\(\text{\eqref{u_mom}-\eqref{b}}\)</span> by grouping the time tendency and diffusion terms; equations <span class="math notranslate nohighlight">\(\eqref{u_mom}\)</span> and <span class="math notranslate nohighlight">\(\eqref{v_mom}\)</span> become</p>
+<section id="a-partial-differential-equation">
+<h2>A Partial Differential Equation<a class="headerlink" href="#a-partial-differential-equation" title="Link to this heading"></a></h2>
+<p>We now derive a single partial differential equation (PDE) for the stream function <span class="math notranslate nohighlight">\(\psi\)</span>. We’ll include some algebraic gore as it’s our first time. To start, rewrite <span class="math notranslate nohighlight">\(\text{\eqref{u_mom}-\eqref{b}}\)</span> by grouping the time tendency and diffusion terms; equations <span class="math notranslate nohighlight">\(\eqref{u_mom}\)</span> and <span class="math notranslate nohighlight">\(\eqref{v_mom}\)</span> become</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
 \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u &amp;= \frac{f}{\omega}v-p_x, \label{u_mom_grouped} \\
@@ -288,25 +285,88 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 \label{u_w_alt}
 \end{equation}\]</div>
 <p>Finally, substitute <span class="math notranslate nohighlight">\((u_z,w_x) = (\psi_{zz}, -\psi_{xx})\)</span> into <span class="math notranslate nohighlight">\(\eqref{u_w_alt}\)</span> and group terms to get</p>
-<div class="admonition-governing-equation-for-math-psi admonition">
-<p class="admonition-title">Governing Equation for <span class="math notranslate nohighlight">\(\psi\)</span></p>
+<div class="admonition-partial-differential-equation-for-math-psi admonition">
+<p class="admonition-title">Partial Differential Equation for <span class="math notranslate nohighlight">\(\psi\)</span></p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-\left[\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 + \frac{f^2}{\omega^2} \right] \psi_{xx} + \left[\frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 + 1\right] \psi_{xx}  = -Q_x.
-\label{psi_ode}
+\left[\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 + \frac{f^2}{\omega^2} \right] \psi_{zz} + \left[\frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 + 1\right] \psi_{xx}  = -Q_x.
+\label{psi_pde}
 \end{equation}\]</div>
 </div>
+</section>
+<section id="the-fourier-transform">
+<h2>The Fourier Transform<a class="headerlink" href="#the-fourier-transform" title="Link to this heading"></a></h2>
+<p>The next step is to take <a class="reference external" href="https://en.wikipedia.org/wiki/Fourier_transform">Fourier transforms</a> <span class="math notranslate nohighlight">\(t\mapsto \sigma\)</span> and <span class="math notranslate nohighlight">\(x\mapsto k\)</span> of <span class="math notranslate nohighlight">\(\eqref{psi_pde}\)</span> to get</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\left[\left(i\sigma+\frac{\alpha}{\omega}\right)^2 + \frac{f^2}{\omega^2} \right] \widehat{\psi}_{zz} - k^2 \left[\frac{\omega^2}{N^2}\left(i\sigma + \frac{\alpha}{\omega}\right)^2 + 1\right] \widehat{\psi}  = -\widehat{Q_x}.
+\label{psi_fourier}
+\end{equation}\]</div>
+<p>Now define for convenience</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\widehat{\sigma} &amp;= i\sigma + \frac{\alpha}{\omega}, \\
+B &amp;= \sqrt{-\widehat{\sigma}^2-\frac{f^2}{\omega^2}}, \\
+C &amp;= \sqrt{\frac{\omega^2}{N^2}\widehat{\sigma}^2 + 1}, \\
+A &amp;= B/C.
+\end{align}\end{split}\]</div>
+<p>Then <span class="math notranslate nohighlight">\(\eqref{psi_fourier}\)</span> can be expressed</p>
+<div class="admonition-ordinary-differential-equation-for-math-widehat-psi admonition">
+<p class="admonition-title">Ordinary Differential Equation for <span class="math notranslate nohighlight">\(\widehat{\psi}\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\widehat{\psi}_{zz} + \frac{k^2}{A^2} \widehat{\psi}  = \frac{1}{B^2}\widehat{Q_x}.
+\label{psi_fourier_simp}
+\end{equation}\]</div>
+</div>
+<p>To better understand equation <span class="math notranslate nohighlight">\(\eqref{psi_fourier_simp}\)</span>, let’s review what we’ve done so far.</p>
+<ol class="arabic simple">
+<li><p>We started with equations <span class="math notranslate nohighlight">\(\eqref{u_mom_dim}-\eqref{boundary_dim}\)</span>, a system of coupled PDEs enforcing conservation of momentum, energy and mass for our fluid.</p></li>
+<li><p>We non-dimensionalized and crunched these PDEs down into a single equation for the stream function <span class="math notranslate nohighlight">\(\psi\)</span> to get <span class="math notranslate nohighlight">\(\eqref{psi_pde}\)</span>.</p></li>
+<li><p>Taking Fourier transforms in <span class="math notranslate nohighlight">\(t\)</span> and <span class="math notranslate nohighlight">\(x\)</span> has now given us <span class="math notranslate nohighlight">\(\eqref{psi_fourier_simp}\)</span>, an ordinary differential equation (ODE) in <span class="math notranslate nohighlight">\(z\)</span> for <span class="math notranslate nohighlight">\(\widehat{\psi}\)</span>.</p></li>
+</ol>
+<p>Note the function <span class="math notranslate nohighlight">\(\widehat{\psi}\)</span> depends on <span class="math notranslate nohighlight">\(k, z\)</span> and <span class="math notranslate nohighlight">\(\sigma\)</span>, and remember that the inverse Fourier transform says</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\psi(x,z,t) = \frac{1}{4\pi^2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \widehat{\psi}(k,z,\sigma) e^{i(kx + \sigma t)} \, dk \, d\sigma.
+\label{inverse_fourier}
+\end{equation}\]</div>
+<p>So really what we’ve done is express <span class="math notranslate nohighlight">\(\psi\)</span> as a fancy sum (a double integral) of wave like terms <span class="math notranslate nohighlight">\(\widehat{\psi}(k,z,\sigma) e^{i(kx + \sigma t)}\)</span>, with the amplitudes of these waves given by <span class="math notranslate nohighlight">\(\widehat{\psi}(k,z,\sigma)\)</span>. We can therefore describe <span class="math notranslate nohighlight">\(\widehat{\psi}\)</span> as a “vertical structure function”. Analogous points apply to <span class="math notranslate nohighlight">\(\widehat{Q_x}\)</span>, which gives us the vertical structure of the forcing decomposed into its constituent horizontal wavenumbers and frequencies.</p>
+<p>Equation <span class="math notranslate nohighlight">\(\eqref{psi_fourier_simp}\)</span> thus tells us how the vertical structure of the response depends on the vertical structure of the forcing. In other words, we can think of <span class="math notranslate nohighlight">\(Q\)</span> as having “excited” a bunch of different horizontal waves <span class="math notranslate nohighlight">\(e^{i(kx + \sigma t)}\)</span> in our fluid, with the strength of each wave at height <span class="math notranslate nohighlight">\(z\)</span> determined precisely from <span class="math notranslate nohighlight">\(Q\)</span> via <span class="math notranslate nohighlight">\(\eqref{psi_fourier_simp}\)</span>.</p>
+</section>
+<section id="solution">
+<h2>Solution<a class="headerlink" href="#solution" title="Link to this heading"></a></h2>
+<p>So to solve the Rotunno (1983) model, we just need to solve <span class="math notranslate nohighlight">\(\eqref{psi_fourier_simp}\)</span> for <span class="math notranslate nohighlight">\(\widehat{\psi}\)</span>, then recover <span class="math notranslate nohighlight">\(\psi\)</span> via the inverse Fourier transform <span class="math notranslate nohighlight">\(\eqref{inverse_fourier}\)</span>. Our first step is to consider the simpler, so called “homogeneous”, version of <span class="math notranslate nohighlight">\(\eqref{psi_fourier_simp}\)</span>,</p>
+<div class="admonition-homogenous-equation-for-math-widehat-psi admonition">
+<p class="admonition-title">Homogenous Equation for <span class="math notranslate nohighlight">\(\widehat{\psi}\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\widehat{\psi}_{zz} + \frac{k^2}{A^2} \widehat{\psi} = 0,
+\label{psi_homo}
+\end{equation}\]</div>
+</div>
+<p>i.e. <span class="math notranslate nohighlight">\(\eqref{psi_fourier_simp}\)</span> but with <span class="math notranslate nohighlight">\(\widehat{Q_x}=0\)</span>. Writing <span class="math notranslate nohighlight">\(m=\frac{k}{A}\)</span> we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\widehat{\psi} = a_p e^{imz} + a_m e^{-imz},
+\label{homo_sol}
+\end{equation}\]</div>
+<p>where <span class="math notranslate nohighlight">\(a_p, a_m \in\mathbb{C}\)</span> do not depend on <span class="math notranslate nohighlight">\(z\)</span>. Notice that we have yet to apply the lower boundary condition <span class="math notranslate nohighlight">\(\eqref{boundary}\)</span>. Indeed, if there were no lower boundary, and if <span class="math notranslate nohighlight">\(Q=0\)</span>, then <span class="math notranslate nohighlight">\(\eqref{homo_sol}\)</span> and <span class="math notranslate nohighlight">\(\eqref{inverse_fourier}\)</span> suggest that all expressions of the form</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\psi = a_p e^{i(kx + mz + \sigma t)} + a_m e^{i(kx - mz + \sigma t)},
+\label{Eq:basic_sol}
+\end{equation}\]</div>
+<p><span class="math notranslate nohighlight">\(m = \frac{k}{A}\)</span>, are solutions to our system <span class="math notranslate nohighlight">\(\eqref{u_mom} - \eqref{cont}\)</span>; you can check this by direct substitution. Note in the case of no dispersion, <span class="math notranslate nohighlight">\(\alpha=0\)</span>, the condition <span class="math notranslate nohighlight">\(m = \frac{k}{A}\)</span> is equivalent to the usual intertia-gravity wave dispersion relation, stated in dimensional coordinates,</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+\frac{k_*^2}{m_*^2} = \frac{\sigma_*^2 - f^2}{N^2-\sigma_*^2},
+\end{equation}\]</div>
+<p>where <span class="math notranslate nohighlight">\(k_*, m_*, \sigma_*\)</span> are the wavenumbers and frequency in dimensional coordinates. <a class="footnote-reference brackets" href="#id8" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p>
 </section>
 <section id="models">
 <h2>Models<a class="headerlink" href="#models" title="Link to this heading"></a></h2>
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="land_sea.html">Land-Sea Breeze</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
-<li class="toctree-l1"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
-</ul>
 </div>
 </section>
 <section id="appendix-a-operators">
@@ -330,17 +390,21 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 <p>However, suppressing the square brackets can be deceptive, as it may appear we are  “multiplying” terms like <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span> and <span class="math notranslate nohighlight">\(u\)</span>, rather than feeding <span class="math notranslate nohighlight">\(u\)</span> into the operator <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span>. Sometimes we really are multiplying though, in the sense of multiplying an operator by a function. For instance, you may see expressions like <span class="math notranslate nohighlight">\(u\frac{\partial}{\partial t}\)</span>, which multiplies the function <span class="math notranslate nohighlight">\(u\)</span> by the operator <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t}\)</span> to produce another operator; this operator is thus a completely different mathematical object to <span class="math notranslate nohighlight">\(\frac{\partial}{\partial t}u\)</span>, which is a function! Similarly, you may see expressions like <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2\)</span>, which should be interpreted as a composition of operators, i.e. <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\circ \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span>.</p>
 <p>The ideas sketched in this appendix are made rigorous in <a class="reference external" href="https://en.wikipedia.org/wiki/Abstract_algebra">abstract algebra</a> and <a class="reference external" href="https://en.wikipedia.org/wiki/Functional_analysis">functional analysis</a> courses.</p>
 <aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id4" role="doc-footnote">
+<aside class="footnote brackets" id="id5" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
 <p>In our applets we omit the <span class="math notranslate nohighlight">\(*\)</span> subscripts, as the choice of dimensional or non-dimensional variables is clear from the radio button.</p>
 </aside>
-<aside class="footnote brackets" id="id5" role="doc-footnote">
+<aside class="footnote brackets" id="id6" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
 <p>In our applets we write the horizontal length scale simply as <span class="math notranslate nohighlight">\(L\)</span> for both dimensional and non-dimensional coordinates, as javascript struggles with calligraphic math symbols, and the meaning of <span class="math notranslate nohighlight">\(L\)</span> is clear from the context.</p>
 </aside>
-<aside class="footnote brackets" id="id6" role="doc-footnote">
+<aside class="footnote brackets" id="id7" role="doc-footnote">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
 <p><a class="reference external" href="https://doi.org/10.1017/CBO9780511800955">Batchelor’s (1967, p. 76)</a> discussion of stream functions uses the language of exact and closed <a class="reference external" href="https://en.wikipedia.org/wiki/Differential_form">differential forms</a>, ideas from <a class="reference external" href="https://en.wikipedia.org/wiki/Differential_geometry">differential geometry</a>, and Batchelor appears to implicitly invoke the Poincaré lemma in his argument; I don’t like this approach, as it invokes graduate level maths unnecessarily. You may have also encountered differential forms in thermodynamics, where they add an almost catastrophic level of confusion. See Bohrens &amp; Albrecht (2023) for a scathing critique of differential forms in thermodynamics, with which I agree!</p>
+</aside>
+<aside class="footnote brackets" id="id8" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<p>To get <span class="math notranslate nohighlight">\(k_*\)</span>, note <span class="math notranslate nohighlight">\(k=\frac{2\pi}{\lambda_x}\)</span> where <span class="math notranslate nohighlight">\(\lambda_x\)</span> is the horizontal wavelength in non-dimensional coordinates. Converting back to dimensional coordinates we have <span class="math notranslate nohighlight">\(\lambda_x^* = \frac{NH}{\omega}\lambda_x\)</span> and so <span class="math notranslate nohighlight">\(k_* = \frac{\omega}{NH}k\)</span>. The dimensional vertical wavenumber <span class="math notranslate nohighlight">\(m_*\)</span> and frequency <span class="math notranslate nohighlight">\(\sigma_*\)</span> are obtained analogously.</p>
 </aside>
 </aside>
 </section>

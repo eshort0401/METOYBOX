@@ -11,3 +11,5 @@ log
 htmlcov
 .pre-commit-config.yaml
 conda_init_out.out
+*useful_scripts.txt
+source/_static/*.html

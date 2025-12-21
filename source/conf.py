@@ -4,7 +4,9 @@ import sys
 from pathlib import Path
 import shutil
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+print(str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import source._static.util as util
 
 # -- Project information
 
@@ -93,7 +95,7 @@ intersphinx_disabled_domains = ["std"]
 
 templates_path = ["_templates"]
 html_static_path = ["_static"]
-html_extra_path = [".nojekyll", "_static"]
+html_extra_path = [".nojekyll"]
 
 # -- Options for HTML output
 html_theme = "sphinx_rtd_theme"
@@ -104,35 +106,41 @@ epub_show_urls = "footnote"
 html_baseurl = "https://eshort0401.github.io/METOYBOX/"
 
 
+_repo_root = Path(__file__).resolve().parents[1]
+
+
+def _copy_metoybox_to_build(app, docname, source):
+    # Only run once during the build (not for every document)
+    if not hasattr(app.env, "_metoybox_copied"):
+        metoybox_src = _repo_root / "metoybox"
+
+        # Destination in the built output
+        build_dir = Path(app.outdir)  # This is _build/html
+        metoybox_dst = build_dir / "metoybox"
+
+        # Only copy if source exists
+        if metoybox_src.exists():
+            # Ensure _static directory exists in build output
+            metoybox_dst.parent.mkdir(parents=True, exist_ok=True)
+
+            # Remove old copy if it exists
+            if metoybox_dst.exists():
+                shutil.rmtree(metoybox_dst)
+
+            # Copy the whole folder
+            shutil.copytree(metoybox_src, metoybox_dst)
+            print(f"Copied {metoybox_src} to {metoybox_dst}")
+
+            # Mark as done so we don't copy multiple times
+            app.env._metoybox_copied = True
+        else:
+            print(f"Source directory {metoybox_src} does not exist. Skipping copy.")
+
+
 def setup(app):
-    def copy_metoybox_to_build(app, docname, source):
-        # Only run once during the build (not for every document)
-        if not hasattr(app.env, "_metoybox_copied"):
-            # Path to your metoybox code (outside source)
-            repo_root = Path(__file__).resolve().parents[1]
-            metoybox_src = repo_root / "metoybox"
-
-            # Destination in the built output
-            build_dir = Path(app.outdir)  # This is _build/html
-            metoybox_dst = build_dir / "metoybox"
-
-            # Only copy if source exists
-            if metoybox_src.exists():
-                # Ensure _static directory exists in build output
-                metoybox_dst.parent.mkdir(parents=True, exist_ok=True)
-
-                # Remove old copy if it exists
-                if metoybox_dst.exists():
-                    shutil.rmtree(metoybox_dst)
-
-                # Copy the whole folder
-                shutil.copytree(metoybox_src, metoybox_dst)
-                print(f"Copied {metoybox_src} to {metoybox_dst}")
-
-                # Mark as done so we don't copy multiple times
-                app.env._metoybox_copied = True
-            else:
-                print(f"Source directory {metoybox_src} does not exist. Skipping copy.")
-
+    """Setup function for Sphinx."""
+    # Make sure the html files have been built
+    stub_directory = _repo_root / "source" / "_static"
+    util.generate_all_html(stub_directory)
     # Connect to the source-read event (runs early in the build)
-    app.connect("source-read", copy_metoybox_to_build)
+    app.connect("source-read", _copy_metoybox_to_build)

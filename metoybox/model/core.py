@@ -49,13 +49,15 @@ def get_default_scalings(
     t_scale = 1 / omega  # times t to redimensionalize
     b_scale = Q_0 / omega  # times b to redimensionalize
     phi_scale = Q_0 * H / omega  # times phi to redimensionalize
-    M_scale = omega / N
+    M_scale = omega / N # times omega / N to redimensionalize
+    sigma_scale = omega # times sigma to redimensionalize
     scalings = {"x": x_scale, "y": y_scale, "z": z_scale, "psi": psi_scale}
     scalings.update({"xi": x_scale, "zeta": z_scale})
     scalings.update({"u": u_scale, "v": v_scale, "w": w_scale, "Q": Q_scale})
     scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale})
+    scalings.update({"k": 1 / x_scale})
     # Add some scalings for convenience
-    scalings.update({"z_f": z_scale, "M": M_scale, "L": x_scale, "sigma": 1})
+    scalings.update({"z_f": z_scale, "M": M_scale, "L": x_scale, "sigma": sigma_scale})
     return scalings
 
 
@@ -83,9 +85,10 @@ def match_non_dimensional(
     M_dim = M * omega / N
     z_f_dim = non_dimensional_variables["z_f"] * H
     L_dim = non_dimensional_variables["L"] * H * N / omega
+    sigma_dim = sigma * omega
 
     variables = {"f": f, "N": N, "alpha": alpha, "t_dim": t_dim, "M_dim": M_dim}
-    variables.update({"z_f_dim": z_f_dim, "L_dim": L_dim, "sigma_dim": sigma})
+    variables.update({"z_f_dim": z_f_dim, "L_dim": L_dim, "sigma_dim": sigma_dim})
     dimensional_variables.update(variables)
 
     return dimensional_variables
@@ -108,15 +111,16 @@ def match_dimensional(
     N_omega = N / omega
     alpha_omega = dimensional_variables["alpha"] / omega
     t = dimensional_variables["t_dim"] * omega
-    sigma_dim = dimensional_variables["sigma_dim"]
+    sigma_dim = dimensional_variables["sigma_dim"] # Why are sigma and sigma dim the same???
 
     # The following variables are used by the subclass models. Define the
     # matching here for convenience.
     M = dimensional_variables["M_dim"] * N / omega
     z_f = dimensional_variables["z_f_dim"] / H
     L = dimensional_variables["L_dim"] * omega / (H * N)
+    sigma = sigma_dim / omega
 
-    variables = {"f_omega": f_omega, "N_omega": N_omega, "sigma": sigma_dim}
+    variables = {"f_omega": f_omega, "N_omega": N_omega, "sigma": sigma}
     variables.update({"alpha_omega": alpha_omega, "t": t, "M": M, "z_f": z_f, "L": L})
 
     non_dimensional_variables.update(variables)
@@ -381,7 +385,7 @@ class BaseWaveModel:
         non_dimensional_variables: dict[str, float] = default_non_dimensional,
         x_unit_formatter: UnitFormatter = UnitFormatter("km", 1e-3),
         z_unit_formatter: UnitFormatter = UnitFormatter("km", 1e-3),
-        figure_size: tuple[float] = (5.5, 4),
+        figure_size: tuple[float] = (6.5, 5),
         suptitle_height: float = 1.0,
         fields: dict[str, BaseField] | None = None,
         get_scalings: GetScalingsFunction = get_default_scalings,
@@ -442,7 +446,7 @@ class BaseWaveModel:
             "font.family": "DejaVu Serif",
             "font.serif": ["DejaVu Serif", "Nimbus Roman", "Times New Roman", "Times"],
             "mathtext.fontset": "cm",
-            "font.size": 11,
+            "font.size": 12,
         }
         plt.rcParams.update(fonts)
 

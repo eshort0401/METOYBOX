@@ -7,7 +7,7 @@ Here we present models that feature inertia-gravity wave dynamics. Most of our m
 
 Governing equations
 ---------------------------------------
-We first linearize the governing equations and make the `Boussinesq/shallow-anelastic`_ and :math:`f`-plane approximations. The symbol :math:`*` indicates our variables our "dimensional", i.e. they have physical units. Below we introduce the corresponding unit-less "non-dimensional" variables, which simplify the maths.
+We first linearize the governing equations and make the `Boussinesq/shallow-anelastic`_ and :math:`f`-plane approximations. The symbol :math:`*` indicates our variables our "dimensional", i.e. they have physical units; we discuss the corresponding unit-less "non-dimensional" later.
 
 .. admonition:: Dimensional Governing Equations
 
@@ -21,7 +21,7 @@ We first linearize the governing equations and make the `Boussinesq/shallow-anel
         w_*(z_*=0) &= 0. \label{boundary_dim}
         \end{align}
     
-The function :math:`Q_*` represents a forcing on the buoyancy tendency we might loosely call "heating". `Rotunno (1983)`_, `Qian et al. (2009)`_, and many subsequent papers consider
+The function :math:`Q_*` represents a forcing on the buoyancy tendency we loosely call "heating". `Rotunno (1983)`_, `Qian et al. (2009)`_, and many subsequent papers consider
 
 .. math::
     \begin{equation}
@@ -39,7 +39,7 @@ which emulates the heating/cooling of a land-surface :math:`x>0` as compared to 
 .. raw:: html
     :file: ./_static/land_sea_intro.html
 
-The idea is that we have chosen our coordinates :math:`(x_*, y_*, z_*)` so that :math:`*x_*=0`, :math:`z_*=0` represents a coastline, which extends infinitely far into and out of the screen in the :math:`y_*` direction. The :math:`z_*=0` lower boundary represents land and sea for :math:`x_*>0` and :math:`x_*<0`, respectively; imagine you're at the beach, looking down the coastline, with sand to your right, and water to your left. The land surface changes temperature over the course of the day, but the ocean surface temperature is comparatively constant. You should play with the :math:`t`, :math:`Q_0`, :math:`H` and :math:`L` sliders to see how the forcing :math:`Q_*` changes. Also, with :math:`Q_*` given by :math:`\eqref{Q_sea_breeze_dim}` we can solve :math:`\text{\eqref{u_mom_dim}-\eqref{boundary_dim}}` analytically! Switching on the quiver plot shows the :math:`(u, w)` vectors overlaid on :math:`Q`. You can also change the shading from :math:`Q` to another variable, e.g. :math:`v`. If the applets are laggy in Firefox, abandon computer communism, embrace digital counter-revolution, and try Chrome instead!
+The idea is that we have chosen our coordinates :math:`(x_*, y_*, z_*)` so that :math:`x_*=0`, :math:`z_*=0` represents a coastline, which extends infinitely far into and out of the screen in the :math:`y_*` direction. The :math:`z_*=0` lower boundary represents land and sea for :math:`x_*>0` and :math:`x_*<0`, respectively; imagine you're at the beach, looking down the coastline, with sand to your right, and water to your left. The land surface changes temperature over the course of the day, but the ocean surface temperature is comparatively constant. You should play with the :math:`t`, :math:`Q_0`, :math:`H` and :math:`L` sliders to see how the forcing :math:`Q_*` changes. Also, with :math:`Q_*` given by :math:`\eqref{Q_sea_breeze_dim}` we can solve :math:`\text{\eqref{u_mom_dim}-\eqref{boundary_dim}}` analytically! Switching on the quiver plot shows the :math:`(u, w)` vectors overlaid on :math:`Q`. You can also change the shading from :math:`Q` to another variable, e.g. :math:`v`. If the applets are laggy in Firefox, abandon computer communism, and embrace the Chrome counter-revolution instead.
 
 .. _non-dim:
 
@@ -52,9 +52,9 @@ Here we use the scalings from `Qian et al. (2009)`_;
 .. math::
     \begin{align}
     \begin{split}
-    &x^*=\frac{NH}{\omega}x, \quad y^*=\frac{NH}{\omega}y, \quad z^*=Hz,\quad t^*=\frac{t}{\omega}, \\
-    &Q^*=Q_0Q,\quad u^*=\frac{Q_0}{N\omega}u, \quad v^*=\frac{Q_0}{N\omega}v, \quad w^* = \frac{Q_0}{N^2}w, \\
-    &b^* = \frac{Q_0}{\omega} b,\quad p^*= \frac{Q_0H}{\omega}p,
+    &x_*=\frac{NH}{\omega}x, \quad y_*=\frac{NH}{\omega}y, \quad z_*=Hz,\quad t_*=\frac{t}{\omega}, \\
+    &Q_*=Q_0Q,\quad u_*=\frac{Q_0}{N\omega}u, \quad v_*=\frac{Q_0}{N\omega}v, \quad w_* = \frac{Q_0}{N^2}w, \\
+    &b_* = \frac{Q_0}{\omega} b,\quad p_*= \frac{Q_0H}{\omega}p,
     \end{split}
     \label{scalings}
     \end{align}
@@ -137,9 +137,9 @@ Note stream functions are in general not unique; we can add any function :math:`
 
 The preceding argument shows stream functions exist provided :math:`u_x + w_z = 0`, and continuity conditions on :math:`u` and :math:`w` are satisfied. This is a special case of the `Poincaré lemma`_, typically taught in graduate `differential geometry`_ courses. [#]_
 
-An Ordinary Differential Equation
+A Partial Differential Equation
 ------------------------------------------------------------------------
-We now derive a single ordinary differential equation (ODE) for the stream function :math:`\psi`. We'll include some algebraic gore as it's our first time. To start, rewrite :math:`\text{\eqref{u_mom}-\eqref{b}}` by grouping the time tendency and diffusion terms; equations :math:`\eqref{u_mom}` and :math:`\eqref{v_mom}` become
+We now derive a single partial differential equation (PDE) for the stream function :math:`\psi`. We'll include some algebraic gore as it's our first time. To start, rewrite :math:`\text{\eqref{u_mom}-\eqref{b}}` by grouping the time tendency and diffusion terms; equations :math:`\eqref{u_mom}` and :math:`\eqref{v_mom}` become
 
 .. math::
     \begin{align}
@@ -195,18 +195,106 @@ Now substitute :math:`\eqref{b_x}` into :math:`\eqref{u_w}` and rearrange to get
     
 Finally, substitute :math:`(u_z,w_x) = (\psi_{zz}, -\psi_{xx})` into :math:`\eqref{u_w_alt}` and group terms to get
 
-.. admonition:: Governing Equation for :math:`\psi`
+.. admonition:: Partial Differential Equation for :math:`\psi`
     
     .. math::
         \begin{equation}
-        \left[\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 + \frac{f^2}{\omega^2} \right] \psi_{xx} + \left[\frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 + 1\right] \psi_{xx}  = -Q_x.
-        \label{psi_ode}
+        \left[\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 + \frac{f^2}{\omega^2} \right] \psi_{zz} + \left[\frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 + 1\right] \psi_{xx}  = -Q_x.
+        \label{psi_pde}
         \end{equation}
 
+
+The Fourier Transform
+------------------------------------------------------------------------
+The next step is to take `Fourier transforms`_ :math:`t\mapsto \sigma` and :math:`x\mapsto k` of :math:`\eqref{psi_pde}` to get
+
+.. math::
+    \begin{equation}
+    \left[\left(i\sigma+\frac{\alpha}{\omega}\right)^2 + \frac{f^2}{\omega^2} \right] \widehat{\psi}_{zz} - k^2 \left[\frac{\omega^2}{N^2}\left(i\sigma + \frac{\alpha}{\omega}\right)^2 + 1\right] \widehat{\psi}  = -\widehat{Q_x}.
+    \label{psi_fourier}
+    \end{equation}
+
+Now define for convenience
+
+.. math::
+    \begin{align}
+    \widehat{\sigma} &= i\sigma + \frac{\alpha}{\omega}, \\
+    B &= \sqrt{-\widehat{\sigma}^2-\frac{f^2}{\omega^2}}, \\
+    C &= \sqrt{\frac{\omega^2}{N^2}\widehat{\sigma}^2 + 1}, \\
+    A &= B/C.
+    \end{align}
+
+Then :math:`\eqref{psi_fourier}` can be expressed
+
+.. admonition:: Ordinary Differential Equation for :math:`\widehat{\psi}`
+
+    .. math::
+        \begin{equation}
+        \widehat{\psi}_{zz} + \frac{k^2}{A^2} \widehat{\psi}  = \frac{1}{B^2}\widehat{Q_x}.
+        \label{psi_fourier_simp}
+        \end{equation}
+
+To better understand equation :math:`\eqref{psi_fourier_simp}`, let's review what we've done so far. 
+
+1. We started with equations :math:`\eqref{u_mom_dim}-\eqref{boundary_dim}`, a system of coupled PDEs enforcing conservation of momentum, energy and mass for our fluid.
+2. We non-dimensionalized and crunched these PDEs down into a single equation for the stream function :math:`\psi` to get :math:`\eqref{psi_pde}`.
+3. Taking Fourier transforms in :math:`t` and :math:`x` has now given us :math:`\eqref{psi_fourier_simp}`, an ordinary differential equation (ODE) in :math:`z` for :math:`\widehat{\psi}`. 
+
+Note the function :math:`\widehat{\psi}` depends on :math:`k, z` and :math:`\sigma`, and remember that the inverse Fourier transform says
+
+.. math::
+    \begin{equation}
+    \psi(x,z,t) = \frac{1}{4\pi^2} \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} \widehat{\psi}(k,z,\sigma) e^{i(kx + \sigma t)} \, dk \, d\sigma.
+    \label{inverse_fourier}
+    \end{equation}
+
+So really what we've done is express :math:`\psi` as a fancy sum (a double integral) of wave like terms :math:`\widehat{\psi}(k,z,\sigma) e^{i(kx + \sigma t)}`, with the amplitudes of these waves given by :math:`\widehat{\psi}(k,z,\sigma)`. We can therefore describe :math:`\widehat{\psi}` as a "vertical structure function". Analogous points apply to :math:`\widehat{Q_x}`, which gives us the vertical structure of the forcing decomposed into its constituent horizontal wavenumbers and frequencies. 
+
+Equation :math:`\eqref{psi_fourier_simp}` thus tells us how the vertical structure of the response depends on the vertical structure of the forcing. In other words, we can think of :math:`Q` as having "excited" a bunch of different horizontal waves :math:`e^{i(kx + \sigma t)}` in our fluid, with the strength of each wave at height :math:`z` determined precisely from :math:`Q` via :math:`\eqref{psi_fourier_simp}`.
+
+Solution
+-------------------------------------------------
+So to solve the Rotunno (1983) model, we just need to solve :math:`\eqref{psi_fourier_simp}` for :math:`\widehat{\psi}`, then recover :math:`\psi` via the inverse Fourier transform :math:`\eqref{inverse_fourier}`. Our first step is to consider the simpler, so called "homogeneous", version of :math:`\eqref{psi_fourier_simp}`, 
+
+.. admonition:: Homogenous Equation for :math:`\widehat{\psi}`
+
+    .. math::
+        \begin{equation}
+        \widehat{\psi}_{zz} + \frac{k^2}{A^2} \widehat{\psi} = 0,
+        \label{psi_homo}
+        \end{equation}
+
+i.e. :math:`\eqref{psi_fourier_simp}` but with :math:`\widehat{Q_x}=0`. Writing :math:`m=\frac{k}{A}` we have
+
+.. math::
+    \begin{equation}
+    \widehat{\psi} = a_p e^{imz} + a_m e^{-imz},
+    \label{homo_sol}
+    \end{equation}
+
+where :math:`a_p, a_m \in\mathbb{C}` do not depend on :math:`z`. Notice that we have yet to apply the lower boundary condition :math:`\eqref{boundary}`. Indeed, if there were no lower boundary, and if :math:`Q=0`, then :math:`\eqref{homo_sol}` and :math:`\eqref{inverse_fourier}` suggest that all expressions of the form 
+
+.. math::
+    \begin{equation}
+    \psi = a_p e^{i(kx + mz + \sigma t)} + a_m e^{i(kx - mz + \sigma t)},
+    \label{Eq:basic_sol}
+    \end{equation}
+
+:math:`m = \frac{k}{A}`, are solutions to our system :math:`\eqref{u_mom} - \eqref{cont}`; you can check this by direct substitution. Note in the case of no dispersion, :math:`\alpha=0`, the condition :math:`m = \frac{k}{A}` is equivalent to the usual intertia-gravity wave dispersion relation, stated in dimensional coordinates,
+
+.. math::
+    \begin{equation}
+    \frac{k_*^2}{m_*^2} = \frac{\sigma_*^2 - f^2}{N^2-\sigma_*^2},
+    \end{equation}
+
+where :math:`k_*, m_*, \sigma_*` are the wavenumbers and frequency in dimensional coordinates. [#]_
+
+
 Models
------------------
+--------------------------------------------------------
 
 .. toctree::
+    :hidden:
     :maxdepth: 1
 
     land_sea.rst
@@ -256,6 +344,8 @@ The ideas sketched in this appendix are made rigorous in `abstract algebra`_ and
 
 .. [#] `Batchelor's (1967, p. 76)`_ discussion of stream functions uses the language of exact and closed `differential forms`_, ideas from `differential geometry`_, and Batchelor appears to implicitly invoke the Poincaré lemma in his argument; I don't like this approach, as it invokes graduate level maths unnecessarily. You may have also encountered differential forms in thermodynamics, where they add an almost catastrophic level of confusion. See Bohrens & Albrecht (2023) for a scathing critique of differential forms in thermodynamics, with which I agree! 
 
+.. [#] To get :math:`k_*`, note :math:`k=\frac{2\pi}{\lambda_x}` where :math:`\lambda_x` is the horizontal wavelength in non-dimensional coordinates. Converting back to dimensional coordinates we have :math:`\lambda_x^* = \frac{NH}{\omega}\lambda_x` and so :math:`k_* = \frac{\omega}{NH}k`. The dimensional vertical wavenumber :math:`m_*` and frequency :math:`\sigma_*` are obtained analogously.
+
 .. _Boussinesq/shallow-anelastic: https://doi.org/10.1175/1520-0469(1962)019<0173:SAODAS>2.0.CO;2
 
 .. _reduce the number of independent variables: https://en.wikipedia.org/wiki/Buckingham_%CF%80_theorem
@@ -289,4 +379,6 @@ The ideas sketched in this appendix are made rigorous in `abstract algebra`_ and
 .. _abstract algebra: https://en.wikipedia.org/wiki/Abstract_algebra
 
 .. _functional analysis: https://en.wikipedia.org/wiki/Functional_analysis
+
+.. _Fourier transforms: https://en.wikipedia.org/wiki/Fourier_transform
 

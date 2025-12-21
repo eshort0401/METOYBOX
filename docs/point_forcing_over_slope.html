@@ -18,6 +18,8 @@
       <script src="_static/documentation_options.js?v=d45e8c67"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -51,7 +53,9 @@
 <li class="toctree-l2"><a class="reference internal" href="gravity_waves_introduction.html#non-dimensionalization">Non-Dimensionalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gravity_waves_introduction.html#hydrostatic-waves">Hydrostatic Waves</a></li>
 <li class="toctree-l2"><a class="reference internal" href="gravity_waves_introduction.html#the-stream-function">The Stream Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="gravity_waves_introduction.html#an-ordinary-differential-equation">An Ordinary Differential Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gravity_waves_introduction.html#a-partial-differential-equation">A Partial Differential Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gravity_waves_introduction.html#the-fourier-transform">The Fourier Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gravity_waves_introduction.html#solution">Solution</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="gravity_waves_introduction.html#models">Models</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="land_sea.html">Land-Sea Breeze</a></li>
 <li class="toctree-l3"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
@@ -92,14 +96,10 @@
              
   <section id="point-forcing-over-slope">
 <h1>Point Forcing Over Slope<a class="headerlink" href="#point-forcing-over-slope" title="Link to this heading"></a></h1>
-<!-- Note we only need a snippet that will get put in the rst generated html file.-->
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<link rel="stylesheet" href="_static/assets/css/mathjax.css" />
 <link rel="stylesheet" href="_static/assets/css/base.css" />
 <link rel="stylesheet" href="_static/assets/css/controls.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-<script src="_static/assets/js/mathjax-config.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 <div id="loading-screen">
     <div class="spinner"></div>
@@ -120,7 +120,7 @@
         // Add a displacement toggle checkbox row above the sliders
         const displacement_config = overlayToggleConfig();
         configs.unshift(displacement_config);
-
+        
         // Add an imshow selection control row above the sliders
         const fields = ["psi", "u", "v", "w", "phi"]
         const labels = ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
@@ -143,7 +143,8 @@
         createModelControls(configs, "controls");
     </script>
     <py-script src="_static/point_forcing_over_slope.py" config="_static/assets/pyscript.toml"></py-script>
-</div></section>
+</div><p><span class="math notranslate nohighlight">\(\,\)</span></p>
+</section>
 
 
            </div>

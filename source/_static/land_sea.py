@@ -17,16 +17,16 @@ z_limits = (0, 4)
 u = core.Velocity(percentile=95).fields["u"]
 w = core.Velocity(percentile=95).fields["w"]
 fields = {"psi": core.Psi(percentile=85), "u": u, "w": w}
-fields.update({"velocity": core.Velocity(percentile=99)})
-fields["velocity"].fields["u"].percentile = 85
-fields["velocity"].fields["w"].percentile = 85
-fields.update({"v": core.V(percentile=85), "Q": core.Q()})
+fields.update({"velocity": core.Velocity(percentile=95)})
+fields.update({"v": core.V(percentile=99), "Q": core.Q()})
 fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
 args = ["land_sea", x, z, x_ticks, z_ticks, x_limits, z_limits]
 model = land_sea.LandSeaBreezeModel(*args, fields=fields)
 # Use a more interesting startig time
 # Note we also must update the starting slider value in land_sea.html
 model.non_dimensional_variables["t"] = np.pi / 2
+# Use a smaller alpha
+model.non_dimensional_variables["alpha"] = 0.1
 
 dim_var = ctl_core.default_dimensional.copy() + ["L_dim"]
 non_dim_var = ctl_core.default_non_dimensional.copy() + ["L"]

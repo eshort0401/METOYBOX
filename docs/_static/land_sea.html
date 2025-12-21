@@ -1,11 +1,7 @@
-<!-- Note we only need a snippet that will get put in the rst generated html file.-->
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<link rel="stylesheet" href="_static/assets/css/mathjax.css" />
 <link rel="stylesheet" href="_static/assets/css/base.css" />
 <link rel="stylesheet" href="_static/assets/css/controls.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-<script src="_static/assets/js/mathjax-config.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 <div id="loading-screen">
     <div class="spinner"></div>
@@ -14,7 +10,6 @@
 </div>
 
 <div id="main-content">
-    <div id="figure-output"></div>
     <div id="figure-output">
         <!-- Use two layers to prevent flickering in firefox -->
         <div id="figure-output-A" class="figure-layer is-active"></div>
@@ -31,7 +26,7 @@
         // Add a displacement toggle checkbox row above the sliders
         const overlay_toggle_config = overlayToggleConfig();
         configs.unshift(overlay_toggle_config);
-
+        
         // Add an imshow selection control row above the sliders
         const fields = ["psi", "u", "v", "w", "Q"]
         const labels = ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(Q\\)"]

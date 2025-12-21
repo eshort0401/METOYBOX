@@ -64,10 +64,10 @@ class BaseWaveController:
         name = self._get_active_imshow_field()
         self.model.active_imshow_field = name
         self.model.initialize_figure()
+        self.initialize_feature_visibility()
         self.initialize_coordinates()
         self.model.update_fields()
         self.model.update_suptitle()
-        self.initialize_feature_visibility()
         self.model.update_labels()
         self.model.update_figure_data()
         display(self.model.fig, target="figure-output-A", append=False)
