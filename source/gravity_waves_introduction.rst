@@ -289,22 +289,6 @@ where :math:`a_p, a_m \in\mathbb{C}` do not depend on :math:`z`. Notice that we 
 
 where :math:`k_*, m_*, \sigma_*` are the wavenumbers and frequency in dimensional coordinates. [#]_
 
-
-Models
---------------------------------------------------------
-
-.. toctree::
-    :hidden:
-    :maxdepth: 1
-
-    land_sea.rst
-    gaussian_forcing.rst
-    localized_line_forcing.rst
-    slope_breeze.rst
-    point_forcing_over_slope.rst
-
-
-
 Appendix A: Operators
 -----------------------------------------------------------------------------
 
@@ -382,3 +366,12 @@ The ideas sketched in this appendix are made rigorous in `abstract algebra`_ and
 
 .. _Fourier transforms: https://en.wikipedia.org/wiki/Fourier_transform
 
+.. toctree::
+    :hidden:
+    :maxdepth: 1
+
+    land_sea.rst
+    gaussian_forcing.rst
+    localized_line_forcing.rst
+    slope_breeze.rst
+    point_forcing_over_slope.rst

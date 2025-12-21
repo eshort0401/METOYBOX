@@ -2,8 +2,8 @@ import glob
 from pathlib import Path
 
 _header = """<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<link rel="stylesheet" href="_static/assets/css/base.css" />
-<link rel="stylesheet" href="_static/assets/css/controls.css" />
+<link rel="stylesheet" href="/_static/assets/css/base.css" />
+<link rel="stylesheet" href="/_static/assets/css/controls.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
 <div id="loading-screen">
@@ -21,7 +21,7 @@ _div_open = """
         <div id="figure-output-B" class="figure-layer is-passive"></div>
     </div>
     <div id="controls"></div>
-    <script src="_static/assets/js/model-controls.js"></script>
+    <script src="/_static/assets/js/model-controls.js"></script>
     <script>
 """
 
@@ -30,7 +30,7 @@ _div_close = """
     <py-script src="{python_path}" config="{config_path}"></py-script>
 </div>"""
 
-def generate_html(stub_path, html_path=None, python_path=None, config_path="_static/assets/pyscript.toml"):
+def generate_html(stub_path, html_path=None, python_path=None, config_path="/_static/assets/pyscript.toml"):
     """Generate the full HTML for a given js stub."""
     with open(stub_path, "r") as stub_file:
         stub = stub_file.read()
@@ -39,7 +39,7 @@ def generate_html(stub_path, html_path=None, python_path=None, config_path="_sta
     # Ensure the output directory exists
     Path(html_path).parent.mkdir(parents=True, exist_ok=True)
     filename = Path(stub_path).name
-    relative_path = Path("_static")
+    relative_path = Path("/_static")
     if python_path is None:
         python_path = relative_path / filename.replace(".js", ".py")
 

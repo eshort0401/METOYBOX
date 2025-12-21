@@ -1,6 +1,9 @@
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
 import numpy as np
-
-
 from metoybox.model import foundation
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core

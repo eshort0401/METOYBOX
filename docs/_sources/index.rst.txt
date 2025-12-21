@@ -10,6 +10,6 @@ The models on this site have been coded up in Python, and are presented interact
 
    fundamentals_introduction.rst
    gravity_waves_introduction.rst
-
+   test/test.rst
 
 .. _pyscript: https://pyscript.net

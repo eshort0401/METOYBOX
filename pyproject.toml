@@ -1,0 +1,13 @@
+# pyproject.toml
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "metoybox"
+version = "0.0.1"
+dependencies = ["numpy", "matplotlib", "scipy"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["metoybox*"]
