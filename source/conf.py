@@ -2,11 +2,12 @@
 # First add the project root to the path
 import sys
 from pathlib import Path
+import subprocess
 import shutil
 
 print(str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import source._static.util as util
+import source._static.utils as utils
 
 # -- Project information
 
@@ -58,35 +59,6 @@ autodoc_pydantic_field_list_validators = False
 autodoc_pydantic_model_show_config_summary = False
 
 
-# autodoc_mock_imports = [
-#     "numba",
-#     "scipy",
-#     "scikit-image",
-#     "cartopy",
-#     "typing_extensions",
-#     "codecov",
-#     "netcdf4",
-#     "h5netcdf",
-#     "requests",
-#     "tqdm",
-#     "cdsapi",
-#     "xesmf",
-#     "skimage",
-#     "cv2",
-#     "nco",
-#     "pytables",
-#     "zarr",
-#     "windrose",
-#     "pydot",
-#     "metpy",
-#     "graphviz",
-#     "pygraphviz",
-#     "nbconvert",
-#     "networkx",
-#     "imageio",
-# ]
-
-
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "sphinx": ("https://www.sphinx-doc.org/en/master/", None),
@@ -106,41 +78,21 @@ epub_show_urls = "footnote"
 html_baseurl = "https://eshort0401.github.io/METOYBOX/"
 
 
-_repo_root = Path(__file__).resolve().parents[1]
-
-
-# def _copy_metoybox_to_build(app, docname, source):
-#     # Only run once during the build (not for every document)
-#     if not hasattr(app.env, "_metoybox_copied"):
-#         metoybox_src = _repo_root / "metoybox"
-
-#         # Destination in the built output
-#         build_dir = Path(app.outdir)  # This is _build/html
-#         metoybox_dst = build_dir / "metoybox"
-
-#         # Only copy if source exists
-#         if metoybox_src.exists():
-#             # Ensure _static directory exists in build output
-#             metoybox_dst.parent.mkdir(parents=True, exist_ok=True)
-
-#             # Remove old copy if it exists
-#             if metoybox_dst.exists():
-#                 shutil.rmtree(metoybox_dst)
-
-#             # Copy the whole folder
-#             shutil.copytree(metoybox_src, metoybox_dst)
-#             print(f"Copied {metoybox_src} to {metoybox_dst}")
-
-#             # Mark as done so we don't copy multiple times
-#             app.env._metoybox_copied = True
-#         else:
-#             print(f"Source directory {metoybox_src} does not exist. Skipping copy.")
-
+_parent = Path(__file__).resolve().parents[1]
 
 def setup(app):
     """Setup function for Sphinx."""
-    # Make sure the html files have been built
-    stub_directory = _repo_root / "source" / "_static"
-    util.generate_all_html(stub_directory)
-    # Connect to the source-read event (runs early in the build)
-    # app.connect("source-read", _copy_metoybox_to_build)
+    # Build the metoybox wheel
+    print("Building metoybox wheel...")
+    subprocess.run(["python", "-m", "build"], cwd=_parent, check=True)
+    dist_directory = _parent / "dist"
+    wheel_files = list(dist_directory.glob("metoybox-*-py3-none-any.whl"))
+    if wheel_files:
+        latest_wheel = max(wheel_files, key=lambda p: p.stat().st_mtime)
+        dest = _parent / "source" / "_static" / "assets" / latest_wheel.name
+        shutil.copy2(latest_wheel, dest)
+        print(f"Copied {latest_wheel.name} to {dest}")
+
+    # Build the html snippets for each model from the js stubs
+    stub_directory = _parent / "source" / "_static"
+    utils.generate_all_html(stub_directory)

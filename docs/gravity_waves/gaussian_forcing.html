@@ -1,0 +1,186 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gaussian Temporal Forcing &mdash; metoybox 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
+
+  
+    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/gravity_waves/gaussian_forcing.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Localized Line Forcing" href="localized_line_forcing.html" />
+    <link rel="prev" title="Land-Sea Breeze" href="land_sea.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            metoybox
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../fundamentals/introduction.html">Fundamentals</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="introduction.html">Inertia-Gravity Waves</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#governing-equations">Governing equations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#non-dimensionalization">Non-Dimensionalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#hydrostatic-waves">Hydrostatic Waves</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#the-stream-function">The Stream Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#a-partial-differential-equation">A Partial Differential Equation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#the-fourier-transform">The Fourier Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="introduction.html#solution">Solution</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="introduction.html#appendix-a-operators">Appendix A: Operators</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="land_sea.html">Land-Sea Breeze</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Gaussian Temporal Forcing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
+<li class="toctree-l3"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">metoybox</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="introduction.html">Inertia-Gravity Waves</a></li>
+      <li class="breadcrumb-item active">Gaussian Temporal Forcing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/gravity_waves/gaussian_forcing.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gaussian-temporal-forcing">
+<h1>Gaussian Temporal Forcing<a class="headerlink" href="#gaussian-temporal-forcing" title="Link to this heading"></a></h1>
+<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+<link rel="stylesheet" href="/METOYBOX/_static/assets/css/base.css" />
+<link rel="stylesheet" href="/METOYBOX/_static/assets/css/controls.css" />
+<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+<div id="loading-screen">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+    <p><small>This can take a few minutes!</small></p>
+</div>
+
+<div id="main-content">
+    <div id="figure-output">
+        <!-- Use two layers to prevent flickering in firefox -->
+        <div id="figure-output-A" class="figure-layer is-active"></div>
+        <div id="figure-output-B" class="figure-layer is-passive"></div>
+    </div>
+    <div id="controls"></div>
+    <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
+    <script>
+        const configs = coreWaveConfigs();
+        // Add a displacement toggle checkbox row above the sliders
+        const displacement_config = overlayToggleConfig();
+        configs.unshift(displacement_config);
+        
+        // Add an imshow selection control row above the sliders
+        const fields = ["psi", "u", "v", "w", "phi"]
+        const labels = ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
+        const imshow_sel_config = imshowSelectionConfig(fields, labels);
+        configs.unshift(imshow_sel_config);
+        const zFStep = 3 * stepRatio
+        const LStep = 1 * stepRatio
+        const LValue = 0.2
+        const LDimValue = LValue * NValue * HValue / Omega
+        args = ["\\(z_f:\\)", "z_f-slider", 0, 3, 1, zFStep, "non-dimensional"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(z_f:\\)", "z_f_dim-slider", 0, 3e3, 1e3, zFStep * 1e3, "dimensional", "m"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(\\omega:\\)", "omega-slider", Omega * stepRatio, 2 * Omega, Omega, Omega * stepRatio, "dimensional", "s⁻¹"];
+        configs.push(sliderConfig(...args));
+        const sigmaMin = 0.1
+        const sigmaMax = 5
+        const sigmaStep = (sigmaMax - sigmaMin) * stepRatio
+        const sigmaDimMin = sigmaMin * Omega
+        const sigmaDimMax = sigmaMax * Omega
+        const sigmaDimStep = sigmaStep * Omega
+        args = ["\\(\\sigma:\\)", "sigma-slider", sigmaMin, sigmaMax, 1, sigmaStep, "non-dimensional"];
+        configs.push(sliderConfig(...args));
+        args = ["\\(\\sigma:\\)", "sigma_dim-slider", sigmaDimMin, sigmaDimMax, Omega, sigmaDimStep, "dimensional", "s⁻¹"];
+        configs.push(sliderConfig(...args));
+        createModelControls(configs, "controls");
+    </script>
+    <py-script src="/METOYBOX/_static/gaussian_forcing.py" config="/METOYBOX/_static/assets/pyscript.toml"></py-script>
+</div><p><span class="math notranslate nohighlight">\(\,\)</span></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="land_sea.html" class="btn btn-neutral float-left" title="Land-Sea Breeze" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="localized_line_forcing.html" class="btn btn-neutral float-right" title="Localized Line Forcing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ewan Short.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
