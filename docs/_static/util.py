@@ -36,6 +36,7 @@ def generate_html(
     html_path=None,
     python_path=None,
     config_path="/METOYBOX/_static/assets/pyscript.toml",
+    local_parent=None,
 ):
     """Generate the full HTML for a given js stub."""
     with open(stub_path, "r") as stub_file:
@@ -44,10 +45,14 @@ def generate_html(
         html_path = stub_path.replace(".js", ".html")
     # Ensure the output directory exists
     Path(html_path).parent.mkdir(parents=True, exist_ok=True)
-    filename = Path(stub_path).name
-    relative_path = Path("/METOYBOX/_static")
-    if python_path is None:
-        python_path = relative_path / filename.replace(".js", ".py")
+    # filename = Path(stub_path).name
+    if local_parent is None:
+        local_parent = Path(__file__).parent
+    web_parent = Path("/METOYBOX/_static")
+    # Assume python file in same directory as javascript stub
+    python_path = stub_path.replace(".js", ".py")
+    # Now convert to web path
+    python_path = str(web_parent / Path(python_path).relative_to(local_parent))
 
     div_close = _div_close.format(python_path=python_path, config_path=config_path)
 
@@ -59,18 +64,13 @@ def generate_html(
         f.write(div_close)
 
 
-def generate_all_html(
-    stub_directory=None, output_directory=None, python_directory=None
-):
+def generate_all_html(stub_directory=None):
     """Generate HTML files for all JS stubs in this directory."""
     if stub_directory is None:
         stub_directory = Path(__file__).parent
-    if output_directory is None:
-        output_directory = stub_directory
     js_stubs = glob.glob(str(stub_directory / "*.js"))
     for js_stub in js_stubs:
-        html_path = output_directory / (Path(js_stub).stem + ".html")
-        generate_html(js_stub, html_path=html_path)
+        generate_html(js_stub)
 
 
 if __name__ == "__main__":
