@@ -124,8 +124,8 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
 <p>which emulates the heating/cooling of a land-surface <span class="math notranslate nohighlight">\(x&gt;0\)</span> as compared to an ocean surface <span class="math notranslate nohighlight">\(x&lt;0\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(H\)</span> are horizontal and vertical length scales, respectively, and <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency. The applet below visualizes this choice of <span class="math notranslate nohighlight">\(Q_*\)</span> <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p id="igw-intro-applet"><strong>Rotunno (1983) Applet</strong></p>
 <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<link rel="stylesheet" href="_static/assets/css/base.css" />
-<link rel="stylesheet" href="_static/assets/css/controls.css" />
+<link rel="stylesheet" href="/METOYBOX/_static/assets/css/base.css" />
+<link rel="stylesheet" href="/METOYBOX/_static/assets/css/controls.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
 <div id="loading-screen">
@@ -141,7 +141,7 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
         <div id="figure-output-B" class="figure-layer is-passive"></div>
     </div>
     <div id="controls"></div>
-    <script src="_static/assets/js/model-controls.js"></script>
+    <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
     <script>
         const configs = coreWaveConfigs();
         
@@ -166,7 +166,7 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
         configs.push(sliderConfig(...args));
         createModelControls(configs, "controls", "dimensional");
     </script>
-    <py-script src="_static/land_sea_intro.py" config="_static/assets/pyscript.toml"></py-script>
+    <py-script src="/METOYBOX/_static/land_sea_intro.py" config="/METOYBOX/_static/assets/pyscript.toml"></py-script>
 </div><p>The idea is that we have chosen our coordinates <span class="math notranslate nohighlight">\((x_*, y_*, z_*)\)</span> so that <span class="math notranslate nohighlight">\(x_*=0\)</span>, <span class="math notranslate nohighlight">\(z_*=0\)</span> represents a coastline, which extends infinitely far into and out of the screen in the <span class="math notranslate nohighlight">\(y_*\)</span> direction. The <span class="math notranslate nohighlight">\(z_*=0\)</span> lower boundary represents land and sea for <span class="math notranslate nohighlight">\(x_*&gt;0\)</span> and <span class="math notranslate nohighlight">\(x_*&lt;0\)</span>, respectively; imagine you’re at the beach, looking down the coastline, with sand to your right, and water to your left. The land surface changes temperature over the course of the day, but the ocean surface temperature is comparatively constant. You should play with the <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(Q_0\)</span>, <span class="math notranslate nohighlight">\(H\)</span> and <span class="math notranslate nohighlight">\(L\)</span> sliders to see how the forcing <span class="math notranslate nohighlight">\(Q_*\)</span> changes. Also, with <span class="math notranslate nohighlight">\(Q_*\)</span> given by <span class="math notranslate nohighlight">\(\eqref{Q_sea_breeze_dim}\)</span> we can solve <span class="math notranslate nohighlight">\(\text{\eqref{u_mom_dim}-\eqref{boundary_dim}}\)</span> analytically! Switching on the quiver plot shows the <span class="math notranslate nohighlight">\((u, w)\)</span> vectors overlaid on <span class="math notranslate nohighlight">\(Q\)</span>. You can also change the shading from <span class="math notranslate nohighlight">\(Q\)</span> to another variable, e.g. <span class="math notranslate nohighlight">\(v\)</span>. If the applets are laggy in Firefox, abandon computer communism, and embrace the Chrome counter-revolution instead.</p>
 </section>
 <section id="non-dimensionalization">
