@@ -385,7 +385,7 @@ class BaseWaveModel:
         non_dimensional_variables: dict[str, float] = default_non_dimensional,
         x_unit_formatter: UnitFormatter = UnitFormatter("km", 1e-3),
         z_unit_formatter: UnitFormatter = UnitFormatter("km", 1e-3),
-        figure_size: tuple[float] = (7.5, 6),
+        figure_size: tuple[float] = (6.5, 5),
         suptitle_height: float = 1.0,
         fields: dict[str, BaseField] | None = None,
         get_scalings: GetScalingsFunction = get_default_scalings,
