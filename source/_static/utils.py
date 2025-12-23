@@ -5,29 +5,33 @@ _header = """<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1
 <link rel="stylesheet" href="/METOYBOX/_static/assets/css/base.css" />
 <link rel="stylesheet" href="/METOYBOX/_static/assets/css/controls.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-
-<div id="loading-screen">
-    <div class="spinner"></div>
-    <p>Loading...</p>
-    <p><small>This can take a few minutes!</small></p>
-</div>
 """
 
+# Note we wrap in a container div and scope js to allow multiple models on one page
 _div_open = """
-<div id="main-content">
-    <div id="figure-output">
-        <!-- Use two layers to prevent flickering in firefox -->
-        <div id="figure-output-A" class="figure-layer is-active"></div>
-        <div id="figure-output-B" class="figure-layer is-passive"></div>
+<div id="{container_id}">
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+        <p><small>This can take a few minutes!</small></p>
     </div>
-    <div id="controls"></div>
-    <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
-    <script>
+    <div id="main-content">
+        <div id="figure-output">
+            <!-- Use two layers to prevent flickering in firefox -->
+            <div id="figure-output-A" class="figure-layer is-active"></div>
+            <div id="figure-output-B" class="figure-layer is-passive"></div>
+        </div>
+        <div id="controls"></div>
+        <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
+        <script>
+            (function () {{
 """
 
 _div_close = """
-    </script>
-    <py-script src="{python_path}" config="{config_path}"></py-script>
+            }})();
+        </script>
+        <py-script src="{python_path}" config="{config_path}"></py-script>
+    </div>
 </div>"""
 
 
@@ -37,6 +41,7 @@ def generate_html(
     python_path=None,
     config_path="/METOYBOX/_static/assets/pyscript.toml",
     local_parent=None,
+    container_id=None,
 ):
     """Generate the full HTML for a given js stub."""
     with open(stub_path, "r") as stub_file:
@@ -54,12 +59,17 @@ def generate_html(
     # Now convert to web path
     python_path = str(web_parent / Path(python_path).relative_to(local_parent))
 
+    if container_id is None:
+        # Use the filename without extension as container id
+        container_id = Path(stub_path).stem
+
+    div_open = _div_open.format(container_id=container_id)
     div_close = _div_close.format(python_path=python_path, config_path=config_path)
 
-    indented_stub = "\n".join(["        " + line for line in stub.splitlines()])
+    indented_stub = "\n".join(["                " + line for line in stub.splitlines()])
     with open(html_path, "w") as f:
         f.write(_header)
-        f.write(_div_open)
+        f.write(div_open)
         f.write(indented_stub)
         f.write(div_close)
 

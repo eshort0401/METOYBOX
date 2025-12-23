@@ -3,52 +3,55 @@
 <link rel="stylesheet" href="/METOYBOX/_static/assets/css/controls.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
-<div id="loading-screen">
-    <div class="spinner"></div>
-    <p>Loading...</p>
-    <p><small>This can take a few minutes!</small></p>
-</div>
-
-<div id="main-content">
-    <div id="figure-output">
-        <!-- Use two layers to prevent flickering in firefox -->
-        <div id="figure-output-A" class="figure-layer is-active"></div>
-        <div id="figure-output-B" class="figure-layer is-passive"></div>
+<div id="gaussian_forcing">
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+        <p><small>This can take a few minutes!</small></p>
     </div>
-    <div id="controls"></div>
-    <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
-    <script>
-        const configs = coreWaveConfigs();
-        // Add a displacement toggle checkbox row above the sliders
-        const displacement_config = overlayToggleConfig();
-        configs.unshift(displacement_config);
-        
-        // Add an imshow selection control row above the sliders
-        const fields = ["psi", "u", "v", "w", "phi"]
-        const labels = ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
-        const imshow_sel_config = imshowSelectionConfig(fields, labels);
-        configs.unshift(imshow_sel_config);
-        const zFStep = 3 * stepRatio
-        const LStep = 1 * stepRatio
-        const LValue = 0.2
-        const LDimValue = LValue * NValue * HValue / Omega
-        args = ["\\(z_f:\\)", "z_f-slider", 0, 3, 1, zFStep, "non-dimensional"];
-        configs.push(sliderConfig(...args));
-        args = ["\\(z_f:\\)", "z_f_dim-slider", 0, 3e3, 1e3, zFStep * 1e3, "dimensional", "m"];
-        configs.push(sliderConfig(...args));
-        args = ["\\(\\omega:\\)", "omega-slider", Omega * stepRatio, 2 * Omega, Omega, Omega * stepRatio, "dimensional", "s⁻¹"];
-        configs.push(sliderConfig(...args));
-        const sigmaMin = 0.1
-        const sigmaMax = 5
-        const sigmaStep = (sigmaMax - sigmaMin) * stepRatio
-        const sigmaDimMin = sigmaMin * Omega
-        const sigmaDimMax = sigmaMax * Omega
-        const sigmaDimStep = sigmaStep * Omega
-        args = ["\\(\\sigma:\\)", "sigma-slider", sigmaMin, sigmaMax, 1, sigmaStep, "non-dimensional"];
-        configs.push(sliderConfig(...args));
-        args = ["\\(\\sigma:\\)", "sigma_dim-slider", sigmaDimMin, sigmaDimMax, Omega, sigmaDimStep, "dimensional", "s⁻¹"];
-        configs.push(sliderConfig(...args));
-        createModelControls(configs, "controls");
-    </script>
-    <py-script src="/METOYBOX/_static/gaussian_forcing.py" config="/METOYBOX/_static/assets/pyscript.toml"></py-script>
+    <div id="main-content">
+        <div id="figure-output">
+            <!-- Use two layers to prevent flickering in firefox -->
+            <div id="figure-output-A" class="figure-layer is-active"></div>
+            <div id="figure-output-B" class="figure-layer is-passive"></div>
+        </div>
+        <div id="controls"></div>
+        <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
+        <script>
+            (function () {
+                const configs = coreWaveConfigs();
+                // Add a displacement toggle checkbox row above the sliders
+                const displacement_config = overlayToggleConfig();
+                configs.unshift(displacement_config);
+                
+                // Add an imshow selection control row above the sliders
+                const fields = ["psi", "u", "v", "w", "phi"]
+                const labels = ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
+                const imshow_sel_config = imshowSelectionConfig(fields, labels);
+                configs.unshift(imshow_sel_config);
+                const zFStep = 3 * stepRatio
+                const LStep = 1 * stepRatio
+                const LValue = 0.2
+                const LDimValue = LValue * NValue * HValue / Omega
+                args = ["\\(z_f:\\)", "z_f-slider", 0, 3, 1, zFStep, "non-dimensional"];
+                configs.push(sliderConfig(...args));
+                args = ["\\(z_f:\\)", "z_f_dim-slider", 0, 3e3, 1e3, zFStep * 1e3, "dimensional", "m"];
+                configs.push(sliderConfig(...args));
+                args = ["\\(\\omega:\\)", "omega-slider", Omega * stepRatio, 2 * Omega, Omega, Omega * stepRatio, "dimensional", "s⁻¹"];
+                configs.push(sliderConfig(...args));
+                const sigmaMin = 0.1
+                const sigmaMax = 5
+                const sigmaStep = (sigmaMax - sigmaMin) * stepRatio
+                const sigmaDimMin = sigmaMin * Omega
+                const sigmaDimMax = sigmaMax * Omega
+                const sigmaDimStep = sigmaStep * Omega
+                args = ["\\(\\sigma:\\)", "sigma-slider", sigmaMin, sigmaMax, 1, sigmaStep, "non-dimensional"];
+                configs.push(sliderConfig(...args));
+                args = ["\\(\\sigma:\\)", "sigma_dim-slider", sigmaDimMin, sigmaDimMax, Omega, sigmaDimStep, "dimensional", "s⁻¹"];
+                configs.push(sliderConfig(...args));
+                createModelControls(configs, "controls");
+            })();
+        </script>
+        <py-script src="/METOYBOX/_static/gaussian_forcing.py" config="/METOYBOX/_static/assets/pyscript.toml"></py-script>
+    </div>
 </div>

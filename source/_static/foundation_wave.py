@@ -1,8 +1,4 @@
-import sys
 from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
 import numpy as np
 from metoybox.model import foundation
 from metoybox.model import core
@@ -26,7 +22,10 @@ fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
 args = ["point_forcing", x, z, x_ticks, z_ticks, x_limits, z_limits]
 model = foundation.FoundationWaveModel(*args, fields=fields)
 
-dim_var = ctl_core.default_dimensional.copy() + ["z_f_dim", "omega", "sigma_dim"]
-non_dim_var = ctl_core.default_non_dimensional.copy() + ["z_f", "sigma"]
-controller = ctl_core.BaseWaveController(model, dim_var, non_dim_var)
-ctl_core.hide_loading_screen()
+dim_var = ctl_core.default_dimensional.copy() + ["omega", "sigma_dim"]
+non_dim_var = ctl_core.default_non_dimensional.copy() + ["sigma"]
+
+# Use the filename without extension as container id
+container_id = "foundation_wave"
+controller = ctl_core.BaseWaveController(model, container_id, dim_var, non_dim_var)
+ctl_core.hide_loading_screen(container_id)

@@ -23,6 +23,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Plane Wave" href="plane_wave.html" />
     <link rel="prev" title="Slope Breeze" href="slope_breeze.html" /> 
 </head>
 
@@ -62,6 +63,7 @@
 <li class="toctree-l3"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
 <li class="toctree-l3"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">Point Forcing Over Slope</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plane_wave.html">Plane Wave</a></li>
 </ul>
 </li>
 </ul>
@@ -100,48 +102,51 @@
 <link rel="stylesheet" href="/METOYBOX/_static/assets/css/controls.css" />
 <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 
-<div id="loading-screen">
-    <div class="spinner"></div>
-    <p>Loading...</p>
-    <p><small>This can take a few minutes!</small></p>
-</div>
-
-<div id="main-content">
-    <div id="figure-output">
-        <!-- Use two layers to prevent flickering in firefox -->
-        <div id="figure-output-A" class="figure-layer is-active"></div>
-        <div id="figure-output-B" class="figure-layer is-passive"></div>
+<div id="point_forcing_over_slope">
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+        <p><small>This can take a few minutes!</small></p>
     </div>
-    <div id="controls"></div>
-    <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
-    <script>
-        const configs = coreWaveConfigs();
-        // Add a displacement toggle checkbox row above the sliders
-        const displacement_config = overlayToggleConfig();
-        configs.unshift(displacement_config);
-        
-        // Add an imshow selection control row above the sliders
-        const fields = ["psi", "u", "v", "w", "phi"]
-        const labels = ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
-        const imshow_sel_config = imshowSelectionConfig(fields, labels);
-        configs.unshift(imshow_sel_config);
-        const MStep = 3 * stepRatio
-        const MDimMax = 1e-2
-        const MDimStep = MDimMax * stepRatio
-        const zFStep = 3 * stepRatio
-        let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
-        configs.push(sliderConfig(...args));
-        args = ["\\(z_f:\\)", "z_f-slider", 0, 3, 1, zFStep, "non-dimensional"];
-        configs.push(sliderConfig(...args));
-        args = ["\\(z_f:\\)", "z_f_dim-slider", 0, 3e3, 1e3, zFStep * 1e3, "dimensional", "m"];
-        configs.push(sliderConfig(...args));
-        args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep, "dimensional", "m m⁻¹"];
-        configs.push(sliderConfig(...args));
-        args = ["\\(\\omega:\\)", "omega-slider", Omega * stepRatio, 2 * Omega, Omega, Omega * stepRatio, "dimensional", "s⁻¹"];
-        configs.push(sliderConfig(...args));
-        createModelControls(configs, "controls");
-    </script>
-    <py-script src="/METOYBOX/_static/point_forcing_over_slope.py" config="/METOYBOX/_static/assets/pyscript.toml"></py-script>
+    <div id="main-content">
+        <div id="figure-output">
+            <!-- Use two layers to prevent flickering in firefox -->
+            <div id="figure-output-A" class="figure-layer is-active"></div>
+            <div id="figure-output-B" class="figure-layer is-passive"></div>
+        </div>
+        <div id="controls"></div>
+        <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
+        <script>
+            (function () {
+                const configs = coreWaveConfigs();
+                // Add a displacement toggle checkbox row above the sliders
+                const displacement_config = overlayToggleConfig();
+                configs.unshift(displacement_config);
+                
+                // Add an imshow selection control row above the sliders
+                const fields = ["psi", "u", "v", "w", "phi"]
+                const labels = ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
+                const imshow_sel_config = imshowSelectionConfig(fields, labels);
+                configs.unshift(imshow_sel_config);
+                const MStep = 3 * stepRatio
+                const MDimMax = 1e-2
+                const MDimStep = MDimMax * stepRatio
+                const zFStep = 3 * stepRatio
+                let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
+                configs.push(sliderConfig(...args));
+                args = ["\\(z_f:\\)", "z_f-slider", 0, 3, 1, zFStep, "non-dimensional"];
+                configs.push(sliderConfig(...args));
+                args = ["\\(z_f:\\)", "z_f_dim-slider", 0, 3e3, 1e3, zFStep * 1e3, "dimensional", "m"];
+                configs.push(sliderConfig(...args));
+                args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep, "dimensional", "m m⁻¹"];
+                configs.push(sliderConfig(...args));
+                args = ["\\(\\omega:\\)", "omega-slider", Omega * stepRatio, 2 * Omega, Omega, Omega * stepRatio, "dimensional", "s⁻¹"];
+                configs.push(sliderConfig(...args));
+                createModelControls(configs, "controls");
+            })();
+        </script>
+        <py-script src="/METOYBOX/_static/point_forcing_over_slope.py" config="/METOYBOX/_static/assets/pyscript.toml"></py-script>
+    </div>
 </div><p><span class="math notranslate nohighlight">\(\,\)</span></p>
 </section>
 
@@ -150,6 +155,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="slope_breeze.html" class="btn btn-neutral float-left" title="Slope Breeze" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plane_wave.html" class="btn btn-neutral float-right" title="Plane Wave" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

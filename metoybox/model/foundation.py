@@ -6,7 +6,7 @@ from metoybox.calculate import foundation
 
 class FoundationWaveModel(core.BaseWaveModel):
     """
-    A linear theory model for an elevated localized line forcing.
+    A basic plane wave.
     """
 
     def calculate_fields(self, names):

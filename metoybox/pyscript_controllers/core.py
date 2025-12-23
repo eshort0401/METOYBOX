@@ -14,12 +14,13 @@ from js import window
 class WebCache:
     """Cache for DOM elements to avoid repeated lookups."""
 
-    def __init__(self):
+    def __init__(self, container):
         self.elements = {}
+        self.container = container
 
     def get(self, element_id):
         if element_id not in self.elements:
-            element = document.getElementById(element_id)
+            element = self.container.querySelector(f"#{element_id}")
             if element is None:
                 print(f"Missing DOM element: '{element_id}'")
                 return None
@@ -40,6 +41,7 @@ class BaseWaveController:
     def __init__(
         self,
         model: BaseWaveModel,
+        container_id: str,
         dimensional_variables: Iterable[str] = default_dimensional,
         non_dimensional_variables: Iterable[str] = default_non_dimensional,
         active_target: str = "figure-output-A",
@@ -49,7 +51,8 @@ class BaseWaveController:
         Initialize the controller. This sets up the web cache and registers all the
         event handlers with pyscript.
         """
-        self.cache = WebCache()
+        self.container = document.getElementById(container_id)
+        self.cache = WebCache(self.container)
         self.active_target = active_target
         self.inactive_target = inactive_target
         self.model = model
@@ -339,10 +342,12 @@ class BaseWaveController:
         self.redraw()
 
 
-def hide_loading_screen():
-    """Hide loading screen and show main content"""
-    loading_screen = document.getElementById("loading-screen")
-    main_content = document.getElementById("main-content")
+def hide_loading_screen(container_id):
+    """Hide loading screen and show main content."""
+
+    container = document.getElementById(container_id)
+    loading_screen = container.querySelector("#loading-screen")
+    main_content = container.querySelector("#main-content")
 
     loading_screen.style.display = "none"
     main_content.style.display = "block"

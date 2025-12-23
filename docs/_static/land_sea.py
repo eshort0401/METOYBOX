@@ -1,6 +1,5 @@
 import numpy as np
-
-
+from pathlib import Path
 from metoybox.model import land_sea
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core
@@ -30,5 +29,7 @@ model.non_dimensional_variables["alpha"] = 0.1
 
 dim_var = ctl_core.default_dimensional.copy() + ["L_dim"]
 non_dim_var = ctl_core.default_non_dimensional.copy() + ["L"]
-controller = ctl_core.BaseWaveController(model, dim_var, non_dim_var)
-ctl_core.hide_loading_screen()
+# Use the filename without extension as container id
+container_id = "land_sea"
+controller = ctl_core.BaseWaveController(model, container_id, dim_var, non_dim_var)
+ctl_core.hide_loading_screen(container_id)

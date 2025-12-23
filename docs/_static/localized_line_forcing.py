@@ -1,6 +1,5 @@
 import numpy as np
-
-
+from pathlib import Path
 from metoybox.model import elevated
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core
@@ -25,5 +24,8 @@ model = elevated.LocalizedLineForcingModel(*args, fields=fields)
 
 dim_var = ctl_core.default_dimensional.copy() + ["z_f_dim", "omega", "L_dim"]
 non_dim_var = ctl_core.default_non_dimensional.copy() + ["z_f", "L"]
-controller = ctl_core.BaseWaveController(model, dim_var, non_dim_var)
-ctl_core.hide_loading_screen()
+
+# Use the filename without extension as container id
+container_id = "localized_line_forcing"
+controller = ctl_core.BaseWaveController(model, container_id, dim_var, non_dim_var)
+ctl_core.hide_loading_screen(container_id)

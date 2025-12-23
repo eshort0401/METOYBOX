@@ -1,4 +1,5 @@
 import numpy as np
+from pathlib import Path
 from metoybox.model import slope
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core
@@ -22,5 +23,8 @@ model = slope.MountainValleyModel(*args, fields=fields, max_upper_scale=5)
 
 dim_var = ctl_core.default_dimensional.copy() + ["M_dim"]
 non_dim_var = ctl_core.default_non_dimensional.copy() + ["M"]
-controller = ctl_core.BaseWaveController(model, dim_var, non_dim_var)
-ctl_core.hide_loading_screen()
+
+# Use the filename without extension as container id
+container_id = "slope_breeze"
+controller = ctl_core.BaseWaveController(model, container_id, dim_var, non_dim_var)
+ctl_core.hide_loading_screen(container_id)

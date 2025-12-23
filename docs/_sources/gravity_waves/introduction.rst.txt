@@ -289,6 +289,10 @@ where :math:`a_p, a_m \in\mathbb{C}` do not depend on :math:`z`. Notice that we 
 
 where :math:`k_*, m_*, \sigma_*` are the wavenumbers and frequency in dimensional coordinates. [#]_
 
+**A Simple Plane Wave**
+
+
+
 Appendix A: Operators
 -----------------------------------------------------------------------------
 
@@ -375,3 +379,4 @@ The ideas sketched in this appendix are made rigorous in `abstract algebra`_ and
     localized_line_forcing.rst
     slope_breeze.rst
     point_forcing_over_slope.rst
+    plane_wave.rst
