@@ -5,9 +5,8 @@ from pathlib import Path
 import subprocess
 import shutil
 
-print(str(Path(__file__).resolve().parents[1]))
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import source._static.utils as utils
+import source.generate_html as generate_html
 
 # -- Project information
 
@@ -128,5 +127,7 @@ def setup(app):
         print("Wheel is up to date; skipping build.")
 
     # Build the html snippets for each model from the js stubs
-    stub_directory = _parent / "source" / "_static"
-    utils.generate_all_html(stub_directory)
+    stub_directory = _parent / "source/_static/models"
+    # The local parent path will get switched to METOYBOX/_static for the python scripts
+    local_parent = _parent / "source/_static"
+    generate_html.generate_all_html(stub_directory, local_parent=local_parent)

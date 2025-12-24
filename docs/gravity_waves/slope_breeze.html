@@ -10,6 +10,9 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=3a193a7f" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/controls.css?v=48e535e7" />
+      <link rel="stylesheet" type="text/css" href="https://pyscript.net/releases/2024.1.1/core.css" />
 
   
     <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/gravity_waves/slope_breeze.html" />
@@ -20,6 +23,8 @@
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+      <script src="../_static/assets/js/model-controls.js?v=4516b1dc"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -97,47 +102,7 @@
              
   <section id="slope-breeze">
 <h1>Slope Breeze<a class="headerlink" href="#slope-breeze" title="Link to this heading"></a></h1>
-<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<link rel="stylesheet" href="/METOYBOX/_static/assets/css/base.css" />
-<link rel="stylesheet" href="/METOYBOX/_static/assets/css/controls.css" />
-<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-
-<div id="slope_breeze">
-    <div id="loading-screen">
-        <div class="spinner"></div>
-        <p>Loading...</p>
-        <p><small>This can take a few minutes!</small></p>
-    </div>
-    <div id="main-content">
-        <div id="figure-output">
-            <!-- Use two layers to prevent flickering in firefox -->
-            <div id="slope_breeze-figure-output-A" class="figure-layer is-active"></div>
-            <div id="slope_breeze-figure-output-B" class="figure-layer is-passive"></div>
-        </div>
-        <div id="controls"></div>
-        <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
-        <script>
-            const configs = coreWaveConfigs();
-            // Add a displacement toggle checkbox row above the sliders
-            const displacement_config = overlayToggleConfig();
-            configs.unshift(displacement_config);
-            
-            // Add an imshow selection control row above the sliders
-            const imshow_sel_config = imshowSelectionConfig();
-            configs.unshift(imshow_sel_config);
-            const MStep = 3 * stepRatio
-            const MDimMax = 1e-2
-            const MDimStep = MDimMax * stepRatio
-            let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
-            configs.push(sliderConfig(...args));
-            args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep]
-            args.push("dimensional", "m m⁻¹");
-            configs.push(sliderConfig(...args));
-            createModelControls(configs, "controls");
-        </script>
-        <py-script src="/METOYBOX/_static/slope_breeze.py" config="/METOYBOX/_static/assets/pyscript.toml"></py-script>
-    </div>
-</div><p><span class="math notranslate nohighlight">\(\,\)</span></p>
+<p><span class="math notranslate nohighlight">\(\,\)</span></p>
 </section>
 
 

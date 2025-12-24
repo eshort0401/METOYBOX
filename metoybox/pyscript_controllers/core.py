@@ -193,7 +193,8 @@ class BaseWaveController:
         @when("change", toggle_str)
         def _toggle_feature(event):
             """Handle feature visibility change."""
-            feature = event.target.id.split("-")[0]
+            # Note ID strings have the format {container_id}-{feature}-checkbox
+            feature = event.target.id.split("-")[1]
             self.toggle_feature(event, feature)
 
         time_sliders = [
@@ -229,7 +230,8 @@ class BaseWaveController:
 
     def _get_active_imshow_field(self):
         """Get the currently active imshow field from the relevant buttons."""
-        checked = document.querySelector('input[name="imshow-field"]:checked')
+        imshow_str = f"{self.container_id}-imshow-field"
+        checked = document.querySelector(f"input[name='{imshow_str}']:checked")
         return checked.value if checked else "psi"
 
     def change_imshow_field(self, event):
@@ -289,13 +291,14 @@ class BaseWaveController:
         self,
         names: Iterable[str],
         control_suffix: str = "-slider",
-        output_suffix: str = "-out",
+        output_suffix: str = "-output",
     ):
         """Update the controller outputs (e.g. the text next to a slider.)"""
         for name in names:
-            value = float(self.cache.get(f"{name}{control_suffix}").value)
-            element_id = f"{self.container_id}-{name}{output_suffix}"
-            out = self.cache.get(element_id)
+            control_id = f"{self.container_id}-{name}{control_suffix}"
+            value = float(self.cache.get(control_id).value)
+            output_id = f"{self.container_id}-{name}{output_suffix}"
+            out = self.cache.get(output_id)
             if out.units:
                 out.textContent = f"{value:.1e}" + f" {out.units}"
             else:

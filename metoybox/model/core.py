@@ -86,9 +86,11 @@ def match_non_dimensional(
     z_f_dim = non_dimensional_variables["z_f"] * H
     L_dim = non_dimensional_variables["L"] * H * N / omega
     sigma_dim = sigma * omega
+    k_dim = non_dimensional_variables["k"] * omega / (H * N)
 
     variables = {"f": f, "N": N, "alpha": alpha, "t_dim": t_dim, "M_dim": M_dim}
     variables.update({"z_f_dim": z_f_dim, "L_dim": L_dim, "sigma_dim": sigma_dim})
+    variables.update({"k_dim": k_dim})
     dimensional_variables.update(variables)
 
     return dimensional_variables
@@ -111,9 +113,8 @@ def match_dimensional(
     N_omega = N / omega
     alpha_omega = dimensional_variables["alpha"] / omega
     t = dimensional_variables["t_dim"] * omega
-    sigma_dim = dimensional_variables[
-        "sigma_dim"
-    ]  # Why are sigma and sigma dim the same???
+    sigma_dim = dimensional_variables["sigma_dim"]
+    k_dim = dimensional_variables["k_dim"]
 
     # The following variables are used by the subclass models. Define the
     # matching here for convenience.
@@ -121,8 +122,9 @@ def match_dimensional(
     z_f = dimensional_variables["z_f_dim"] / H
     L = dimensional_variables["L_dim"] * omega / (H * N)
     sigma = sigma_dim / omega
+    k = k_dim * H * N / omega
 
-    variables = {"f_omega": f_omega, "N_omega": N_omega, "sigma": sigma}
+    variables = {"f_omega": f_omega, "N_omega": N_omega, "sigma": sigma, "k": k}
     variables.update({"alpha_omega": alpha_omega, "t": t, "M": M, "z_f": z_f, "L": L})
 
     non_dimensional_variables.update(variables)
@@ -338,12 +340,12 @@ _L_dim = _L * _H * _N / _Omega
 default_dimensional = {"t_dim": 0.0, "N": 1e-2, "H": 1e3, "omega": _Omega}
 default_dimensional.update({"Q_0": 1.2e-5, "alpha": 0.2 * _Omega, "f": 0.5 * _Omega})
 default_dimensional.update({"M_dim": _Omega * 1e2, "z_f_dim": 1e3, "L_dim": _L_dim})
-default_dimensional.update({"sigma_dim": 1.0, "k_dim": 2 * np.pi * _Omega / (_N * _H)})
+default_dimensional.update({"sigma_dim": _Omega, "k_dim": np.pi * _Omega / (_N * _H)})
 
 default_non_dimensional = {"t": 0.0, "N_omega": 1e-2 / _Omega}
 default_non_dimensional.update({"alpha_omega": 0.2, "f_omega": 0.5})
 default_non_dimensional.update({"M": 0.2, "z_f": 1.0, "L": _L})
-default_non_dimensional.update({"sigma": 1.0, "k": 2 * np.pi})
+default_non_dimensional.update({"sigma": 1.0, "k": np.pi})
 
 
 class DisplacementLines:
@@ -677,18 +679,21 @@ class BaseWaveModel:
         if self.coordinates == "dimensional":
             t_dim = self.dimensional_variables["t_dim"]
             t = t_dim / self.scalings["t"]
+            sigma_dim = self.dimensional_variables["sigma_dim"]
+            sigma = sigma_dim / self.scalings["sigma"]
         else:
             t = self.non_dimensional_variables["t"]
+            sigma = self.non_dimensional_variables["sigma"]
 
         imshow_field = self.fields[self.active_imshow_field]
-        imshow_data = np.real(imshow_field.field * np.exp(1j * t))
+        imshow_data = np.real(imshow_field.field * np.exp(1j * sigma * t))
         self.imshow.set_data(imshow_data)
 
         quiver_field = self.fields[self.active_quiver_field]
         component_fields = quiver_field.fields
         keys = list(component_fields.keys())
-        field_1 = np.real(component_fields[keys[0]].field * np.exp(1j * t))
-        field_2 = np.real(component_fields[keys[1]].field * np.exp(1j * t))
+        field_1 = np.real(component_fields[keys[0]].field * np.exp(1j * sigma * t))
+        field_2 = np.real(component_fields[keys[1]].field * np.exp(1j * sigma * t))
         # Mask out arrows larger than max_upper
         magnitude = np.sqrt(field_1**2 + field_2**2)
         field_1[magnitude > quiver_field.max_upper] = np.nan
@@ -723,10 +728,12 @@ class BaseWaveModel:
         zeta = self.fields[disp_lines.fields[1]].field[disp_lines.subset, :]
         z = z[disp_lines.subset]
         t = self.non_dimensional_variables["t"]
+        sigma = self.non_dimensional_variables["sigma"]
         xi_mag = np.abs(xi)
         zeta_mag = np.abs(zeta)
-        xi = np.real(xi * np.exp(1j * t))
-        zeta = np.real(zeta * np.exp(1j * t))
+
+        xi = np.real(xi * np.exp(1j * sigma * t))
+        zeta = np.real(zeta * np.exp(1j * sigma * t))
 
         for i, line in enumerate(disp_lines.lines):
             zeta_i = zeta_mag[i, :]

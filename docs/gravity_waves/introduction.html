@@ -10,6 +10,9 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=3a193a7f" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/controls.css?v=48e535e7" />
+      <link rel="stylesheet" type="text/css" href="https://pyscript.net/releases/2024.1.1/core.css" />
 
   
     <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/gravity_waves/introduction.html" />
@@ -20,6 +23,8 @@
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+      <script src="../_static/assets/js/model-controls.js?v=4516b1dc"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -123,11 +128,6 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
 \end{equation}\]</div>
 <p>which emulates the heating/cooling of a land-surface <span class="math notranslate nohighlight">\(x&gt;0\)</span> as compared to an ocean surface <span class="math notranslate nohighlight">\(x&lt;0\)</span>, where <span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(H\)</span> are horizontal and vertical length scales, respectively, and <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency. The applet below visualizes this choice of <span class="math notranslate nohighlight">\(Q_*\)</span> <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>.</p>
 <p id="igw-intro-applet"><strong>Rotunno (1983) Applet</strong></p>
-<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<link rel="stylesheet" href="/METOYBOX/_static/assets/css/base.css" />
-<link rel="stylesheet" href="/METOYBOX/_static/assets/css/controls.css" />
-<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-
 <div id="land_sea_intro">
     <div id="loading-screen">
         <div class="spinner"></div>
@@ -141,32 +141,37 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
             <div id="land_sea_intro-figure-output-B" class="figure-layer is-passive"></div>
         </div>
         <div id="controls"></div>
-        <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
         <script>
-            const configs = coreWaveConfigs();
-            
-            // Add a displacement toggle checkbox row above the sliders
-            const overlay_toggle_config = overlayToggleConfig();
-            // Switch off the quiver upon loading
-            overlay_toggle_config.checkboxes[1].checked = false;
-            configs.unshift(overlay_toggle_config);
-            
-            // Add an imshow selection control row above the sliders
-            const fields = ["Q", "psi", "u", "v", "w"]
-            const labels = ["\\(Q\\)", "\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)"]
-            imshow_selection_config = imshowSelectionConfig(fields, labels);
-            
-            configs.unshift(imshow_selection_config);
-            const LStep = 1 * stepRatio
-            const LValue = 0.2
-            const LDimValue = LValue * NValue * HValue / Omega
-            args = ["\\(L:\\)", "L-slider", LStep, 1, LValue, LStep, "non-dimensional"];
-            configs.push(sliderConfig(...args));
-            args = ["\\(L:\\)", "L_dim-slider", LStep * 100e3, 100e3, LDimValue, LStep * 100e3, "dimensional", "m"];
-            configs.push(sliderConfig(...args));
-            createModelControls(configs, "controls", "dimensional");
+            (function(containerID) {
+                const configs = coreWaveConfigs();
+                
+                // Add a displacement toggle checkbox row above the sliders
+                const overlay_toggle_config = overlayToggleConfig();
+                // Switch off the quiver upon loading
+                overlay_toggle_config.checkboxes[1].checked = false;
+                configs.unshift(overlay_toggle_config);
+                
+                // Add an imshow selection control row above the sliders
+                const fields = ["Q", "psi", "u", "v", "w"]
+                const labels = ["\\(Q\\)", "\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)"]
+                imshow_selection_config = imshowSelectionConfig(fields, labels);
+                
+                configs.unshift(imshow_selection_config);
+                const LStep = 1 * stepRatio
+                const LValue = 0.2
+                const LDimValue = LValue * NValue * HValue / Omega
+                args = ["\\(L:\\)", "L-slider", LStep, 1, LValue, LStep, "non-dimensional"];
+                configs.push(sliderConfig(...args));
+                args = ["\\(L:\\)", "L_dim-slider", LStep * 100e3, 100e3, LDimValue, LStep * 100e3, "dimensional", "m"];
+                configs.push(sliderConfig(...args));
+                createModelControls(configs, "controls", "dimensional");
+            })('land_sea_intro');
         </script>
-        <py-script src="/METOYBOX/_static/land_sea_intro.py" config="/METOYBOX/_static/assets/pyscript.toml"></py-script>
+        <py-script 
+            src="/METOYBOX/_static/models/gravity_waves/land_sea_intro/land_sea_intro.py" 
+            config="/METOYBOX/_static/assets/pyscript.toml"
+            data-container-id="land_sea_intro">
+        </py-script>
     </div>
 </div><p>The idea is that we have chosen our coordinates <span class="math notranslate nohighlight">\((x_*, y_*, z_*)\)</span> so that <span class="math notranslate nohighlight">\(x_*=0\)</span>, <span class="math notranslate nohighlight">\(z_*=0\)</span> represents a coastline, which extends infinitely far into and out of the screen in the <span class="math notranslate nohighlight">\(y_*\)</span> direction. The <span class="math notranslate nohighlight">\(z_*=0\)</span> lower boundary represents land and sea for <span class="math notranslate nohighlight">\(x_*&gt;0\)</span> and <span class="math notranslate nohighlight">\(x_*&lt;0\)</span>, respectively; imagine you’re at the beach, looking down the coastline, with sand to your right, and water to your left. The land surface changes temperature over the course of the day, but the ocean surface temperature is comparatively constant. You should play with the <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(Q_0\)</span>, <span class="math notranslate nohighlight">\(H\)</span> and <span class="math notranslate nohighlight">\(L\)</span> sliders to see how the forcing <span class="math notranslate nohighlight">\(Q_*\)</span> changes. Also, with <span class="math notranslate nohighlight">\(Q_*\)</span> given by <span class="math notranslate nohighlight">\(\eqref{Q_sea_breeze_dim}\)</span> we can solve <span class="math notranslate nohighlight">\(\text{\eqref{u_mom_dim}-\eqref{boundary_dim}}\)</span> analytically! Switching on the quiver plot shows the <span class="math notranslate nohighlight">\((u, w)\)</span> vectors overlaid on <span class="math notranslate nohighlight">\(Q\)</span>. You can also change the shading from <span class="math notranslate nohighlight">\(Q\)</span> to another variable, e.g. <span class="math notranslate nohighlight">\(v\)</span>. If the applets are laggy in Firefox, abandon computer communism, and embrace the Chrome counter-revolution instead.</p>
 </section>

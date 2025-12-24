@@ -10,6 +10,9 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=3a193a7f" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/controls.css?v=48e535e7" />
+      <link rel="stylesheet" type="text/css" href="https://pyscript.net/releases/2024.1.1/core.css" />
 
   
     <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/gravity_waves/land_sea.html" />
@@ -20,6 +23,8 @@
       <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+      <script src="../_static/assets/js/model-controls.js?v=4516b1dc"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -97,11 +102,6 @@
              
   <section id="land-sea-breeze">
 <h1>Land-Sea Breeze<a class="headerlink" href="#land-sea-breeze" title="Link to this heading"></a></h1>
-<link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
-<link rel="stylesheet" href="/METOYBOX/_static/assets/css/base.css" />
-<link rel="stylesheet" href="/METOYBOX/_static/assets/css/controls.css" />
-<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-
 <div id="land_sea">
     <div id="loading-screen">
         <div class="spinner"></div>
@@ -115,59 +115,65 @@
             <div id="land_sea-figure-output-B" class="figure-layer is-passive"></div>
         </div>
         <div id="controls"></div>
-        <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
         <script>
-            containerID = "land_sea";
-            
-            dimSliders = coreWaveSlidersDim(containerID);
-            nonDimSliders = coreWaveSlidersNonDim(containerID);
-            
-            // Change starting values of t and alpha sliders
-            dimSliders.tSlider.value = Math.PI / 2;
-            dimSliders.alphaOmegaSlider.value = 0.1;
-            
-            // Add new sliders for L
-            const LStep = 1 * stepRatio;
-            const LValue = 0.1;
-            const LDimValue = (LValue * NValue * HValue) / Omega;
-            nonDimSliders.LSlider = createSliderRow(
-                `${containerID}-L-slider`,
-                `${containerID}-L-output`,
-                "\\(L:\\)",
-                LStep,
-                1,
-                LValue,
-                LStep,
-                "non-dimensional"
-            );
-            dimSliders.LDimSlider = createSliderRow(
-                `${containerID}-L_dim-slider`,
-                `${containerID}-L_dim-output`,
-                "\\(L:\\)",
-                LStep * 100e3,
-                100e3,
-                LDimValue,
-                LStep * 100e3,
-                "dimensional",
-                "m"
-            );
-            
-            coordinateToggle = createCoordinateSelectionRow(containerID);
-            overlayToggle = createOverlayToggleRow(containerID);
-            imshowSelection = createImshowSelectionRow(
-                containerID,
-                ["psi", "u", "v", "w", "Q"],
-                ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(Q\\)"]
-            );
-            
-            // Get the relevant div container
-            container = document.getElementById(`${containerID} #main-content #controls`);
-            // Append all the control rows to the container
-            container.append(coordinateToggle, overlayToggle, imshowSelection);
-            container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
-            setupCoordinateToggle(containerID);
+            (function(containerID) {
+                // Note containerID is set by utils.py
+                
+                const dimSliders = coreWaveSlidersDim(containerID);
+                const nonDimSliders = coreWaveSlidersNonDim(containerID);
+                
+                // Change starting values of t and alpha sliders
+                // Remember the "input" objects here are the sliders themselves.
+                nonDimSliders.tSlider.querySelector('input').value = Math.PI / 2;
+                nonDimSliders.alphaOmegaSlider.querySelector('input').value = 0.1;
+                
+                // Add new sliders for L
+                const LStep = 1 * stepRatio;
+                const LValue = 0.1;
+                const LDimValue = (LValue * NValue * HValue) / Omega;
+                nonDimSliders.LSlider = createSliderRow(
+                    `${containerID}-L-slider`,
+                    `${containerID}-L-output`,
+                    "\\(L:\\)",
+                    LStep,
+                    1,
+                    LValue,
+                    LStep,
+                    "non-dimensional"
+                );
+                dimSliders.LDimSlider = createSliderRow(
+                    `${containerID}-L_dim-slider`,
+                    `${containerID}-L_dim-output`,
+                    "\\(L:\\)",
+                    LStep * 100e3,
+                    100e3,
+                    LDimValue,
+                    LStep * 100e3,
+                    "dimensional",
+                    "m"
+                );
+                
+                const coordinateToggle = createCoordinateSelectionRow(containerID);
+                const overlayToggle = createOverlayToggleRow(containerID);
+                const imshowSelection = createImshowSelectionRow(
+                    containerID,
+                    ["psi", "u", "v", "w", "Q"],
+                    ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(Q\\)"]
+                );
+                
+                // Get the relevant div container
+                container = document.querySelector(`#${containerID} #main-content #controls`);
+                // Append all the control rows to the container
+                container.append(coordinateToggle, overlayToggle, imshowSelection);
+                container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
+                setupCoordinateToggle(containerID);
+            })('land_sea');
         </script>
-        <py-script src="/METOYBOX/_static/land_sea.py" config="/METOYBOX/_static/assets/pyscript.toml"></py-script>
+        <py-script 
+            src="/METOYBOX/_static/models/gravity_waves/land_sea/land_sea.py" 
+            config="/METOYBOX/_static/assets/pyscript.toml"
+            data-container-id="land_sea">
+        </py-script>
     </div>
 </div><p><span class="math notranslate nohighlight">\(\,\)</span></p>
 </section>

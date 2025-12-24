@@ -1,10 +1,10 @@
 """Extensions of the BaseWaveModel elevated forcings."""
 
 from metoybox.model import core
-from metoybox.calculate import foundation
+from metoybox.calculate import plane_wave
 
 
-class FoundationWaveModel(core.BaseWaveModel):
+class PlaneWaveModel(core.BaseWaveModel):
     """
     A basic plane wave.
     """
@@ -13,7 +13,7 @@ class FoundationWaveModel(core.BaseWaveModel):
         """Calculate the fields for the elevated localized line forcing model."""
 
         # Update imshow field
-        new_fields = foundation.calculate_fields_spatial(
+        new_fields = plane_wave.calculate_fields_spatial(
             self.X,
             self.Z,
             self.non_dimensional_variables["k"],

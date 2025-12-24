@@ -1,8 +1,9 @@
-from pathlib import Path
 import numpy as np
 from metoybox.model import foundation
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core
+from metoybox.pyscript_controllers.utils import initialize_from_controllers
+from js import document
 
 
 # Configure the model
@@ -20,12 +21,17 @@ fields.update({"velocity": core.Velocity(percentile=95)})
 fields.update({"v": core.V(percentile=95), "phi": core.Phi(percentile=95)})
 fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
 args = ["point_forcing", x, z, x_ticks, z_ticks, x_limits, z_limits]
-model = foundation.FoundationWaveModel(*args, fields=fields)
+model = foundation.PlaneWaveModel(*args, fields=fields)
 
-dim_var = ctl_core.default_dimensional.copy() + ["omega", "sigma_dim"]
-non_dim_var = ctl_core.default_non_dimensional.copy() + ["sigma"]
+dim_var = ctl_core.default_dimensional.copy() + ["sigma_dim", "k_dim"]
+# We don't need Q_0 for the plane wave model
+dim_var.remove("Q_0")
+non_dim_var = ctl_core.default_non_dimensional.copy() + ["sigma", "k"]
 
-# Use the filename without extension as container id
-container_id = "foundation_wave"
+# Enforce consistency between initial slider values and initial model values
+initialize_from_controllers(model)
+
+script = document.currentScript
+container_id = script.getAttribute('data-container-id')
 controller = ctl_core.BaseWaveController(model, container_id, dim_var, non_dim_var)
 ctl_core.hide_loading_screen(container_id)

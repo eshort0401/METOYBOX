@@ -1,9 +1,9 @@
 import numpy as np
-from pathlib import Path
 from metoybox.model import land_sea
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core
-
+from metoybox.pyscript_controllers.utils import initialize_from_controllers
+from js import document
 
 # Configure the model
 x = np.linspace(-2, 2, 201)
@@ -25,11 +25,15 @@ model = land_sea.LandSeaBreezeModel(*args, fields=fields)
 # Note we also must update the starting slider value in land_sea.html
 model.non_dimensional_variables["t"] = np.pi / 2
 # Use a smaller alpha
-model.non_dimensional_variables["alpha"] = 0.1
+model.non_dimensional_variables["alpha_omega"] = 0.1
 
 dim_var = ctl_core.default_dimensional.copy() + ["L_dim"]
 non_dim_var = ctl_core.default_non_dimensional.copy() + ["L"]
-# Use the filename without extension as container id
-container_id = "land_sea"
+
+# Enforce consistency between initial slider values and initial model values
+initialize_from_controllers(model)
+
+script = document.currentScript
+container_id = script.getAttribute('data-container-id')
 controller = ctl_core.BaseWaveController(model, container_id, dim_var, non_dim_var)
 ctl_core.hide_loading_screen(container_id)

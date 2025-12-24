@@ -1,0 +1,41 @@
+<div id="slope_breeze">
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+        <p><small>This can take a few minutes!</small></p>
+    </div>
+    <div id="main-content">
+        <div id="figure-output">
+            <!-- Use two layers to prevent flickering in firefox -->
+            <div id="slope_breeze-figure-output-A" class="figure-layer is-active"></div>
+            <div id="slope_breeze-figure-output-B" class="figure-layer is-passive"></div>
+        </div>
+        <div id="controls"></div>
+        <script>
+            (function(containerID) {
+                const configs = coreWaveConfigs();
+                // Add a displacement toggle checkbox row above the sliders
+                const displacement_config = overlayToggleConfig();
+                configs.unshift(displacement_config);
+                
+                // Add an imshow selection control row above the sliders
+                const imshow_sel_config = imshowSelectionConfig();
+                configs.unshift(imshow_sel_config);
+                const MStep = 3 * stepRatio
+                const MDimMax = 1e-2
+                const MDimStep = MDimMax * stepRatio
+                let args = ["\\(M:\\)", "M-slider", 0, 3, 0.2, MStep, "non-dimensional"];
+                configs.push(sliderConfig(...args));
+                args = ["\\(M:\\)", "M_dim-slider", 0, MDimMax, Omega * 1e2, MDimStep]
+                args.push("dimensional", "m m⁻¹");
+                configs.push(sliderConfig(...args));
+                createModelControls(configs, "controls");
+            })('slope_breeze');
+        </script>
+        <py-script 
+            src="/METOYBOX/_static/models/gravity_waves/slope_breeze/slope_breeze.py" 
+            config="/METOYBOX/_static/assets/pyscript.toml"
+            data-container-id="slope_breeze">
+        </py-script>
+    </div>
+</div>
