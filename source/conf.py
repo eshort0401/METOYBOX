@@ -77,16 +77,16 @@ html_theme = "sphinx_rtd_theme"
 epub_show_urls = "footnote"
 html_baseurl = "https://eshort0401.github.io/METOYBOX/"
 
-# html_css_files = [
-#     "assets/css/base.css",
-#     "assets/css/controls.css",
-#     "https://pyscript.net/releases/2024.1.1/core.css",
-# ]
+html_css_files = [
+    "assets/css/base.css",
+    "assets/css/controls.css",
+    "https://pyscript.net/releases/2024.1.1/core.css",
+]
 
-# html_js_files = [
-#     ("https://pyscript.net/releases/2024.1.1/core.js", {"type": "module"}),
-#     "assets/js/model-controls.js", 
-# ]
+html_js_files = [
+    ("https://pyscript.net/releases/2024.1.1/core.js", {"type": "module"}),
+    "assets/js/model-controls.js", 
+]
 
 
 _parent = Path(__file__).resolve().parents[1]

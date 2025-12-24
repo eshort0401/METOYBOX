@@ -18,17 +18,15 @@ _div_open = """
     <div id="main-content">
         <div id="figure-output">
             <!-- Use two layers to prevent flickering in firefox -->
-            <div id="figure-output-A" class="figure-layer is-active"></div>
-            <div id="figure-output-B" class="figure-layer is-passive"></div>
+            <div id="{container_id}-figure-output-A" class="figure-layer is-active"></div>
+            <div id="{container_id}-figure-output-B" class="figure-layer is-passive"></div>
         </div>
         <div id="controls"></div>
         <script src="/METOYBOX/_static/assets/js/model-controls.js"></script>
         <script>
-            (function () {{
 """
 
 _div_close = """
-            }})();
         </script>
         <py-script src="{python_path}" config="{config_path}"></py-script>
     </div>
@@ -66,7 +64,7 @@ def generate_html(
     div_open = _div_open.format(container_id=container_id)
     div_close = _div_close.format(python_path=python_path, config_path=config_path)
 
-    indented_stub = "\n".join(["                " + line for line in stub.splitlines()])
+    indented_stub = "\n".join(["            " + line for line in stub.splitlines()])
     with open(html_path, "w") as f:
         f.write(_header)
         f.write(div_open)

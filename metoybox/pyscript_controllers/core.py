@@ -1,6 +1,5 @@
 """Base classes for building pyscript controllers."""
 
-from os import name
 from typing import Literal
 from metoybox.model.core import BaseWaveModel
 from typing import Iterable
@@ -44,23 +43,26 @@ class BaseWaveController:
         container_id: str,
         dimensional_variables: Iterable[str] = default_dimensional,
         non_dimensional_variables: Iterable[str] = default_non_dimensional,
-        active_target: str = "figure-output-A",
-        inactive_target: str = "figure-output-B",
+        # active_target: str = "figure-output-A",
+        # inactive_target: str = "figure-output-B",
     ):
         """
         Initialize the controller. This sets up the web cache and registers all the
         event handlers with pyscript.
         """
+        self.container_id = container_id  # Store the HTML id of the model container div
         self.container = document.getElementById(container_id)
         self.cache = WebCache(self.container)
-        self.active_target = active_target
-        self.inactive_target = inactive_target
+        self.active_target = f"{container_id}-figure-output-A"
+        self.inactive_target = f"{container_id}-figure-output-B"
         self.model = model
         self.dimensional_variables = dimensional_variables
         self.non_dimensional_variables = non_dimensional_variables
-        self.dimensional_sliders = [f"{name}-slider" for name in dimensional_variables]
+        self.dimensional_sliders = [
+            f"{container_id}-{name}-slider" for name in dimensional_variables
+        ]
         self.non_dimensional_sliders = [
-            f"{name}-slider" for name in non_dimensional_variables
+            f"{container_id}-{name}-slider" for name in non_dimensional_variables
         ]
         self._check_variables()
         self._register_event_handlers()
@@ -73,14 +75,18 @@ class BaseWaveController:
         self.model.update_suptitle()
         self.model.update_labels()
         self.model.update_figure_data()
-        display(self.model.fig, target="figure-output-A", append=False)
+        display(
+            self.model.fig, target=f"{self.container_id}-figure-output-A", append=False
+        )
         self.change_coordinates(None)
 
     def initialize_feature_visibility(self):
         """Initialize the visibility of features based on checkbox/button states."""
-        quiver_checkbox = self.cache.get("quiver-checkbox")
-        imshow_checkbox = self.cache.get("imshow-checkbox")
-        displacement_checkbox = self.cache.get("displacement-checkbox")
+        quiver_checkbox = self.cache.get(f"{self.container_id}-quiver-checkbox")
+        imshow_checkbox = self.cache.get(f"{self.container_id}-imshow-checkbox")
+        displacement_checkbox = self.cache.get(
+            f"{self.container_id}-displacement-checkbox"
+        )
 
         self.model.quiver.set_visible(quiver_checkbox.checked)
         if not quiver_checkbox.checked:
@@ -164,23 +170,36 @@ class BaseWaveController:
     def _register_event_handlers(self):
         """Register all event handlers."""
 
-        @when("change", "#dimensional-button, #non-dimensional-button")
+        dimensional_str = "#" + f"{self.container_id}-dimensional-button"
+        non_dimensional_str = "#" + f"{self.container_id}-non-dimensional-button"
+        coords_str = f"{dimensional_str}, {non_dimensional_str}"
+
+        @when("change", coords_str)
         def _change_coordinates(event):
             """Handle coordinate system change."""
             self.change_coordinates(event)
 
-        @when("change", "#displacement-checkbox")
+        checkbox_str = f"#{self.container_id}-displacement-checkbox"
+
+        @when("change", checkbox_str)
         def _toggle_displacement_lines(event):
             """Handle displacement lines visibility change."""
             self.toggle_displacement_lines(event)
 
-        @when("change", "#quiver-checkbox, #imshow-checkbox")
+        quiver_str = f"#{self.container_id}-quiver-checkbox"
+        imshow_str = f"#{self.container_id}-imshow-checkbox"
+        toggle_str = f"{quiver_str}, {imshow_str}"
+
+        @when("change", toggle_str)
         def _toggle_feature(event):
             """Handle feature visibility change."""
             feature = event.target.id.split("-")[0]
             self.toggle_feature(event, feature)
 
-        time_sliders = ["t-slider", "t_dim-slider"]
+        time_sliders = [
+            f"{self.container_id}-t-slider",
+            f"{self.container_id}-t_dim-slider",
+        ]
         model_sliders = self.dimensional_sliders + self.non_dimensional_sliders
         model_sliders = [s for s in model_sliders if s not in time_sliders]
         model_slider_str = "#" + ", #".join(model_sliders)
@@ -196,14 +215,16 @@ class BaseWaveController:
             """Update the time variable."""
             self.update_time(event)
 
-        @when("change", 'input[name="imshow-field"]')
+        imshow_str = f"input[name='{self.container_id}-imshow-field']"
+
+        @when("change", imshow_str)
         def _change_imshow_field(event):
             """Handle imshow field change."""
             self.change_imshow_field(event)
 
     def _is_dimensional_mode(self):
         """Check if the controller is in dimensional mode."""
-        button = self.cache.get("dimensional-button")
+        button = self.cache.get(f"{self.container_id}-dimensional-button")
         return button.checked if button else False
 
     def _get_active_imshow_field(self):
@@ -260,7 +281,8 @@ class BaseWaveController:
     ):
         """Update the controller values (e.g. the sliders.)"""
         for name, value in new_values.items():
-            control = self.cache.get(f"{name}{control_suffix}")
+            element_id = f"{self.container_id}-{name}{control_suffix}"
+            control = self.cache.get(element_id)
             control.value = str(value)
 
     def _update_outputs(
@@ -272,7 +294,8 @@ class BaseWaveController:
         """Update the controller outputs (e.g. the text next to a slider.)"""
         for name in names:
             value = float(self.cache.get(f"{name}{control_suffix}").value)
-            out = self.cache.get(f"{name}{output_suffix}")
+            element_id = f"{self.container_id}-{name}{output_suffix}"
+            out = self.cache.get(element_id)
             if out.units:
                 out.textContent = f"{value:.1e}" + f" {out.units}"
             else:
@@ -311,7 +334,7 @@ class BaseWaveController:
     def update_model_variables(self, event, control_suffix: str = "-slider"):
         """Update the model variables based on the controller inputs."""
         name = event.target.id
-        key = name.replace(control_suffix, "")
+        key = name.replace(control_suffix, "").replace(f"{self.container_id}-", "")
         control = self.cache.get(name)
         if self._is_dimensional_mode():
             self.model.dimensional_variables[key] = float(control.value)
@@ -327,14 +350,14 @@ class BaseWaveController:
     def update_time(self, event):
         """Update the time variable."""
         if self._is_dimensional_mode():
-            t_dim = float(self.cache.get("t_dim-slider").value)
+            t_dim = float(self.cache.get(f"{self.container_id}-t_dim-slider").value)
             self.model.dimensional_variables["t_dim"] = t_dim
             omega = self.model.dimensional_variables["omega"]
             t = t_dim * omega
             self.model.non_dimensional_variables["t"] = t
             self._update_outputs(["t_dim"])
         else:
-            t = float(self.cache.get("t-slider").value)
+            t = float(self.cache.get(f"{self.container_id}-t-slider").value)
             self.model.non_dimensional_variables["t"] = t
             self._update_outputs(["t"])
         self.model.update_figure_data()

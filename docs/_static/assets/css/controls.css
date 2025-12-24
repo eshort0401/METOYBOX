@@ -94,11 +94,11 @@ input[type="range"] {
 }
 
 /* Show non-dimensional sliders when body has non-dimensional-mode class */
-body.non-dimensional-mode .non-dimensional {
+.non-dimensional-mode .non-dimensional {
     display: flex;
 }
 
 /* Show dimensional sliders when body has dimensional-mode class */
-body.dimensional-mode .dimensional {
+.dimensional-mode .dimensional {
     display: flex;
 }
