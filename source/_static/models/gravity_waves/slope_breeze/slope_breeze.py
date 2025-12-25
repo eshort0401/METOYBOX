@@ -1,8 +1,9 @@
 import numpy as np
-from pathlib import Path
 from metoybox.model import slope
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core
+from metoybox.pyscript_controllers.utils import initialize_from_controllers
+from js import document
 
 
 # Configure the model
@@ -24,7 +25,11 @@ model = slope.MountainValleyModel(*args, fields=fields, max_upper_scale=5)
 dim_var = ctl_core.default_dimensional.copy() + ["M_dim"]
 non_dim_var = ctl_core.default_non_dimensional.copy() + ["M"]
 
-# Use the filename without extension as container id
-container_id = "slope_breeze"
+# Enforce consistency between initial slider values and initial model values
+initialize_from_controllers(model)
+
+script = document.currentScript
+container_id = script.getAttribute("data-container-id")
+
 controller = ctl_core.BaseWaveController(model, container_id, dim_var, non_dim_var)
 ctl_core.hide_loading_screen(container_id)

@@ -10,69 +10,12 @@ dimSliders.alphaSlider.querySelector('input').min = 0;
 nonDimSliders.alphaOmegaSlider.querySelector('input').value = 0;
 dimSliders.alphaSlider.querySelector('input').value = 0;
 
-const kMin = 0.1;
-const kMax = 10 * Math.PI;
-const kStep = (kMax - kMin) * stepRatio;
-const kValue = Math.PI; // Set starting horizontal wavelength to 2 non-dimensional unit
+// Add sliders for k and sigma
+nonDimSliders.kNonDimSlider = getKNonDimSlider(containerID);
+dimSliders.kDimSlider = getKDimSlider(containerID);
 
-nonDimSliders.kSlider = createSliderRow(
-    `${containerID}-k-slider`,
-    `${containerID}-k-output`,
-    "\\(k:\\)",
-    kStep,
-    kMax,
-    kValue,
-    kStep,
-    "non-dimensional"
-);
-
-const scale = Omega / (NValue * HValue);
-const kMinDim = kMin * scale;
-const kMaxDim = kMax * scale;
-const kStepDim = kStep * scale;
-
-dimSliders.kDimSlider = createSliderRow(
-    `${containerID}-k_dim-slider`,
-    `${containerID}-k_dim-output`,
-    "\\(k:\\)",
-    kStepDim,
-    kMaxDim,
-    kValue * scale,
-    kStepDim,
-    "dimensional",
-    "m⁻¹"
-);
-
-const sigmaMin = 0.1;
-const sigmaMax = 5;
-const sigmaStep = (sigmaMax - sigmaMin) * stepRatio;
-
-nonDimSliders.sigmaSlider = createSliderRow(
-    `${containerID}-sigma-slider`,
-    `${containerID}-sigma-output`,
-    "\\(\\sigma:\\)",
-    sigmaMin,
-    sigmaMax,
-    1,
-    sigmaStep,
-    "non-dimensional"
-);
-
-const sigmaMinDim = sigmaMin * Omega;
-const sigmaMaxDim = sigmaMax * Omega;
-const sigmaStepDim = sigmaStep * Omega;
-
-dimSliders.sigmaDimSlider = createSliderRow(
-    `${containerID}-sigma_dim-slider`,
-    `${containerID}-sigma_dim-output`,
-    "\\(\\sigma:\\)",
-    sigmaStepDim,
-    sigmaMaxDim,
-    Omega,
-    sigmaStepDim,
-    "dimensional",
-    "s⁻¹"
-);
+nonDimSliders.sigmaNonDimSlider = getSigmaNonDimSlider(containerID);
+dimSliders.sigmaDimSlider = getSigmaDimSlider(containerID);
 
 const coordinateToggle = createCoordinateSelectionRow(containerID);
 const overlayToggle = createOverlayToggleRow(containerID);

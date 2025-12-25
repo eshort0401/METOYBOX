@@ -24,7 +24,7 @@
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-      <script src="../_static/assets/js/model-controls.js?v=4516b1dc"></script>
+      <script src="../_static/assets/js/model-controls.js?v=ba695591"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -52,25 +52,15 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../fundamentals/introduction.html">Fundamentals</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="introduction.html">Inertia-Gravity Waves</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#governing-equations">Governing equations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#non-dimensionalization">Non-Dimensionalization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#hydrostatic-waves">Hydrostatic Waves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#the-stream-function">The Stream Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#a-partial-differential-equation">A Partial Differential Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#the-fourier-transform">The Fourier Transform</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#solution">Solution</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="introduction.html#appendix-a-operators">Appendix A: Operators</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="land_sea.html">Land-Sea Breeze</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Localized Line Forcing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
-<li class="toctree-l3"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plane_wave.html">Plane Wave</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../foundations/index.html">Foundations</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Inertia-Gravity Waves</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="land_sea.html">Land-Sea Breeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Localized Line Forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plane_wave.html">Plane Wave</a></li>
 </ul>
 </li>
 </ul>
@@ -89,7 +79,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="introduction.html">Inertia-Gravity Waves</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Inertia-Gravity Waves</a></li>
       <li class="breadcrumb-item active">Localized Line Forcing</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/gravity_waves/localized_line_forcing.rst.txt" rel="nofollow"> View page source</a>
@@ -102,7 +92,58 @@
              
   <section id="localized-line-forcing">
 <h1>Localized Line Forcing<a class="headerlink" href="#localized-line-forcing" title="Link to this heading"></a></h1>
-<p><span class="math notranslate nohighlight">\(\,\)</span></p>
+<div id="localized_line_forcing">
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+        <p><small>This can take a few minutes!</small></p>
+    </div>
+    <div id="main-content">
+        <div id="figure-output">
+            <!-- Use two layers to prevent flickering in firefox -->
+            <div id="localized_line_forcing-figure-output-A" class="figure-layer is-active"></div>
+            <div id="localized_line_forcing-figure-output-B" class="figure-layer is-passive"></div>
+        </div>
+        <div id="controls"></div>
+        <script>
+            (function(containerID) {
+                // Note containerID is set by utils.py
+                
+                const dimSliders = coreWaveSlidersDim(containerID);
+                const nonDimSliders = coreWaveSlidersNonDim(containerID);
+                
+                // Add new sliders for L, z_f and omega
+                nonDimSliders.LSlider = getLNonDimSlider(containerID);
+                dimSliders.LDimSlider = getLDimSlider(containerID);
+                
+                nonDimSliders.zFSlider = getZfNonDimSlider(containerID);
+                dimSliders.zFDimSlider = getZfDimSlider(containerID);
+                
+                dimSliders.omegaSlider = getOmegaSlider(containerID);
+                
+                const coordinateToggle = createCoordinateSelectionRow(containerID);
+                const overlayToggle = createOverlayToggleRow(containerID);
+                const imshowSelection = createImshowSelectionRow(
+                    containerID,
+                    ["psi", "u", "v", "w", "phi"],
+                    ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
+                );
+                
+                // Get the relevant div container
+                container = document.querySelector(`#${containerID} #main-content #controls`);
+                // Append all the control rows to the container
+                container.append(coordinateToggle, overlayToggle, imshowSelection);
+                container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
+                setupCoordinateToggle(containerID);
+            })('localized_line_forcing');
+        </script>
+        <py-script 
+            src="/METOYBOX/_static/models/gravity_waves/localized_line_forcing/localized_line_forcing.py" 
+            config="/METOYBOX/_static/assets/pyscript.toml"
+            data-container-id="localized_line_forcing">
+        </py-script>
+    </div>
+</div><p><span class="math notranslate nohighlight">\(\,\)</span></p>
 </section>
 
 

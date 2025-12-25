@@ -9,30 +9,8 @@ nonDimSliders.tSlider.querySelector('input').value = Math.PI / 2;
 nonDimSliders.alphaOmegaSlider.querySelector('input').value = 0.1;
 
 // Add new sliders for L
-const LStep = 1 * stepRatio;
-const LValue = 0.1;
-const LDimValue = (LValue * NValue * HValue) / Omega;
-nonDimSliders.LSlider = createSliderRow(
-    `${containerID}-L-slider`,
-    `${containerID}-L-output`,
-    "\\(L:\\)",
-    LStep,
-    1,
-    LValue,
-    LStep,
-    "non-dimensional"
-);
-dimSliders.LDimSlider = createSliderRow(
-    `${containerID}-L_dim-slider`,
-    `${containerID}-L_dim-output`,
-    "\\(L:\\)",
-    LStep * 100e3,
-    100e3,
-    LDimValue,
-    LStep * 100e3,
-    "dimensional",
-    "m"
-);
+nonDimSliders.LNonDimSlider = getLNonDimSlider(containerID);
+dimSliders.LDimSlider = getLDimSlider(containerID);
 
 const coordinateToggle = createCoordinateSelectionRow(containerID);
 const overlayToggle = createOverlayToggleRow(containerID);

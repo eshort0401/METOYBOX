@@ -68,6 +68,8 @@ templates_path = ["_templates"]
 html_static_path = ["_static"]
 html_extra_path = [".nojekyll"]
 
+html_theme_options = {"collapse_navigation": True}
+
 # -- Options for HTML output
 html_theme = "sphinx_rtd_theme"
 # html_logo = "images/logo_white.svg"
@@ -84,7 +86,7 @@ html_css_files = [
 
 html_js_files = [
     ("https://pyscript.net/releases/2024.1.1/core.js", {"type": "module"}),
-    "assets/js/model-controls.js", 
+    "assets/js/model-controls.js",
 ]
 
 

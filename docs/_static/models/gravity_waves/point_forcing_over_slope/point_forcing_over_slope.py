@@ -1,8 +1,9 @@
 import numpy as np
-from pathlib import Path
 from metoybox.model import slope
 from metoybox.model import core
 from metoybox.pyscript_controllers import core as ctl_core
+from metoybox.pyscript_controllers.utils import initialize_from_controllers
+from js import document
 
 
 # Configure the model
@@ -25,7 +26,11 @@ model = slope.PointForcingModel(*args, fields=fields)
 dim_var = ctl_core.default_dimensional.copy() + ["M_dim", "z_f_dim", "omega"]
 non_dim_var = ctl_core.default_non_dimensional.copy() + ["M", "z_f"]
 
-# Use the filename without extension as container id
-container_id = "point_forcing_over_slope"
+# Enforce consistency between initial slider values and initial model values
+initialize_from_controllers(model)
+
+script = document.currentScript
+container_id = script.getAttribute("data-container-id")
+
 controller = ctl_core.BaseWaveController(model, container_id, dim_var, non_dim_var)
 ctl_core.hide_loading_screen(container_id)

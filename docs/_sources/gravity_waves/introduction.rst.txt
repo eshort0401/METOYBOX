@@ -1,8 +1,6 @@
-Inertia-Gravity Waves
+Introduction
 =======================================================
 
-Introduction
---------------------------------------------
 Here we present models that feature inertia-gravity wave dynamics. Most of our models are derived from the work of `Rotunno (1983)`_. We can often solve these models purely analytically, sometimes discovering interesting connections between the maths, logic and physics. On this page, we use the original `Rotunno (1983)`_ model to introduce some key ideas; further details on the `Rotunno (1983)`_ model itself can be found on the :doc:`land_sea` page.
 
 Governing equations
@@ -289,9 +287,10 @@ where :math:`a_p, a_m \in\mathbb{C}` do not depend on :math:`z`. Notice that we 
 
 where :math:`k_*, m_*, \sigma_*` are the wavenumbers and frequency in dimensional coordinates. [#]_
 
-**A Simple Plane Wave**
+**Plane Wave**
 
-
+.. raw:: html
+    :file: ../_static/models/gravity_waves/plane_wave/plane_wave.html
 
 Appendix A: Operators
 -----------------------------------------------------------------------------
@@ -370,13 +369,3 @@ The ideas sketched in this appendix are made rigorous in `abstract algebra`_ and
 
 .. _Fourier transforms: https://en.wikipedia.org/wiki/Fourier_transform
 
-.. toctree::
-    :hidden:
-    :maxdepth: 1
-
-    land_sea.rst
-    gaussian_forcing.rst
-    localized_line_forcing.rst
-    slope_breeze.rst
-    point_forcing_over_slope.rst
-    plane_wave.rst

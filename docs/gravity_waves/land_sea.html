@@ -24,12 +24,12 @@
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-      <script src="../_static/assets/js/model-controls.js?v=4516b1dc"></script>
+      <script src="../_static/assets/js/model-controls.js?v=ba695591"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Gaussian Temporal Forcing" href="gaussian_forcing.html" />
-    <link rel="prev" title="Inertia-Gravity Waves" href="introduction.html" /> 
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,25 +52,15 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../fundamentals/introduction.html">Fundamentals</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="introduction.html">Inertia-Gravity Waves</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#introduction">Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#governing-equations">Governing equations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#non-dimensionalization">Non-Dimensionalization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#hydrostatic-waves">Hydrostatic Waves</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#the-stream-function">The Stream Function</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#a-partial-differential-equation">A Partial Differential Equation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#the-fourier-transform">The Fourier Transform</a></li>
-<li class="toctree-l2"><a class="reference internal" href="introduction.html#solution">Solution</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="introduction.html#appendix-a-operators">Appendix A: Operators</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Land-Sea Breeze</a></li>
-<li class="toctree-l3"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
-<li class="toctree-l3"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
-<li class="toctree-l3"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
-<li class="toctree-l3"><a class="reference internal" href="plane_wave.html">Plane Wave</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../foundations/index.html">Foundations</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Inertia-Gravity Waves</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Land-Sea Breeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plane_wave.html">Plane Wave</a></li>
 </ul>
 </li>
 </ul>
@@ -89,7 +79,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="introduction.html">Inertia-Gravity Waves</a></li>
+          <li class="breadcrumb-item"><a href="index.html">Inertia-Gravity Waves</a></li>
       <li class="breadcrumb-item active">Land-Sea Breeze</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/gravity_waves/land_sea.rst.txt" rel="nofollow"> View page source</a>
@@ -128,30 +118,8 @@
                 nonDimSliders.alphaOmegaSlider.querySelector('input').value = 0.1;
                 
                 // Add new sliders for L
-                const LStep = 1 * stepRatio;
-                const LValue = 0.1;
-                const LDimValue = (LValue * NValue * HValue) / Omega;
-                nonDimSliders.LSlider = createSliderRow(
-                    `${containerID}-L-slider`,
-                    `${containerID}-L-output`,
-                    "\\(L:\\)",
-                    LStep,
-                    1,
-                    LValue,
-                    LStep,
-                    "non-dimensional"
-                );
-                dimSliders.LDimSlider = createSliderRow(
-                    `${containerID}-L_dim-slider`,
-                    `${containerID}-L_dim-output`,
-                    "\\(L:\\)",
-                    LStep * 100e3,
-                    100e3,
-                    LDimValue,
-                    LStep * 100e3,
-                    "dimensional",
-                    "m"
-                );
+                nonDimSliders.LNonDimSlider = getLNonDimSlider(containerID);
+                dimSliders.LDimSlider = getLDimSlider(containerID);
                 
                 const coordinateToggle = createCoordinateSelectionRow(containerID);
                 const overlayToggle = createOverlayToggleRow(containerID);
@@ -182,7 +150,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="introduction.html" class="btn btn-neutral float-left" title="Inertia-Gravity Waves" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="gaussian_forcing.html" class="btn btn-neutral float-right" title="Gaussian Temporal Forcing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

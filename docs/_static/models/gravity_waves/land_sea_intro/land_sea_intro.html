@@ -13,28 +13,32 @@
         <div id="controls"></div>
         <script>
             (function(containerID) {
-                const configs = coreWaveConfigs();
+                // Note containerID is set by utils.py
                 
-                // Add a displacement toggle checkbox row above the sliders
-                const overlay_toggle_config = overlayToggleConfig();
-                // Switch off the quiver upon loading
-                overlay_toggle_config.checkboxes[1].checked = false;
-                configs.unshift(overlay_toggle_config);
+                const dimSliders = coreWaveSlidersDim(containerID);
+                const nonDimSliders = coreWaveSlidersNonDim(containerID);
                 
-                // Add an imshow selection control row above the sliders
-                const fields = ["Q", "psi", "u", "v", "w"]
-                const labels = ["\\(Q\\)", "\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)"]
-                imshow_selection_config = imshowSelectionConfig(fields, labels);
+                // Add new sliders for L
+                nonDimSliders.LSlider = getLNonDimSlider(containerID);
+                dimSliders.LDimSlider = getLDimSlider(containerID);
                 
-                configs.unshift(imshow_selection_config);
-                const LStep = 1 * stepRatio
-                const LValue = 0.2
-                const LDimValue = LValue * NValue * HValue / Omega
-                args = ["\\(L:\\)", "L-slider", LStep, 1, LValue, LStep, "non-dimensional"];
-                configs.push(sliderConfig(...args));
-                args = ["\\(L:\\)", "L_dim-slider", LStep * 100e3, 100e3, LDimValue, LStep * 100e3, "dimensional", "m"];
-                configs.push(sliderConfig(...args));
-                createModelControls(configs, "controls", "dimensional");
+                const coordinateToggle = createCoordinateSelectionRow(containerID);
+                const overlayToggle = createOverlayToggleRow(containerID);
+                // Note we switch off the quiver by default for the intro figure
+                overlayToggle.querySelector(`#${containerID}-quiver-checkbox`).checked = false;
+                // Note we change the default variable order for the intro figure to highlight Q
+                const imshowSelection = createImshowSelectionRow(
+                    containerID,
+                    ["Q", "psi", "u", "v", "w"],
+                    ["\\(Q\\)", "\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)"]
+                );
+                
+                // Get the relevant div container
+                container = document.querySelector(`#${containerID} #main-content #controls`);
+                // Append all the control rows to the container
+                container.append(coordinateToggle, overlayToggle, imshowSelection);
+                container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
+                setupCoordinateToggle(containerID);
             })('land_sea_intro');
         </script>
         <py-script 

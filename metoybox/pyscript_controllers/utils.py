@@ -5,7 +5,6 @@ def initialize_from_controllers(model):
 
     script = document.currentScript
     container_id = script.getAttribute('data-container-id')
-    print(container_id)
 
     # Read initial values from the sliders
     for var_type in ["non_dimensional_variables", "dimensional_variables"]:

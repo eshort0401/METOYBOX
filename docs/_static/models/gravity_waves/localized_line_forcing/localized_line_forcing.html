@@ -13,31 +13,34 @@
         <div id="controls"></div>
         <script>
             (function(containerID) {
-                const configs = coreWaveConfigs();
-                // Add a displacement toggle checkbox row above the sliders
-                const displacement_config = overlayToggleConfig();
-                configs.unshift(displacement_config);
+                // Note containerID is set by utils.py
                 
-                // Add an imshow selection control row above the sliders
-                const fields = ["psi", "u", "v", "w", "phi"]
-                const labels = ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
-                const imshow_sel_config = imshowSelectionConfig(fields, labels);
-                configs.unshift(imshow_sel_config);
-                const zFStep = 3 * stepRatio
-                const LStep = 1 * stepRatio
-                const LValue = 0.2
-                const LDimValue = LValue * NValue * HValue / Omega
-                args = ["\\(z_f:\\)", "z_f-slider", 0, 3, 1, zFStep, "non-dimensional"];
-                configs.push(sliderConfig(...args));
-                args = ["\\(z_f:\\)", "z_f_dim-slider", 0, 3e3, 1e3, zFStep * 1e3, "dimensional", "m"];
-                configs.push(sliderConfig(...args));
-                args = ["\\(\\omega:\\)", "omega-slider", Omega * stepRatio, 2 * Omega, Omega, Omega * stepRatio, "dimensional", "s⁻¹"];
-                configs.push(sliderConfig(...args));
-                args = ["\\(L:\\)", "L-slider", LStep, 1, LValue, LStep, "non-dimensional"];
-                configs.push(sliderConfig(...args));
-                args = ["\\(L:\\)", "L_dim-slider", LStep * 100e3, 100e3, LDimValue, LStep * 100e3, "dimensional", "m"];
-                configs.push(sliderConfig(...args));
-                createModelControls(configs, "controls");
+                const dimSliders = coreWaveSlidersDim(containerID);
+                const nonDimSliders = coreWaveSlidersNonDim(containerID);
+                
+                // Add new sliders for L, z_f and omega
+                nonDimSliders.LSlider = getLNonDimSlider(containerID);
+                dimSliders.LDimSlider = getLDimSlider(containerID);
+                
+                nonDimSliders.zFSlider = getZfNonDimSlider(containerID);
+                dimSliders.zFDimSlider = getZfDimSlider(containerID);
+                
+                dimSliders.omegaSlider = getOmegaSlider(containerID);
+                
+                const coordinateToggle = createCoordinateSelectionRow(containerID);
+                const overlayToggle = createOverlayToggleRow(containerID);
+                const imshowSelection = createImshowSelectionRow(
+                    containerID,
+                    ["psi", "u", "v", "w", "phi"],
+                    ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
+                );
+                
+                // Get the relevant div container
+                container = document.querySelector(`#${containerID} #main-content #controls`);
+                // Append all the control rows to the container
+                container.append(coordinateToggle, overlayToggle, imshowSelection);
+                container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
+                setupCoordinateToggle(containerID);
             })('localized_line_forcing');
         </script>
         <py-script 
