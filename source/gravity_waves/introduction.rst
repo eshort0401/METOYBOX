@@ -11,9 +11,9 @@ We first linearize the governing equations and make the `Boussinesq/shallow-anel
 
     .. math:: 
         \begin{align}
-        \frac{\partial u_*}{\partial t_*} &= fv_* - \frac{\partial p_*}{\partial x_*} - \alpha u_*, \label{u_mom_dim} \\
+        \frac{\partial u_*}{\partial t_*} &= fv_* - \frac{\partial \phi_*}{\partial x_*} - \alpha u_*, \label{u_mom_dim} \\
         \frac{\partial v_*}{\partial t_*} &= -fu_* - \alpha v_*, \label{v_mom_dim} \\
-        \frac{\partial w_*}{\partial t_*} &= b_* - \frac{\partial p_*}{\partial z_*} - \alpha w_*, \label{w_mom_dim} \\
+        \frac{\partial w_*}{\partial t_*} &= b_* - \frac{\partial \phi_*}{\partial z_*} - \alpha w_*, \label{w_mom_dim} \\
         \frac{\partial b_*}{\partial t_*} + N^2 w_* &= Q_* - \alpha b_*, \label{b_dim} \\
         \frac{\partial u_*}{\partial x_*} + \frac{\partial w_*}{\partial z_*} &= 0, \label{cont_dim} \\
         w_*(z_*=0) &= 0. \label{boundary_dim}
@@ -52,7 +52,7 @@ Here we use the scalings from `Qian et al. (2009)`_;
     \begin{split}
     &x_*=\frac{NH}{\omega}x, \quad y_*=\frac{NH}{\omega}y, \quad z_*=Hz,\quad t_*=\frac{t}{\omega}, \\
     &Q_*=Q_0Q,\quad u_*=\frac{Q_0}{N\omega}u, \quad v_*=\frac{Q_0}{N\omega}v, \quad w_* = \frac{Q_0}{N^2}w, \\
-    &b_* = \frac{Q_0}{\omega} b,\quad p_*= \frac{Q_0H}{\omega}p,
+    &b_* = \frac{Q_0}{\omega} b,\quad \phi_*= \frac{Q_0H}{\omega}\phi,
     \end{split}
     \label{scalings}
     \end{align}
@@ -91,7 +91,7 @@ When :math:`\omega` is the diurnal frequency :math:`\frac{2\pi}{24\cdot 3600} \t
 .. math::
     \frac{\omega^2}{N^2} \approx 0 \Rightarrow b \approx p_z,
 
-i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply :math:`w=0`. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of "hydrostatic waves" is thus distinct from the usual "hydrostatic balance" condition :math:`\frac{\partial p}{\partial z} = -\rho g` we encounter in synoptic meteorology, which does imply :math:`w=0`.
+i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply :math:`w=0`. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of "hydrostatic waves" is thus distinct from the usual "hydrostatic balance" condition :math:`\frac{\partial \phi}{\partial z} = -\rho g` we encounter in synoptic meteorology, which does imply :math:`w=0`.
 
 In the land-sea breeze model above, :math:`\omega` is indeed the diurnal frequency, and so the model is mostly unresponsive to :math:`\frac{N}{\omega}`, except for the very smallest values of :math:`N`. Switching back to dimensional coordinates, we see that varying :math:`N` changes the tick labels on the :math:`x` axis in accordance with the scalings given above.
 

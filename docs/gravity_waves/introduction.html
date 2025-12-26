@@ -24,7 +24,7 @@
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-      <script src="../_static/assets/js/model-controls.js?v=ba695591"></script>
+      <script src="../_static/assets/js/model-controls.js?v=bef533db"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -110,9 +110,9 @@
 <p class="admonition-title">Dimensional Governing Equations</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
-\frac{\partial u_*}{\partial t_*} &amp;= fv_* - \frac{\partial p_*}{\partial x_*} - \alpha u_*, \label{u_mom_dim} \\
+\frac{\partial u_*}{\partial t_*} &amp;= fv_* - \frac{\partial \phi_*}{\partial x_*} - \alpha u_*, \label{u_mom_dim} \\
 \frac{\partial v_*}{\partial t_*} &amp;= -fu_* - \alpha v_*, \label{v_mom_dim} \\
-\frac{\partial w_*}{\partial t_*} &amp;= b_* - \frac{\partial p_*}{\partial z_*} - \alpha w_*, \label{w_mom_dim} \\
+\frac{\partial w_*}{\partial t_*} &amp;= b_* - \frac{\partial \phi_*}{\partial z_*} - \alpha w_*, \label{w_mom_dim} \\
 \frac{\partial b_*}{\partial t_*} + N^2 w_* &amp;= Q_* - \alpha b_*, \label{b_dim} \\
 \frac{\partial u_*}{\partial x_*} + \frac{\partial w_*}{\partial z_*} &amp;= 0, \label{cont_dim} \\
 w_*(z_*=0) &amp;= 0. \label{boundary_dim}
@@ -155,7 +155,7 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
                 // Note we switch off the quiver by default for the intro figure
                 overlayToggle.querySelector(`#${containerID}-quiver-checkbox`).checked = false;
                 // Note we change the default variable order for the intro figure to highlight Q
-                const imshowSelection = createImshowSelectionRow(
+                const imshowSelection = createFieldSelectionRow(
                     containerID,
                     ["Q", "psi", "u", "v", "w"],
                     ["\\(Q\\)", "\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)"]
@@ -186,7 +186,7 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
 \begin{split}
 &amp;x_*=\frac{NH}{\omega}x, \quad y_*=\frac{NH}{\omega}y, \quad z_*=Hz,\quad t_*=\frac{t}{\omega}, \\
 &amp;Q_*=Q_0Q,\quad u_*=\frac{Q_0}{N\omega}u, \quad v_*=\frac{Q_0}{N\omega}v, \quad w_* = \frac{Q_0}{N^2}w, \\
-&amp;b_* = \frac{Q_0}{\omega} b,\quad p_*= \frac{Q_0H}{\omega}p,
+&amp;b_* = \frac{Q_0}{\omega} b,\quad \phi_*= \frac{Q_0H}{\omega}\phi,
 \end{split}
 \label{scalings}
 \end{align}\end{split}\]</div>
@@ -217,7 +217,7 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 <p>When <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency <span class="math notranslate nohighlight">\(\frac{2\pi}{24\cdot 3600} \text{ s}^{-1} \approx 7.272 \times 10^{-5} \text{ s}^{-1}\)</span>, the term <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2}\)</span> is tiny, and terms containing this factor can be neglected. Wave solutions for which <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2} \approx 0\)</span> are called hydrostatic waves. The adjective “hydrostatic” reflects</p>
 <div class="math notranslate nohighlight">
 \[\frac{\omega^2}{N^2} \approx 0 \Rightarrow b \approx p_z,\]</div>
-<p>i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply <span class="math notranslate nohighlight">\(w=0\)</span>. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of “hydrostatic waves” is thus distinct from the usual “hydrostatic balance” condition <span class="math notranslate nohighlight">\(\frac{\partial p}{\partial z} = -\rho g\)</span> we encounter in synoptic meteorology, which does imply <span class="math notranslate nohighlight">\(w=0\)</span>.</p>
+<p>i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply <span class="math notranslate nohighlight">\(w=0\)</span>. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of “hydrostatic waves” is thus distinct from the usual “hydrostatic balance” condition <span class="math notranslate nohighlight">\(\frac{\partial \phi}{\partial z} = -\rho g\)</span> we encounter in synoptic meteorology, which does imply <span class="math notranslate nohighlight">\(w=0\)</span>.</p>
 <p>In the land-sea breeze model above, <span class="math notranslate nohighlight">\(\omega\)</span> is indeed the diurnal frequency, and so the model is mostly unresponsive to <span class="math notranslate nohighlight">\(\frac{N}{\omega}\)</span>, except for the very smallest values of <span class="math notranslate nohighlight">\(N\)</span>. Switching back to dimensional coordinates, we see that varying <span class="math notranslate nohighlight">\(N\)</span> changes the tick labels on the <span class="math notranslate nohighlight">\(x\)</span> axis in accordance with the scalings given above.</p>
 </section>
 <section id="the-stream-function">
@@ -394,10 +394,10 @@ A &amp;= B/C.
                 const nonDimSliders = coreWaveSlidersNonDim(containerID);
                 
                 // Allow alpha to be zero for these models (also initialize to zero)
-                nonDimSliders.alphaOmegaSlider.querySelector('input').min = 0;
-                dimSliders.alphaSlider.querySelector('input').min = 0;
-                nonDimSliders.alphaOmegaSlider.querySelector('input').value = 0;
-                dimSliders.alphaSlider.querySelector('input').value = 0;
+                nonDimSliders.alphaOmegaSlider.querySelector("input").min = 0;
+                dimSliders.alphaSlider.querySelector("input").min = 0;
+                nonDimSliders.alphaOmegaSlider.querySelector("input").value = 0;
+                dimSliders.alphaSlider.querySelector("input").value = 0;
                 
                 // Add sliders for k and sigma
                 nonDimSliders.kNonDimSlider = getKNonDimSlider(containerID);
@@ -408,16 +408,43 @@ A &amp;= B/C.
                 
                 const coordinateToggle = createCoordinateSelectionRow(containerID);
                 const overlayToggle = createOverlayToggleRow(containerID);
-                const imshowSelection = createImshowSelectionRow(
+                const imshowSelection = createFieldSelectionRow(
                     containerID,
                     ["psi", "u", "v", "w", "phi"],
                     ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
+                );
+                // TODO: Implement multiple quiver options
+                // const quiverSelection = createFieldSelectionRow(
+                //     containerID,
+                //     ["velocity", "acceleration", "buoyancy", "coriolis", "grad_phi"],
+                //     [
+                //         "\\( \\mathbf{u} \\)",
+                //         "\\( \\frac{\\partial}{\\partial t} \\mathbf{u} \\)",
+                //         "\\(b\\mathbf{k} \\)",
+                //         "\\( \\mathbf{u} \\times f\\mathbf{k} \\)",
+                //         "\\( - \\nabla \\phi \\)",
+                //     ],
+                //     "quiver"
+                // );
+                const quiverSelection = createFieldSelectionRow(
+                    containerID,
+                    ["velocity", "grad_phi"],
+                    [
+                        "\\( \\mathbf{u} \\)",
+                        "\\( - \\nabla \\phi \\)",
+                    ],
+                    "quiver"
                 );
                 
                 // Get the relevant div container
                 container = document.querySelector(`#${containerID} #main-content #controls`);
                 // Append all the control rows to the container
-                container.append(coordinateToggle, overlayToggle, imshowSelection);
+                container.append(
+                    coordinateToggle,
+                    overlayToggle,
+                    imshowSelection,
+                    quiverSelection
+                );
                 container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
                 setupCoordinateToggle(containerID);
             })('plane_wave');

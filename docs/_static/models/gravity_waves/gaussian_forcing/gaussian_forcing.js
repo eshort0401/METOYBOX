@@ -13,7 +13,7 @@ nonDimSliders.sigmaNonDimSlider = getSigmaNonDimSlider(containerID);
 
 const coordinateToggle = createCoordinateSelectionRow(containerID);
 const overlayToggle = createOverlayToggleRow(containerID);
-const imshowSelection = createImshowSelectionRow(
+const imshowSelection = createFieldSelectionRow(
     containerID,
     ["psi", "u", "v", "w", "phi"],
     ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]

@@ -202,7 +202,7 @@ function createOverlayToggleRow(container_id) {
     );
     const quiverCheckbox = createCheckbox(
         `${container_id}-quiver-checkbox`,
-        "Quiver",
+        "Arrows",
         `${container_id}-overlay`,
         true
     );
@@ -224,8 +224,9 @@ function createOverlayToggleRow(container_id) {
  * @param {string} container_id - The container id to prefix element ids
  * @param {Array|null} fields - Array of field names
  * @param {Array|null} labels - Array of corresponding labels
+ * @param {string} feature - Feature name - imshow, quiver, displacement
  */
-function createImshowSelectionRow(container_id, fields = null, labels = null) {
+function createFieldSelectionRow(container_id, fields = null, labels = null, feature="imshow") {
     // Set default fields and labels if not provided
     if (fields === null) {
         fields = ["psi", "u", "v", "w", "Q", "phi"];
@@ -244,15 +245,16 @@ function createImshowSelectionRow(container_id, fields = null, labels = null) {
     // Create a list of radio buttons configs
     const buttons = fields.map((field, index) => {
         return createRadioButton(
-            `${container_id}-imshow-${field}-button`,
+            `${container_id}-${feature}-${field}-button`,
             labels[index] || field,
-            `${container_id}-imshow-field`,
+            `${container_id}-${feature}-field`,
             field,
             index === 0 // First button checked by default
         );
     });
 
-    return createRadioGroupRow("Shading:", buttons);
+    const label = {"imshow": "Shading:", "quiver": "Arrows:"}
+    return createRadioGroupRow(label[feature] || "Shading:", buttons);
 }
 
 /**
@@ -303,47 +305,15 @@ function setupCoordinateToggle(
 
 // Setup variables and steps to help ensure dimensional and non-dimensional sliders match up
 const Omega = (2 * Math.PI) / (24 * 3600); // diurnal frequency in radians per second
-
 const stepRatio = 5e-3; // Step as a ratio of the quantity's scale
+const HValue = 1e3;
+const alphaValue = 0.2 * Omega;
+const NValue = 1e-2;
+const MDimValue = Omega * 1e2;
+const xScale = NValue * HValue / Omega;
 
 const tDimMax = (4 * Math.PI) / Omega; // 48 hours in seconds
 const tDimStep = tDimMax * stepRatio;
-
-const fMax = 2 * Omega;
-const fValue = 0.5 * Omega;
-const fDimStep = fMax * stepRatio;
-
-const alphaMin = 1e-2 * Omega;
-const alphaMax = 2 * Omega;
-const alphaValue = 0.2 * Omega;
-const alphaDimStep = (alphaMax - alphaMin) * stepRatio;
-
-const NMin = 1e-1 * Omega;
-const NMax = (0.1 / Omega) * Omega;
-const NValue = (1e-2 / Omega) * Omega;
-const NDimStep = (NMax - NMin) * stepRatio;
-
-const HValue = 1e3;
-
-const LStep = 1 * stepRatio;
-const LValue = 0.2;
-const LDimValue = (LValue * NValue * HValue) / Omega;
-
-const sigmaDimMin = 0.1 * Omega;
-const sigmaDimMax = 5 * Omega;
-const sigmaDimStep = (sigmaDimMax - sigmaDimMin) * stepRatio;
-
-const zFStep = 3 * stepRatio;
-
-const scale = Omega / (NValue * HValue);
-const kMinDim = 0.1 * scale;
-const kMaxDim = 10 * Math.PI * scale;
-const kValueDim = Math.PI * scale;
-const kStepDim = (kMaxDim-kMinDim) * stepRatio;
-
-const MMaxDim = 1e-2;
-const MValueDim = Omega * 1e2;
-const MStepDim = MMaxDim * stepRatio;
 
 // Create some convenience functions to build commonly used sliders
 function getTDimSlider(container_id) {
@@ -360,6 +330,10 @@ function getTDimSlider(container_id) {
     );
 }
 
+const fMax = 2 * Omega;
+const fValue = 0.5 * Omega;
+const fDimStep = fMax * stepRatio;
+
 function getFSlider(container_id) {
     return createSliderRow(
         `${container_id}-f-slider`,
@@ -374,6 +348,10 @@ function getFSlider(container_id) {
     );
 }
 
+const alphaMin = 1e-2 * Omega;
+const alphaMax = 2 * Omega;
+const alphaDimStep = (alphaMax - alphaMin) * stepRatio;
+
 function getAlphaSlider(container_id) {
     return createSliderRow(
         `${container_id}-alpha-slider`,
@@ -387,6 +365,10 @@ function getAlphaSlider(container_id) {
         "s⁻¹"
     );
 }
+
+const NMin = 1e-1 * Omega;
+const NMax = (0.1 / Omega) * Omega;
+const NDimStep = (NMax - NMin) * stepRatio;
 
 function getNSlider(container_id) {
     return createSliderRow(
@@ -430,15 +412,20 @@ function getQ0Slider(container_id) {
     );
 }
 
+const LDimMin = 0.01 * xScale;
+const LDimMax = 1 * xScale;
+const LDimValue = 0.2 * xScale;
+const LDimStep = (LDimMax - LDimMin) * stepRatio;
+
 function getLDimSlider(container_id) {
     return createSliderRow(
         `${container_id}-L_dim-slider`,
         `${container_id}-L_dim-output`,
         "\\(L:\\)",
-        LStep * 100e3,
-        100e3,
+        LDimMin,
+        LDimMax,
         LDimValue,
-        LStep * 100e3,
+        LDimStep,
         "dimensional",
         "m"
     );
@@ -458,6 +445,12 @@ function getOmegaSlider(container_id) {
     );
 }
 
+const kScale = 1 / xScale;
+const kMinDim = 0.1 * kScale;
+const kMaxDim = 10 * Math.PI * kScale;
+const kValueDim = Math.PI * kScale;
+const kStepDim = (kMaxDim-kMinDim) * stepRatio;
+
 function getKDimSlider(container_id) {
     return createSliderRow(
         `${container_id}-k_dim-slider`,
@@ -471,6 +464,10 @@ function getKDimSlider(container_id) {
         "m⁻¹"
     );
 }
+
+const sigmaDimMin = 0.1 * Omega;
+const sigmaDimMax = 5 * Omega;
+const sigmaDimStep = (sigmaDimMax - sigmaDimMin) * stepRatio;
 
 function getSigmaDimSlider(container_id) {
     return createSliderRow(
@@ -486,19 +483,27 @@ function getSigmaDimSlider(container_id) {
     );
 }
 
+const zFDimMin = 0.1
+const zFDimMax = 3e3
+const zFDimValue = 1e3;
+const zFDimStep = 3 * stepRatio;
+
 function getZfDimSlider(container_id) {
     return createSliderRow(
         `${container_id}-z_f_dim-slider`,
         `${container_id}-z_f_dim-output`,
         "\\(z_f:\\)",
-        zFStep * 1000,
-        3e3,
-        1e3,
-        zFStep * 1000,
+        zFDimMin,
+        zFDimMax,
+        zFDimValue,
+        zFDimStep,
         "dimensional",
         "m"
     );
 }
+
+const MMaxDim = 1e-2;
+const MStepDim = MMaxDim * stepRatio;
 
 function getMDimSlider(container_id) {
     return createSliderRow(
@@ -507,7 +512,7 @@ function getMDimSlider(container_id) {
         "\\(M:\\)",
         0,
         MMaxDim,
-        MValueDim,
+        MDimValue,
         MStepDim,
         "dimensional",
         "m m⁻¹"
@@ -520,13 +525,12 @@ function getMDimSlider(container_id) {
  * @returns {{tDimSlider: HTMLDivElement, fSlider: HTMLDivElement, alphaSlider: HTMLDivElement, NSlider: HTMLDivElement, HSlider: HTMLDivElement, Q0Slider: HTMLDivElement}}
  */
 function coreWaveSlidersDim(container_id) {
-    const className = "dimensional";
-    tDimSlider = getTDimSlider(container_id);
-    fSlider = getFSlider(container_id);
-    alphaSlider = getAlphaSlider(container_id);
-    NSlider = getNSlider(container_id);
-    HSlider = getHSlider(container_id);
-    Q0Slider = getQ0Slider(container_id);
+    const tDimSlider = getTDimSlider(container_id);
+    const fSlider = getFSlider(container_id);
+    const alphaSlider = getAlphaSlider(container_id);
+    const NSlider = getNSlider(container_id);
+    const HSlider = getHSlider(container_id);
+    const Q0Slider = getQ0Slider(container_id);
     return { tDimSlider, fSlider, alphaSlider, NSlider, HSlider, Q0Slider };
 }
 
@@ -552,10 +556,10 @@ const sigmaMin = sigmaDimMin / Omega;
 const sigmaMax = sigmaDimMax / Omega;
 const sigmaStep = (sigmaMax - sigmaMin) * stepRatio;
 
-const kMin = kMinDim / scale;
-const kMax = kMaxDim / scale;
+const kMin = kMinDim / kScale;
+const kMax = kMaxDim / kScale;
 const kStep = (kMax - kMin) * stepRatio;
-const kValue = kValueDim / scale;
+const kValue = kValueDim / kScale;
 
 const MStep = 3 * stepRatio;
 
@@ -616,10 +620,10 @@ function getLNonDimSlider(container_id) {
         `${container_id}-L-slider`,
         `${container_id}-L-output`,
         "\\(L:\\)",
-        LStep,
-        1,
-        LValue,
-        LStep,
+        LDimMin / xScale,
+        LDimMax / xScale,
+        LDimValue / xScale,
+        LDimStep / xScale,
         "non-dimensional"
     );
 }
@@ -629,10 +633,10 @@ function getZfNonDimSlider(container_id) {
         `${container_id}-z_f-slider`,
         `${container_id}-z_f-output`,
         "\\(z_f:\\)",
-        zFStep,
-        3,
-        1,
-        zFStep,
+        zFDimMin / HValue,
+        zFDimMax / HValue,
+        zFDimValue / HValue,
+        zFDimStep / HValue,
         "non-dimensional"
     );
 }

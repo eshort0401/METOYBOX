@@ -36,7 +36,7 @@ def calculate_fields_spatial(
 
     m = k / A
     # Use an amplitude of 0.1 for psi to get plausible dimensional values
-    psi = 0.1*np.exp(1j * (k * X + m * Z))
+    psi = 0.1 * np.exp(1j * (k * X + m * Z))
     u = 1j * m * psi
     w = -1j * k * psi
 
@@ -53,5 +53,7 @@ def calculate_fields_spatial(
 
     phi = -(sigma_hat + f_omega**2 / sigma_hat) * m / k * psi
     fields_dict["phi"] = phi
+    fields_dict["phi_x"] = -1j * k * phi
+    fields_dict["phi_z"] = -1j * m * phi
 
     return fields_dict

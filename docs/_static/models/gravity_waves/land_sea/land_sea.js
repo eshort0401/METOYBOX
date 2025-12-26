@@ -14,7 +14,7 @@ dimSliders.LDimSlider = getLDimSlider(containerID);
 
 const coordinateToggle = createCoordinateSelectionRow(containerID);
 const overlayToggle = createOverlayToggleRow(containerID);
-const imshowSelection = createImshowSelectionRow(
+const imshowSelection = createFieldSelectionRow(
     containerID,
     ["psi", "u", "v", "w", "Q"],
     ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(Q\\)"]

@@ -12,7 +12,7 @@ const overlayToggle = createOverlayToggleRow(containerID);
 // Note we switch off the quiver by default for the intro figure
 overlayToggle.querySelector(`#${containerID}-quiver-checkbox`).checked = false;
 // Note we change the default variable order for the intro figure to highlight Q
-const imshowSelection = createImshowSelectionRow(
+const imshowSelection = createFieldSelectionRow(
     containerID,
     ["Q", "psi", "u", "v", "w"],
     ["\\(Q\\)", "\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)"]

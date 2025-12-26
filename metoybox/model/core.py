@@ -55,6 +55,8 @@ def get_default_scalings(
     scalings.update({"xi": x_scale, "zeta": z_scale})
     scalings.update({"u": u_scale, "v": v_scale, "w": w_scale, "Q": Q_scale})
     scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale})
+    scalings.update({"phi_x": phi_scale / x_scale})
+    scalings.update({"phi_z": phi_scale / z_scale})
     scalings.update({"k": 1 / x_scale})
     # Add some scalings for convenience
     scalings.update({"z_f": z_scale, "M": M_scale, "L": x_scale, "sigma": sigma_scale})
@@ -324,6 +326,36 @@ class Phi(ScalarField):
         formatter = UnitFormatter("m$^2$ s$^{-2}$", 1.0)
         args = ["phi", r"$\phi$", formatter]
         super().__init__(*args, max_upper=0.1, percentile=percentile)
+
+class Phi_x(ScalarField):
+    """Convenience class for creating Boussinesq pressure gradient in x, aka phi_x fields."""
+
+    def __init__(self, percentile: float | None = None):
+        """Initialize a phi_x field."""
+        formatter = UnitFormatter("cm s$^{-2}$", 1e2)
+        args = ["phi_x", r"$-\phi_x$", formatter]
+        super().__init__(*args, max_upper=0.1, percentile=percentile)
+
+
+class Phi_z(ScalarField):
+    """Convenience class for creating Boussinesq pressure gradient in z, aka phi_z fields."""
+
+    def __init__(self, percentile: float | None = None):
+        """Initialize a phi_z field."""
+        formatter = UnitFormatter("cm s$^{-2}$", 1e2)
+        args = ["phi_z", r"$-\phi_z$", formatter]
+        super().__init__(*args, max_upper=0.1, percentile=percentile)
+
+class GradPhi(VectorField):
+    """Convenience class for creating pressure gradient fields."""
+
+    def __init__(self, percentile: float | None = None):
+        """Initialize a pressure gradient field."""
+        phi_x = Phi_x(percentile=percentile)
+        phi_z = Phi_z(percentile=percentile)
+        fields = {"phi_x": phi_x, "phi_z": phi_z}
+        args = ["grad_phi", r"$-\nabla \phi$", fields]
+        super().__init__(*args, quiver_key_magnitude=0.5, percentile=percentile)
 
 
 GetScalingsFunction = Callable[

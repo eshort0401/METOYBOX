@@ -24,7 +24,7 @@
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-      <script src="../_static/assets/js/model-controls.js?v=ba695591"></script>
+      <script src="../_static/assets/js/model-controls.js?v=bef533db"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -113,10 +113,10 @@
                 const nonDimSliders = coreWaveSlidersNonDim(containerID);
                 
                 // Allow alpha to be zero for these models (also initialize to zero)
-                nonDimSliders.alphaOmegaSlider.querySelector('input').min = 0;
-                dimSliders.alphaSlider.querySelector('input').min = 0;
-                nonDimSliders.alphaOmegaSlider.querySelector('input').value = 0;
-                dimSliders.alphaSlider.querySelector('input').value = 0;
+                nonDimSliders.alphaOmegaSlider.querySelector("input").min = 0;
+                dimSliders.alphaSlider.querySelector("input").min = 0;
+                nonDimSliders.alphaOmegaSlider.querySelector("input").value = 0;
+                dimSliders.alphaSlider.querySelector("input").value = 0;
                 
                 // Add sliders for k and sigma
                 nonDimSliders.kNonDimSlider = getKNonDimSlider(containerID);
@@ -127,16 +127,43 @@
                 
                 const coordinateToggle = createCoordinateSelectionRow(containerID);
                 const overlayToggle = createOverlayToggleRow(containerID);
-                const imshowSelection = createImshowSelectionRow(
+                const imshowSelection = createFieldSelectionRow(
                     containerID,
                     ["psi", "u", "v", "w", "phi"],
                     ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
+                );
+                // TODO: Implement multiple quiver options
+                // const quiverSelection = createFieldSelectionRow(
+                //     containerID,
+                //     ["velocity", "acceleration", "buoyancy", "coriolis", "grad_phi"],
+                //     [
+                //         "\\( \\mathbf{u} \\)",
+                //         "\\( \\frac{\\partial}{\\partial t} \\mathbf{u} \\)",
+                //         "\\(b\\mathbf{k} \\)",
+                //         "\\( \\mathbf{u} \\times f\\mathbf{k} \\)",
+                //         "\\( - \\nabla \\phi \\)",
+                //     ],
+                //     "quiver"
+                // );
+                const quiverSelection = createFieldSelectionRow(
+                    containerID,
+                    ["velocity", "grad_phi"],
+                    [
+                        "\\( \\mathbf{u} \\)",
+                        "\\( - \\nabla \\phi \\)",
+                    ],
+                    "quiver"
                 );
                 
                 // Get the relevant div container
                 container = document.querySelector(`#${containerID} #main-content #controls`);
                 // Append all the control rows to the container
-                container.append(coordinateToggle, overlayToggle, imshowSelection);
+                container.append(
+                    coordinateToggle,
+                    overlayToggle,
+                    imshowSelection,
+                    quiverSelection
+                );
                 container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
                 setupCoordinateToggle(containerID);
             })('plane_wave');

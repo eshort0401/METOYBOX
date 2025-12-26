@@ -18,6 +18,7 @@ u = core.Velocity(percentile=95).fields["u"]
 w = core.Velocity(percentile=95).fields["w"]
 fields = {"psi": core.Psi(percentile=95), "u": u, "w": w}
 fields.update({"velocity": core.Velocity(percentile=95)})
+fields.update({"grad_phi": core.GradPhi(percentile=95)})
 fields.update({"v": core.V(percentile=95), "phi": core.Phi(percentile=95)})
 fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
 args = ["point_forcing", x, z, x_ticks, z_ticks, x_limits, z_limits]

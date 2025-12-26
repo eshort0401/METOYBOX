@@ -223,6 +223,13 @@ class BaseWaveController:
             """Handle imshow field change."""
             self.change_imshow_field(event)
 
+        quiver_str = f"input[name='{self.container_id}-quiver-field']"
+
+        @when("change", quiver_str)
+        def _change_quiver_field(event):
+            """Handle quiver field change."""
+            self.change_quiver_field(event)
+
     def _is_dimensional_mode(self):
         """Check if the controller is in dimensional mode."""
         button = self.cache.get(f"{self.container_id}-dimensional-button")
@@ -238,6 +245,21 @@ class BaseWaveController:
         """Handle imshow field change."""
         name = self._get_active_imshow_field()
         self.model.active_imshow_field = name
+        self.model.update_fields(force_update_norm=True)
+        self.model.update_labels()
+        self.model.update_figure_data()
+        self.redraw()
+
+    def _get_active_quiver_field(self):
+        """Get the currently active quiver field from the relevant buttons."""
+        quiver_str = f"{self.container_id}-quiver-field"
+        checked = document.querySelector(f"input[name='{quiver_str}']:checked")
+        return checked.value if checked else "velocity"
+
+    def change_quiver_field(self, event):
+        """Handle quiver field change."""
+        name = self._get_active_quiver_field()
+        self.model.active_quiver_field = name
         self.model.update_fields(force_update_norm=True)
         self.model.update_labels()
         self.model.update_figure_data()
