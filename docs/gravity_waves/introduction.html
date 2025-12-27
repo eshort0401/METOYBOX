@@ -24,7 +24,7 @@
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-      <script src="../_static/assets/js/model-controls.js?v=bef533db"></script>
+      <script src="../_static/assets/js/model-controls.js?v=6dc50cf5"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -428,12 +428,20 @@ A &amp;= B/C.
                 // );
                 const quiverSelection = createFieldSelectionRow(
                     containerID,
-                    ["velocity", "grad_phi"],
+                    ["velocity", "grad_phi", "buoyancy", "coriolis"],
                     [
                         "\\( \\mathbf{u} \\)",
                         "\\( - \\nabla \\phi \\)",
+                        "\\(b\\mathbf{k} \\)",
+                        "\\( fv \\mathbf{i} \\)",
                     ],
-                    "quiver"
+                    "quiver",
+                    [
+                        "\\( \\mathbf{u} \\)",
+                        "\\( - \\left( \\phi_x, \\frac{N^2}{\\omega^2} \\phi_z \\right) \\)",
+                        "\\( \\frac{N^2}{\\omega^2} b\\mathbf{k} \\)",
+                        "\\( \\frac{f}{\\omega} v \\mathbf{i} \\)",
+                    ]
                 );
                 
                 // Get the relevant div container

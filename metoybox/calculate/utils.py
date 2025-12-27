@@ -20,6 +20,6 @@ def recover_polarized_default(
         fields_dict["xi"] = -1j * u / sigma
     if "zeta" in fields:
         fields_dict["zeta"] = -1j * w / sigma
-    if "bw" in fields:
-        fields_dict["bw"] = -w / sigma_hat
+    if "b_w" in fields:
+        fields_dict["b_w"] = -w / sigma_hat
     return fields_dict

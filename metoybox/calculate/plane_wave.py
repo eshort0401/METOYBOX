@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.special import expi as sp_expi
 from typing import List
 from numpy.typing import NDArray
 from metoybox.calculate.utils import recover_polarized_default
@@ -55,5 +54,7 @@ def calculate_fields_spatial(
     fields_dict["phi"] = phi
     fields_dict["phi_x"] = -1j * k * phi
     fields_dict["phi_z"] = -1j * m * phi
+    fields_dict["coriolis_x"] = f_omega * fields_dict["v"]
+    fields_dict["zero"] = np.zeros_like(psi)
 
     return fields_dict

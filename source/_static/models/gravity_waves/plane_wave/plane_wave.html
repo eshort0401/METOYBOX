@@ -54,12 +54,20 @@
                 // );
                 const quiverSelection = createFieldSelectionRow(
                     containerID,
-                    ["velocity", "grad_phi"],
+                    ["velocity", "grad_phi", "buoyancy", "coriolis"],
                     [
                         "\\( \\mathbf{u} \\)",
                         "\\( - \\nabla \\phi \\)",
+                        "\\(b\\mathbf{k} \\)",
+                        "\\( fv \\mathbf{i} \\)",
                     ],
-                    "quiver"
+                    "quiver",
+                    [
+                        "\\( \\mathbf{u} \\)",
+                        "\\( - \\left( \\phi_x, \\frac{N^2}{\\omega^2} \\phi_z \\right) \\)",
+                        "\\( \\frac{N^2}{\\omega^2} b\\mathbf{k} \\)",
+                        "\\( \\frac{f}{\\omega} v \\mathbf{i} \\)",
+                    ]
                 );
                 
                 // Get the relevant div container

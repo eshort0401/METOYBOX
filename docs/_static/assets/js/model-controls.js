@@ -226,7 +226,13 @@ function createOverlayToggleRow(container_id) {
  * @param {Array|null} labels - Array of corresponding labels
  * @param {string} feature - Feature name - imshow, quiver, displacement
  */
-function createFieldSelectionRow(container_id, fields = null, labels = null, feature="imshow") {
+function createFieldSelectionRow(
+    container_id,
+    fields = null,
+    labels = null,
+    feature = "imshow",
+    non_dim_labels = null,
+) {
     // Set default fields and labels if not provided
     if (fields === null) {
         fields = ["psi", "u", "v", "w", "Q", "phi"];
@@ -241,6 +247,9 @@ function createFieldSelectionRow(container_id, fields = null, labels = null, fea
             "\\(\\phi\\)",
         ];
     }
+    if (non_dim_labels === null) {
+        non_dim_labels = labels;
+    }
 
     // Create a list of radio buttons configs
     const buttons = fields.map((field, index) => {
@@ -253,7 +262,7 @@ function createFieldSelectionRow(container_id, fields = null, labels = null, fea
         );
     });
 
-    const label = {"imshow": "Shading:", "quiver": "Arrows:"}
+    const label = { imshow: "Shading:", quiver: "Arrows:" };
     return createRadioGroupRow(label[feature] || "Shading:", buttons);
 }
 
@@ -310,7 +319,7 @@ const HValue = 1e3;
 const alphaValue = 0.2 * Omega;
 const NValue = 1e-2;
 const MDimValue = Omega * 1e2;
-const xScale = NValue * HValue / Omega;
+const xScale = (NValue * HValue) / Omega;
 
 const tDimMax = (4 * Math.PI) / Omega; // 48 hours in seconds
 const tDimStep = tDimMax * stepRatio;
@@ -449,7 +458,7 @@ const kScale = 1 / xScale;
 const kMinDim = 0.1 * kScale;
 const kMaxDim = 10 * Math.PI * kScale;
 const kValueDim = Math.PI * kScale;
-const kStepDim = (kMaxDim-kMinDim) * stepRatio;
+const kStepDim = (kMaxDim - kMinDim) * stepRatio;
 
 function getKDimSlider(container_id) {
     return createSliderRow(
@@ -483,8 +492,8 @@ function getSigmaDimSlider(container_id) {
     );
 }
 
-const zFDimMin = 0.1
-const zFDimMax = 3e3
+const zFDimMin = 0.1;
+const zFDimMax = 3e3;
 const zFDimValue = 1e3;
 const zFDimStep = 3 * stepRatio;
 
@@ -692,5 +701,5 @@ function coreWaveSlidersNonDim(container_id) {
     alphaOmegaSlider = getAlphaNonDimSlider(container_id);
     NOmegaSlider = getNNonDimSlider(container_id);
     LSlider = getLNonDimSlider(container_id);
-    return { tSlider, fOmegaSlider, alphaOmegaSlider, NOmegaSlider};
+    return { tSlider, fOmegaSlider, alphaOmegaSlider, NOmegaSlider };
 }

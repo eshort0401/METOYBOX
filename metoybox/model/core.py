@@ -54,10 +54,10 @@ def get_default_scalings(
     scalings = {"x": x_scale, "y": y_scale, "z": z_scale, "psi": psi_scale}
     scalings.update({"xi": x_scale, "zeta": z_scale})
     scalings.update({"u": u_scale, "v": v_scale, "w": w_scale, "Q": Q_scale})
-    scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale})
-    scalings.update({"phi_x": phi_scale / x_scale})
-    scalings.update({"phi_z": phi_scale / z_scale})
-    scalings.update({"k": 1 / x_scale})
+    scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale, "b_w": b_scale})
+    scalings.update({"phi_x": phi_scale / x_scale, "phi_z": phi_scale / z_scale})
+    scalings.update({"coriolis_x": v_scale})
+    scalings.update({"k": 1 / x_scale, "zero": 1.0})
     # Add some scalings for convenience
     scalings.update({"z_f": z_scale, "M": M_scale, "L": x_scale, "sigma": sigma_scale})
     return scalings
@@ -153,6 +153,7 @@ class BaseField:
         label: str,
         unit_formatter: UnitFormatter,
         field: NDArray[np.complex128],
+        non_dim_label: str | None = None, # Set if non_dim label different from label
         # Max upper will determine the maximum level value
         max_upper: float = 1.0,
         # Max lower is the lowest max value before we update the scaling
@@ -165,6 +166,7 @@ class BaseField:
         """Initialize field properties."""
         self.name = name
         self.label = label
+        self.non_dim_label = non_dim_label if non_dim_label is not None else label
         self.field = field
         self.unit_formatter = unit_formatter
         self.max_upper = max_upper
@@ -172,6 +174,8 @@ class BaseField:
         self.percentile = percentile
         if min is None:
             self.min = -np.abs(max_upper)
+        else:
+            self.min = min
 
 
 class ScalarField(BaseField):
@@ -190,6 +194,7 @@ class ScalarField(BaseField):
         name: str,
         label: str,
         unit_formatter: UnitFormatter,
+        non_dim_label: str | None = None,
         field: NDArray[np.complex128] | None = None,
         max_upper: float = 1.0,
         max_lower: float = 0.5,
@@ -219,6 +224,7 @@ class VectorField(BaseField):
         name: str,
         label: str,
         fields: dict[str, ScalarField],  # Typically the x, z components
+        non_dim_label: str | None = None,
         quiver_scale: float = 2.5,
         max_upper: float = 0.1,
         max_lower: float = 0.05,
@@ -443,12 +449,9 @@ class BaseWaveModel:
         self.x_limits, self.z_limits = x_limits, z_limits
         self.x_unit_formatter = x_unit_formatter
         self.z_unit_formatter = z_unit_formatter
-        self.X: NDArray[np.float64] | None = None
-        self.Z: NDArray[np.float64] | None = None
         self.X, self.Z = np.meshgrid(x, z)
         self.fields = fields
         self.active_imshow_field = active_imshow_field
-        self.active_contour_field = None
         self.active_quiver_field = active_quiver_field
         self.imshow, self.quiver, self.contour = None, None, None
         self.quiver_key, self.colorbar_ax, self.colorbar = None, None, None
@@ -611,16 +614,19 @@ class BaseWaveModel:
 
             def get_component_label(key, scalar_fields):
                 """Get the label for the quiver component."""
+                if key == "zero":
+                    return None
                 field = scalar_fields[key]
                 figure_unit_scaler = field.unit_formatter.figure_unit_scaler
                 units = field.unit_formatter.figure_unit_label
-                mag_1 = quiver_key_mag * self.scalings[key] * figure_unit_scaler
-                label = rf"{field.label}: ${mag_1:0.2f}$ {units}"
+                mag = quiver_key_mag * self.scalings[key] * figure_unit_scaler
+                label = rf"{field.label}: ${mag:0.2f}$ {units}"
                 return label
 
             label_1 = get_component_label(field_keys[0], scalar_fields)
             label_2 = get_component_label(field_keys[1], scalar_fields)
-            quiver_key_label = label_1 + ", " + label_2
+            labels = [l for l in [label_1, label_2] if l is not None]
+            quiver_key_label = ", ".join(labels)
         else:
             mag = self.fields[self.active_quiver_field].quiver_key_magnitude
             quiver_key_label = rf"{mag:0.2f} [-]"

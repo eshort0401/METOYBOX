@@ -21,7 +21,28 @@ fields.update({"velocity": core.Velocity(percentile=95)})
 fields.update({"grad_phi": core.GradPhi(percentile=95)})
 fields.update({"v": core.V(percentile=95), "phi": core.Phi(percentile=95)})
 fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
-args = ["point_forcing", x, z, x_ticks, z_ticks, x_limits, z_limits]
+
+# Create a field for the b scalar fields and bk vector field
+formatter = core.UnitFormatter("cm s$^{-2}$", 1e2)
+# Note b=b_w for the plane wave model
+b_w = core.ScalarField("b_w", r"$b$", formatter, max_upper=0.1, percentile=95)
+zero_field = core.ScalarField("zero", r"0", formatter, percentile=95)
+b = core.VectorField("buoyancy", r"$b\mathbf{k}$", {"zero": zero_field, "b_w": b_w})
+# Create a field for the coriolis acceleration f*v in the x-direction
+coriolis_x = core.ScalarField(
+    "coriolis_x", r"$fv$", formatter, max_upper=0.1, percentile=95
+)
+# Might need to implement different labels for different coordinate systems?
+coriolis = core.VectorField(
+    "coriolis",
+    r"$fv\mathbf{i}$",
+    {"coriolis_x": coriolis_x, "zero": zero_field},
+    non_dim_label=r"$\frac{f}{\omega}v\mathbf{i}$",
+    percentile=95,
+)
+fields.update({"buoyancy": b, "coriolis": coriolis})
+
+args = ["plane_wave", x, z, x_ticks, z_ticks, x_limits, z_limits]
 model = foundation.PlaneWaveModel(*args, fields=fields)
 
 dim_var = ctl_core.default_dimensional.copy() + ["sigma_dim", "k_dim"]
@@ -33,6 +54,6 @@ non_dim_var = ctl_core.default_non_dimensional.copy() + ["sigma", "k"]
 initialize_from_controllers(model)
 
 script = document.currentScript
-container_id = script.getAttribute('data-container-id')
+container_id = script.getAttribute("data-container-id")
 controller = ctl_core.BaseWaveController(model, container_id, dim_var, non_dim_var)
 ctl_core.hide_loading_screen(container_id)
