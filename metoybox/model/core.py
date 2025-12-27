@@ -612,7 +612,7 @@ class BaseWaveModel:
 
         def format_mag(mag):
             """Format the magnitude for the quiver key label."""
-            exp = int(np.floor(np.log10(mag)))
+            exp = 0 if mag == 0 else int(np.floor(np.log10(mag)))
             if exp < -2 or exp >= 2:
                 val = mag / (10**exp)
                 return rf"${val:.2f}\times 10^{{{exp}}}$"

@@ -4,7 +4,7 @@
  * Create a slider row. Note the ids should be unique across the document.
  * @param {string} inputID - id for the input element; must be unique across document
  * @param {string} outputID - id for the output element; must be unique across document
- * @param {string} label_text - label text
+ * @param {string} labelText - label text
  * @param {number} min - Min slider value
  * @param {number} max - Max slider value
  * @param {number} value - Initial value
@@ -15,7 +15,7 @@
 function createSliderRow(
     inputID,
     outputID,
-    label_text,
+    labelText,
     min,
     max,
     value,
@@ -34,7 +34,7 @@ function createSliderRow(
 
     // Create label
     const label = document.createElement("label");
-    label.innerHTML = label_text;
+    label.innerHTML = labelText;
 
     // Create slider itself
     const input = document.createElement("input");
@@ -68,12 +68,12 @@ function formatOutput(value, units, step) {
 /**
  * Create a checkbox
  * @param {string} id - Must be unique across document
- * @param {string} label_text
+ * @param {string} labelText
  * @param {string} name - Needed for grouping, ignore the linter! Need unique groups across document
  * @param {boolean|null} checked
  * @param {string} value - The value associated with the checkbox
  */
-function createCheckbox(id, label_text, name, checked) {
+function createCheckbox(id, labelText, name, checked) {
     // Create a wrapper for each individual textbox to hold the box and label
     const checkboxWrapper = document.createElement("span");
     checkboxWrapper.className = "checkbox-button";
@@ -85,7 +85,7 @@ function createCheckbox(id, label_text, name, checked) {
 
     const label = document.createElement("label");
     label.setAttribute("for", input.id);
-    label.innerHTML = label_text;
+    label.innerHTML = labelText;
 
     checkboxWrapper.append(input, label);
     return checkboxWrapper;
@@ -93,16 +93,16 @@ function createCheckbox(id, label_text, name, checked) {
 
 /**
  * Create a checkbox control row
- * @param {string} label_text - label text
+ * @param {string} labelText - label text
  * @param {Array} checkboxes - array of checkboxes
  */
-function createCheckboxGroupRow(label_text, checkboxes) {
+function createCheckboxGroupRow(labelText, checkboxes) {
     const row = document.createElement("div");
     row.className = "control-row";
 
     // Label for the group
     const groupLabel = document.createElement("label");
-    groupLabel.innerHTML = label_text;
+    groupLabel.innerHTML = labelText;
     row.appendChild(groupLabel);
 
     // Container for all checkboxes
@@ -121,37 +121,56 @@ function createCheckboxGroupRow(label_text, checkboxes) {
 /**
  * Create a radio button
  * @param {string} id - id of the radio button; must be unique across document
- * @param {string} label_text
+ * @param {string} labelText
  * @param {string} name - Needed for grouping, ignore the linter! Need unique groups across document
  * @param {boolean|null} checked
+ * @param {string|null} nonDimLabelText - Optional label text for non-dimensional mode
  */
-function createRadioButton(id, label_text, name, value, checked) {
+function createRadioButton(
+    id,
+    labelText,
+    name,
+    value,
+    checked,
+    nonDimLabelText = null
+) {
     const radioWrapper = document.createElement("span");
     radioWrapper.className = "radio-button";
+    if (nonDimLabelText === null) {
+        nonDimLabelText = labelText;
+    }
 
     const input = document.createElement("input");
     Object.assign(input, { type: "radio", value, id, name });
     input.checked = checked || false;
 
-    const label = document.createElement("label");
-    label.setAttribute("for", input.id);
-    label.innerHTML = label_text;
-    radioWrapper.append(input, label);
+    const dimLabel = document.createElement("label");
+    dimLabel.setAttribute("for", input.id);
+    dimLabel.className = "dimensional";
+    // Initialize to the dimensional label
+    dimLabel.innerHTML = labelText;
+
+    const nonDimLabel = document.createElement("label");
+    nonDimLabel.setAttribute("for", input.id);
+    nonDimLabel.className = "non-dimensional";
+    nonDimLabel.innerHTML = nonDimLabelText;
+
+    radioWrapper.append(input, dimLabel, nonDimLabel);
     return radioWrapper;
 }
 
 /**
  * Create a radio button control group row
- * @param {string} label_text - label text
+ * @param {string} labelText - label text
  * @param {Array} buttons - array of radio buttons
  */
-function createRadioGroupRow(label_text, buttons) {
+function createRadioGroupRow(labelText, buttons) {
     const row = document.createElement("div");
     row.className = "control-row";
 
     // Label for the group
     const label = document.createElement("label");
-    label.innerHTML = label_text;
+    label.innerHTML = labelText;
 
     // Container for all radio buttons
     const radioContainer = document.createElement("div");
@@ -231,7 +250,7 @@ function createFieldSelectionRow(
     fields = null,
     labels = null,
     feature = "imshow",
-    non_dim_labels = null,
+    nonDimLabels = null
 ) {
     // Set default fields and labels if not provided
     if (fields === null) {
@@ -247,8 +266,8 @@ function createFieldSelectionRow(
             "\\(\\phi\\)",
         ];
     }
-    if (non_dim_labels === null) {
-        non_dim_labels = labels;
+    if (nonDimLabels === null) {
+        nonDimLabels = labels;
     }
 
     // Create a list of radio buttons configs
@@ -258,7 +277,8 @@ function createFieldSelectionRow(
             labels[index] || field,
             `${container_id}-${feature}-field`,
             field,
-            index === 0 // First button checked by default
+            index === 0, // First button checked by default
+            nonDimLabels[index] || labels[index] || field
         );
     });
 

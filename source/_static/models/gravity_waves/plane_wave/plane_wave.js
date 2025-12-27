@@ -50,8 +50,8 @@ const quiverSelection = createFieldSelectionRow(
     "quiver",
     [
         "\\( \\mathbf{u} \\)",
-        "\\( - \\left( \\phi_x, \\frac{N^2}{\\omega^2} \\phi_z \\right) \\)",
-        "\\( \\frac{N^2}{\\omega^2} b\\mathbf{k} \\)",
+        "\\( - \\nabla \\phi \\)",
+        "\\(b\\mathbf{k} \\)",
         "\\( \\frac{f}{\\omega} v \\mathbf{i} \\)",
         "\\( \\mathbf{a} \\)",
     ]
