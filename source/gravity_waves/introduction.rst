@@ -67,7 +67,7 @@ Substituting the above scaling expressions into our governing equations and simp
         \begin{align}
         u_t &= \frac{f}{\omega}v - p_x - \frac{\alpha}{\omega}u, \label{u_mom} \\
         v_t &= -\frac{f}{\omega}u - \frac{\alpha}{\omega}v, \label{v_mom} \\
-        \frac{\omega^2}{N^2}w_t &= b - p_z - \frac{\omega^2}{N^2}\frac{\alpha}{\omega}w, \label{w_mom} \\
+        \frac{\omega^2}{N^2}w_t &= b - \phi_z - \frac{\omega^2}{N^2}\frac{\alpha}{\omega}w, \label{w_mom} \\
         b_t + w &= Q - \frac{\alpha}{\omega} b, \label{b} \\
         u_x + w_z &= 0, \label{cont} \\
         w(z=0) &= 0. \label{boundary}
@@ -89,9 +89,9 @@ Hydrostatic Waves
 When :math:`\omega` is the diurnal frequency :math:`\frac{2\pi}{24\cdot 3600} \text{ s}^{-1} \approx 7.272 \times 10^{-5} \text{ s}^{-1}`, the term :math:`\frac{\omega^2}{N^2}` is tiny, and terms containing this factor can be neglected. Wave solutions for which :math:`\frac{\omega^2}{N^2} \approx 0` are called hydrostatic waves. The adjective "hydrostatic" reflects 
 
 .. math::
-    \frac{\omega^2}{N^2} \approx 0 \Rightarrow b \approx p_z,
+    \frac{\omega^2}{N^2} \approx 0 \Rightarrow b \approx \phi_z,
 
-i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply :math:`w=0`. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of "hydrostatic waves" is thus distinct from the usual "hydrostatic balance" condition :math:`\frac{\partial \phi}{\partial z} = -\rho g` we encounter in synoptic meteorology, which does imply :math:`w=0`.
+i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply :math:`w=0`. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of "hydrostatic waves" is thus distinct from the usual "hydrostatic balance" condition :math:`\frac{\partial p}{\partial z} = -\rho g` we encounter in synoptic meteorology, which does imply :math:`w=0`.
 
 In the land-sea breeze model above, :math:`\omega` is indeed the diurnal frequency, and so the model is mostly unresponsive to :math:`\frac{N}{\omega}`, except for the very smallest values of :math:`N`. Switching back to dimensional coordinates, we see that varying :math:`N` changes the tick labels on the :math:`x` axis in accordance with the scalings given above.
 
@@ -141,7 +141,7 @@ We now derive a single partial differential equation (PDE) for the stream functi
 
 .. math::
     \begin{align}
-    \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u &= \frac{f}{\omega}v-p_x, \label{u_mom_grouped} \\
+    \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u &= \frac{f}{\omega}v-\phi_x, \label{u_mom_grouped} \\
     \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)v &= -\frac{f}{\omega}u. \label{v_mom_grouped}
     \end{align}
 
@@ -149,7 +149,7 @@ If expressions like :math:`\left(\frac{\partial}{\partial t} + \frac{\alpha}{\om
 
 .. math::
     \begin{equation}
-    \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u = -\frac{f^2}{\omega^2}u - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)p_x.
+    \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u = -\frac{f^2}{\omega^2}u - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)\phi_x.
     \label{u_mom_alt}
     \end{equation}
 
@@ -157,7 +157,7 @@ Then take :math:`\frac{\partial}{\partial z}` of both sides of :math:`\eqref{u_m
 
 .. math::
     \begin{equation}
-    \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z = -\frac{f^2}{\omega^2}u_z - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)p_{xz}.
+    \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z = -\frac{f^2}{\omega^2}u_z - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)\phi_{xz}.
     \label{u_mom_alt_z}
     \end{equation}
 
@@ -165,10 +165,10 @@ Next, rearrange :math:`\eqref{w_mom}` and take :math:`\left(\frac{\partial}{\par
 
 .. math::
     \begin{equation}
-    \frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x = \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x - \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)p_{zx}.\label{w_mom_alt_x}
+    \frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x = \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x - \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\phi_{zx}.\label{w_mom_alt_x}
     \end{equation}
 
-Now use :math:`\eqref{w_mom_alt_x}` to eliminate :math:`-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)p_{zx}` in :math:`\eqref{u_mom_alt_z}` to get
+Now use :math:`\eqref{w_mom_alt_x}` to eliminate :math:`-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\phi_{zx}` in :math:`\eqref{u_mom_alt_z}` to get
 
 .. math::
     \begin{equation}

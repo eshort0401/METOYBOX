@@ -13,13 +13,12 @@ def recover_polarized_default(
     """Get the requisite fields from the default polarization relations."""
     fields_dict = {}
     sigma_hat = 1j * sigma + alpha_omega
+    fields_dict["b_w"] = -w / sigma_hat
 
-    if "v" in fields:
-        fields_dict["v"] = -f_omega / sigma_hat * u
+    fields_dict["v"] = -f_omega / sigma_hat * u
     if "xi" in fields:
         fields_dict["xi"] = -1j * u / sigma
     if "zeta" in fields:
         fields_dict["zeta"] = -1j * w / sigma
-    if "b_w" in fields:
-        fields_dict["b_w"] = -w / sigma_hat
+    
     return fields_dict

@@ -55,6 +55,10 @@ def calculate_fields_spatial(
     fields_dict["phi_x"] = -1j * k * phi
     fields_dict["phi_z"] = -1j * m * phi
     fields_dict["coriolis_x"] = f_omega * fields_dict["v"]
+
+    fields_dict["a_x"] = fields_dict["phi_x"] + fields_dict["coriolis_x"]
+    fields_dict["a_z"] = fields_dict["phi_z"]*N_omega**2 + fields_dict["b_w"]*N_omega**2
+
     fields_dict["zero"] = np.zeros_like(psi)
 
     return fields_dict

@@ -198,7 +198,7 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
 \[\begin{split}\begin{align}
 u_t &amp;= \frac{f}{\omega}v - p_x - \frac{\alpha}{\omega}u, \label{u_mom} \\
 v_t &amp;= -\frac{f}{\omega}u - \frac{\alpha}{\omega}v, \label{v_mom} \\
-\frac{\omega^2}{N^2}w_t &amp;= b - p_z - \frac{\omega^2}{N^2}\frac{\alpha}{\omega}w, \label{w_mom} \\
+\frac{\omega^2}{N^2}w_t &amp;= b - \phi_z - \frac{\omega^2}{N^2}\frac{\alpha}{\omega}w, \label{w_mom} \\
 b_t + w &amp;= Q - \frac{\alpha}{\omega} b, \label{b} \\
 u_x + w_z &amp;= 0, \label{cont} \\
 w(z=0) &amp;= 0. \label{boundary}
@@ -216,8 +216,8 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 <h2>Hydrostatic Waves<a class="headerlink" href="#hydrostatic-waves" title="Link to this heading"></a></h2>
 <p>When <span class="math notranslate nohighlight">\(\omega\)</span> is the diurnal frequency <span class="math notranslate nohighlight">\(\frac{2\pi}{24\cdot 3600} \text{ s}^{-1} \approx 7.272 \times 10^{-5} \text{ s}^{-1}\)</span>, the term <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2}\)</span> is tiny, and terms containing this factor can be neglected. Wave solutions for which <span class="math notranslate nohighlight">\(\frac{\omega^2}{N^2} \approx 0\)</span> are called hydrostatic waves. The adjective “hydrostatic” reflects</p>
 <div class="math notranslate nohighlight">
-\[\frac{\omega^2}{N^2} \approx 0 \Rightarrow b \approx p_z,\]</div>
-<p>i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply <span class="math notranslate nohighlight">\(w=0\)</span>. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of “hydrostatic waves” is thus distinct from the usual “hydrostatic balance” condition <span class="math notranslate nohighlight">\(\frac{\partial \phi}{\partial z} = -\rho g\)</span> we encounter in synoptic meteorology, which does imply <span class="math notranslate nohighlight">\(w=0\)</span>.</p>
+\[\frac{\omega^2}{N^2} \approx 0 \Rightarrow b \approx \phi_z,\]</div>
+<p>i.e. that buoyancy forces are approximately balanced by vertical pressure gradient forces. In this context the balance is only approximate, and hence does not imply <span class="math notranslate nohighlight">\(w=0\)</span>. Indeed, as we will see later, vertical velocities are essential to the core dynamics of gravity waves. The concept of “hydrostatic waves” is thus distinct from the usual “hydrostatic balance” condition <span class="math notranslate nohighlight">\(\frac{\partial p}{\partial z} = -\rho g\)</span> we encounter in synoptic meteorology, which does imply <span class="math notranslate nohighlight">\(w=0\)</span>.</p>
 <p>In the land-sea breeze model above, <span class="math notranslate nohighlight">\(\omega\)</span> is indeed the diurnal frequency, and so the model is mostly unresponsive to <span class="math notranslate nohighlight">\(\frac{N}{\omega}\)</span>, except for the very smallest values of <span class="math notranslate nohighlight">\(N\)</span>. Switching back to dimensional coordinates, we see that varying <span class="math notranslate nohighlight">\(N\)</span> changes the tick labels on the <span class="math notranslate nohighlight">\(x\)</span> axis in accordance with the scalings given above.</p>
 </section>
 <section id="the-stream-function">
@@ -255,27 +255,27 @@ Q = \frac{1}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x}{\mathcal{L}}\right)\r
 <p>We now derive a single partial differential equation (PDE) for the stream function <span class="math notranslate nohighlight">\(\psi\)</span>. We’ll include some algebraic gore as it’s our first time. To start, rewrite <span class="math notranslate nohighlight">\(\text{\eqref{u_mom}-\eqref{b}}\)</span> by grouping the time tendency and diffusion terms; equations <span class="math notranslate nohighlight">\(\eqref{u_mom}\)</span> and <span class="math notranslate nohighlight">\(\eqref{v_mom}\)</span> become</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u &amp;= \frac{f}{\omega}v-p_x, \label{u_mom_grouped} \\
+\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)u &amp;= \frac{f}{\omega}v-\phi_x, \label{u_mom_grouped} \\
 \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)v &amp;= -\frac{f}{\omega}u. \label{v_mom_grouped}
 \end{align}\end{split}\]</div>
 <p>If expressions like <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\)</span> disturb you, you’re not alone! Have a look at :ref:``   Take <span class="math notranslate nohighlight">\(\left(\frac{\partial }{\partial t} + \frac{\alpha}{\omega}\right)\)</span> of <span class="math notranslate nohighlight">\(\eqref{u_mom_grouped}\)</span> and substitute in <span class="math notranslate nohighlight">\(\eqref{v_mom_grouped}\)</span> to get</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u = -\frac{f^2}{\omega^2}u - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)p_x.
+\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u = -\frac{f^2}{\omega^2}u - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)\phi_x.
 \label{u_mom_alt}
 \end{equation}\]</div>
 <p>Then take <span class="math notranslate nohighlight">\(\frac{\partial}{\partial z}\)</span> of both sides of <span class="math notranslate nohighlight">\(\eqref{u_mom_alt}\)</span> to get</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z = -\frac{f^2}{\omega^2}u_z - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)p_{xz}.
+\left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z = -\frac{f^2}{\omega^2}u_z - \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)\phi_{xz}.
 \label{u_mom_alt_z}
 \end{equation}\]</div>
 <p>Next, rearrange <span class="math notranslate nohighlight">\(\eqref{w_mom}\)</span> and take <span class="math notranslate nohighlight">\(\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\frac{\partial}{\partial x}\)</span> of both sides to get</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-\frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x = \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x - \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)p_{zx}.\label{w_mom_alt_x}
+\frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x = \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x - \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\phi_{zx}.\label{w_mom_alt_x}
 \end{equation}\]</div>
-<p>Now use <span class="math notranslate nohighlight">\(\eqref{w_mom_alt_x}\)</span> to eliminate <span class="math notranslate nohighlight">\(-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)p_{zx}\)</span> in <span class="math notranslate nohighlight">\(\eqref{u_mom_alt_z}\)</span> to get</p>
+<p>Now use <span class="math notranslate nohighlight">\(\eqref{w_mom_alt_x}\)</span> to eliminate <span class="math notranslate nohighlight">\(-\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)\phi_{zx}\)</span> in <span class="math notranslate nohighlight">\(\eqref{u_mom_alt_z}\)</span> to get</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
 \left(\frac{\partial}{\partial t}+\frac{\alpha}{\omega}\right)^2 u_z + \frac{f^2}{\omega^2}u_z = \frac{\omega^2}{N^2}\left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)^2 w_x - \left(\frac{\partial}{\partial t} + \frac{\alpha}{\omega}\right)b_x.
@@ -428,12 +428,13 @@ A &amp;= B/C.
                 // );
                 const quiverSelection = createFieldSelectionRow(
                     containerID,
-                    ["velocity", "grad_phi", "buoyancy", "coriolis"],
+                    ["velocity", "grad_phi", "buoyancy", "coriolis", "acceleration"],
                     [
                         "\\( \\mathbf{u} \\)",
                         "\\( - \\nabla \\phi \\)",
                         "\\(b\\mathbf{k} \\)",
                         "\\( fv \\mathbf{i} \\)",
+                        "\\( \\mathbf{a} \\)",
                     ],
                     "quiver",
                     [
@@ -441,6 +442,7 @@ A &amp;= B/C.
                         "\\( - \\left( \\phi_x, \\frac{N^2}{\\omega^2} \\phi_z \\right) \\)",
                         "\\( \\frac{N^2}{\\omega^2} b\\mathbf{k} \\)",
                         "\\( \\frac{f}{\\omega} v \\mathbf{i} \\)",
+                        "\\( \\mathbf{a} \\)",
                     ]
                 );
                 

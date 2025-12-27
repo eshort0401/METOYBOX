@@ -39,12 +39,13 @@ const imshowSelection = createFieldSelectionRow(
 // );
 const quiverSelection = createFieldSelectionRow(
     containerID,
-    ["velocity", "grad_phi", "buoyancy", "coriolis"],
+    ["velocity", "grad_phi", "buoyancy", "coriolis", "acceleration"],
     [
         "\\( \\mathbf{u} \\)",
         "\\( - \\nabla \\phi \\)",
         "\\(b\\mathbf{k} \\)",
         "\\( fv \\mathbf{i} \\)",
+        "\\( \\mathbf{a} \\)",
     ],
     "quiver",
     [
@@ -52,6 +53,7 @@ const quiverSelection = createFieldSelectionRow(
         "\\( - \\left( \\phi_x, \\frac{N^2}{\\omega^2} \\phi_z \\right) \\)",
         "\\( \\frac{N^2}{\\omega^2} b\\mathbf{k} \\)",
         "\\( \\frac{f}{\\omega} v \\mathbf{i} \\)",
+        "\\( \\mathbf{a} \\)",
     ]
 );
 

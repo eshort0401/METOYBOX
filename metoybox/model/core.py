@@ -56,7 +56,8 @@ def get_default_scalings(
     scalings.update({"u": u_scale, "v": v_scale, "w": w_scale, "Q": Q_scale})
     scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale, "b_w": b_scale})
     scalings.update({"phi_x": phi_scale / x_scale, "phi_z": phi_scale / z_scale})
-    scalings.update({"coriolis_x": v_scale})
+    scalings.update({"coriolis_x": v_scale * omega})
+    scalings.update({"a_x": u_scale / t_scale, "a_z": w_scale / t_scale})
     scalings.update({"k": 1 / x_scale, "zero": 1.0})
     # Add some scalings for convenience
     scalings.update({"z_f": z_scale, "M": M_scale, "L": x_scale, "sigma": sigma_scale})
@@ -153,7 +154,6 @@ class BaseField:
         label: str,
         unit_formatter: UnitFormatter,
         field: NDArray[np.complex128],
-        non_dim_label: str | None = None, # Set if non_dim label different from label
         # Max upper will determine the maximum level value
         max_upper: float = 1.0,
         # Max lower is the lowest max value before we update the scaling
@@ -162,6 +162,7 @@ class BaseField:
         max_lower: float = 0.5,
         min: float | None = None,
         percentile: float | None = None,
+        non_dim_label: str | None = None,  # Set if non_dim label different from label
     ):
         """Initialize field properties."""
         self.name = name
@@ -194,17 +195,17 @@ class ScalarField(BaseField):
         name: str,
         label: str,
         unit_formatter: UnitFormatter,
-        non_dim_label: str | None = None,
         field: NDArray[np.complex128] | None = None,
         max_upper: float = 1.0,
         max_lower: float = 0.5,
         min: float | None = None,
         cmap_name: str = "RdBu_r",
         percentile: float | None = None,
+        non_dim_label: str | None = None,
     ):
         """Initialize field properties."""
         args = [name, label, unit_formatter, field, max_upper, max_lower, min]
-        args += [percentile]
+        args += [percentile, non_dim_label]
         super().__init__(*args)
         self.cmap = plt.get_cmap(cmap_name)
         self.levels = np.linspace(self.min, self.max_upper, 21)
@@ -224,12 +225,12 @@ class VectorField(BaseField):
         name: str,
         label: str,
         fields: dict[str, ScalarField],  # Typically the x, z components
-        non_dim_label: str | None = None,
         quiver_scale: float = 2.5,
         max_upper: float = 0.1,
         max_lower: float = 0.05,
         quiver_key_magnitude: float = 0.5,
         percentile: float | None = None,
+        non_dim_label: str | None = None,
     ):
         self.name = name
         self.label = label
@@ -240,6 +241,7 @@ class VectorField(BaseField):
         self.max_upper = max_upper
         self.max_lower = max_lower
         self.percentile = percentile
+        self.non_dim_label = non_dim_label if non_dim_label is not None else label
 
 
 class Psi(ScalarField):
@@ -333,6 +335,7 @@ class Phi(ScalarField):
         args = ["phi", r"$\phi$", formatter]
         super().__init__(*args, max_upper=0.1, percentile=percentile)
 
+
 class Phi_x(ScalarField):
     """Convenience class for creating Boussinesq pressure gradient in x, aka phi_x fields."""
 
@@ -351,6 +354,7 @@ class Phi_z(ScalarField):
         formatter = UnitFormatter("cm s$^{-2}$", 1e2)
         args = ["phi_z", r"$-\phi_z$", formatter]
         super().__init__(*args, max_upper=0.1, percentile=percentile)
+
 
 class GradPhi(VectorField):
     """Convenience class for creating pressure gradient fields."""
@@ -605,6 +609,16 @@ class BaseWaveModel:
         """Get the quiver key label for the appropriate coordinate system."""
         if self.quiver_visible is False or self.quiver_key is None:
             return
+
+        def format_mag(mag):
+            """Format the magnitude for the quiver key label."""
+            exp = int(np.floor(np.log10(mag)))
+            if exp < -2 or exp >= 2:
+                val = mag / (10**exp)
+                return rf"${val:.2f}\times 10^{{{exp}}}$"
+            else:
+                return f"${mag:.2f}$"
+
         # Next scale the quiver key labels
         if self.coordinates == "dimensional":
             vector_field = self.fields[self.active_quiver_field]
@@ -620,7 +634,7 @@ class BaseWaveModel:
                 figure_unit_scaler = field.unit_formatter.figure_unit_scaler
                 units = field.unit_formatter.figure_unit_label
                 mag = quiver_key_mag * self.scalings[key] * figure_unit_scaler
-                label = rf"{field.label}: ${mag:0.2f}$ {units}"
+                label = rf"{field.label}: {format_mag(mag)} {units}"
                 return label
 
             label_1 = get_component_label(field_keys[0], scalar_fields)
@@ -629,7 +643,7 @@ class BaseWaveModel:
             quiver_key_label = ", ".join(labels)
         else:
             mag = self.fields[self.active_quiver_field].quiver_key_magnitude
-            quiver_key_label = rf"{mag:0.2f} [-]"
+            quiver_key_label = rf"{format_mag(mag)} [-]"
         self.quiver_key_label = quiver_key_label
         self.quiver_key.text.set_text(self.quiver_key_label)
 
@@ -848,7 +862,8 @@ class BaseWaveModel:
         max_upper = self.fields[name].max_upper
         max_lower = self.fields[name].max_lower
 
-        if current_max > max_upper or current_max < max_lower:
+        cond = current_max > max_upper or current_max < max_lower
+        if cond or force_update_norm:
             max_lower, max_upper = bounds_half_order_magnitude(current_max)
             self.fields[name].max_lower = max_lower
             self.fields[name].max_upper = max_upper

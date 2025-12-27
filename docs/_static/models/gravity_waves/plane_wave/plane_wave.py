@@ -23,14 +23,16 @@ fields.update({"v": core.V(percentile=95), "phi": core.Phi(percentile=95)})
 fields.update({"xi": core.Xi(), "zeta": core.Zeta()})
 
 # Create a field for the b scalar fields and bk vector field
-formatter = core.UnitFormatter("cm s$^{-2}$", 1e2)
+cm_formatter = core.UnitFormatter("cm s$^{-2}$", 1e2)
+mm_formatter = core.UnitFormatter("mm s$^{-2}$", 1e3)
+# m_formatter = core.UnitFormatter("m s$^{-2}$", 1)
 # Note b=b_w for the plane wave model
-b_w = core.ScalarField("b_w", r"$b$", formatter, max_upper=0.1, percentile=95)
-zero_field = core.ScalarField("zero", r"0", formatter, percentile=95)
+b_w = core.ScalarField("b_w", r"$b$", cm_formatter, max_upper=0.1, percentile=95)
+zero_field = core.ScalarField("zero", r"0", cm_formatter, percentile=95)
 b = core.VectorField("buoyancy", r"$b\mathbf{k}$", {"zero": zero_field, "b_w": b_w})
 # Create a field for the coriolis acceleration f*v in the x-direction
 coriolis_x = core.ScalarField(
-    "coriolis_x", r"$fv$", formatter, max_upper=0.1, percentile=95
+    "coriolis_x", r"$fv$", cm_formatter, max_upper=0.1, percentile=95
 )
 # Might need to implement different labels for different coordinate systems?
 coriolis = core.VectorField(
@@ -40,7 +42,17 @@ coriolis = core.VectorField(
     non_dim_label=r"$\frac{f}{\omega}v\mathbf{i}$",
     percentile=95,
 )
-fields.update({"buoyancy": b, "coriolis": coriolis})
+
+a_x = core.ScalarField("a_x", r"$a_x$", cm_formatter, max_upper=0.1, percentile=95)
+a_z = core.ScalarField("a_z", r"$a_z$", cm_formatter, max_upper=0.1, percentile=95)
+acceleration = core.VectorField(
+    "acceleration",
+    r"$\mathbf{a}$",
+    {"a_x": a_x, "a_z": a_z},
+    percentile=95,
+)
+
+fields.update({"buoyancy": b, "coriolis": coriolis, "acceleration": acceleration})
 
 args = ["plane_wave", x, z, x_ticks, z_ticks, x_limits, z_limits]
 model = foundation.PlaneWaveModel(*args, fields=fields)
