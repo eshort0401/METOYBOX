@@ -125,26 +125,18 @@
                 nonDimSliders.sigmaNonDimSlider = getSigmaNonDimSlider(containerID);
                 dimSliders.sigmaDimSlider = getSigmaDimSlider(containerID);
                 
-                const coordinateToggle = createCoordinateSelectionRow(containerID);
+                const startingCoords = "dimensional";
+                const coordToggle = createCoordinateSelectionRow(containerID, startingCoords);
                 const overlayToggle = createOverlayToggleRow(containerID);
+                overlayToggle.querySelector(
+                    `#${containerID}-displacement-checkbox`
+                ).checked = true;
+                
                 const imshowSelection = createFieldSelectionRow(
                     containerID,
                     ["psi", "u", "v", "w", "phi"],
                     ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
                 );
-                // TODO: Implement multiple quiver options
-                // const quiverSelection = createFieldSelectionRow(
-                //     containerID,
-                //     ["velocity", "acceleration", "buoyancy", "coriolis", "grad_phi"],
-                //     [
-                //         "\\( \\mathbf{u} \\)",
-                //         "\\( \\frac{\\partial}{\\partial t} \\mathbf{u} \\)",
-                //         "\\(b\\mathbf{k} \\)",
-                //         "\\( \\mathbf{u} \\times f\\mathbf{k} \\)",
-                //         "\\( - \\nabla \\phi \\)",
-                //     ],
-                //     "quiver"
-                // );
                 const quiverSelection = createFieldSelectionRow(
                     containerID,
                     ["velocity", "grad_phi", "buoyancy", "coriolis", "acceleration"],
@@ -168,14 +160,9 @@
                 // Get the relevant div container
                 container = document.querySelector(`#${containerID} #main-content #controls`);
                 // Append all the control rows to the container
-                container.append(
-                    coordinateToggle,
-                    overlayToggle,
-                    imshowSelection,
-                    quiverSelection
-                );
+                container.append(coordToggle, overlayToggle, imshowSelection, quiverSelection);
                 container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
-                setupCoordinateToggle(containerID);
+                setupCoordinateToggle(containerID, startingCoords);
             })('plane_wave');
         </script>
         <py-script 

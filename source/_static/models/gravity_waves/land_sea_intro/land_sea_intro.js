@@ -7,7 +7,8 @@ const nonDimSliders = coreWaveSlidersNonDim(containerID);
 nonDimSliders.LSlider = getLNonDimSlider(containerID);
 dimSliders.LDimSlider = getLDimSlider(containerID);
 
-const coordinateToggle = createCoordinateSelectionRow(containerID);
+startingCoords = "dimensional";
+const coordToggle = createCoordinateSelectionRow(containerID, startingCoords);
 const overlayToggle = createOverlayToggleRow(containerID);
 // Note we switch off the quiver by default for the intro figure
 overlayToggle.querySelector(`#${containerID}-quiver-checkbox`).checked = false;
@@ -21,6 +22,6 @@ const imshowSelection = createFieldSelectionRow(
 // Get the relevant div container
 container = document.querySelector(`#${containerID} #main-content #controls`);
 // Append all the control rows to the container
-container.append(coordinateToggle, overlayToggle, imshowSelection);
+container.append(coordToggle, overlayToggle, imshowSelection);
 container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
-setupCoordinateToggle(containerID);
+setupCoordinateToggle(containerID, startingCoords);

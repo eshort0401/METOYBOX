@@ -150,7 +150,8 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
                 nonDimSliders.LSlider = getLNonDimSlider(containerID);
                 dimSliders.LDimSlider = getLDimSlider(containerID);
                 
-                const coordinateToggle = createCoordinateSelectionRow(containerID);
+                startingCoords = "dimensional";
+                const coordToggle = createCoordinateSelectionRow(containerID, startingCoords);
                 const overlayToggle = createOverlayToggleRow(containerID);
                 // Note we switch off the quiver by default for the intro figure
                 overlayToggle.querySelector(`#${containerID}-quiver-checkbox`).checked = false;
@@ -164,9 +165,9 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
                 // Get the relevant div container
                 container = document.querySelector(`#${containerID} #main-content #controls`);
                 // Append all the control rows to the container
-                container.append(coordinateToggle, overlayToggle, imshowSelection);
+                container.append(coordToggle, overlayToggle, imshowSelection);
                 container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
-                setupCoordinateToggle(containerID);
+                setupCoordinateToggle(containerID, startingCoords);
             })('land_sea_intro');
         </script>
         <py-script 
@@ -175,7 +176,7 @@ Q_* = \frac{Q_0}{\pi}\left(\frac{\pi}{2}+\arctan\left(\frac{x_*}{L}\right)\right
             data-container-id="land_sea_intro">
         </py-script>
     </div>
-</div><p>The idea is that we have chosen our coordinates <span class="math notranslate nohighlight">\((x_*, y_*, z_*)\)</span> so that <span class="math notranslate nohighlight">\(x_*=0\)</span>, <span class="math notranslate nohighlight">\(z_*=0\)</span> represents a coastline, which extends infinitely far into and out of the screen in the <span class="math notranslate nohighlight">\(y_*\)</span> direction. The <span class="math notranslate nohighlight">\(z_*=0\)</span> lower boundary represents land and sea for <span class="math notranslate nohighlight">\(x_*&gt;0\)</span> and <span class="math notranslate nohighlight">\(x_*&lt;0\)</span>, respectively; imagine you’re at the beach, looking down the coastline, with sand to your right, and water to your left. The land surface changes temperature over the course of the day, but the ocean surface temperature is comparatively constant. You should play with the <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(Q_0\)</span>, <span class="math notranslate nohighlight">\(H\)</span> and <span class="math notranslate nohighlight">\(L\)</span> sliders to see how the forcing <span class="math notranslate nohighlight">\(Q_*\)</span> changes. Also, with <span class="math notranslate nohighlight">\(Q_*\)</span> given by <span class="math notranslate nohighlight">\(\eqref{Q_sea_breeze_dim}\)</span> we can solve <span class="math notranslate nohighlight">\(\text{\eqref{u_mom_dim}-\eqref{boundary_dim}}\)</span> analytically! Switching on the quiver plot shows the <span class="math notranslate nohighlight">\((u, w)\)</span> vectors overlaid on <span class="math notranslate nohighlight">\(Q\)</span>. You can also change the shading from <span class="math notranslate nohighlight">\(Q\)</span> to another variable, e.g. <span class="math notranslate nohighlight">\(v\)</span>. If the applets are laggy in Firefox, abandon computer communism, and embrace the Chrome counter-revolution instead.</p>
+</div><p>The idea is that we have chosen our coordinates <span class="math notranslate nohighlight">\((x_*, y_*, z_*)\)</span> so that <span class="math notranslate nohighlight">\(x_*=0\)</span>, <span class="math notranslate nohighlight">\(z_*=0\)</span> represents a coastline, which extends infinitely far into and out of the screen in the <span class="math notranslate nohighlight">\(y_*\)</span> direction. The <span class="math notranslate nohighlight">\(z_*=0\)</span> lower boundary represents land and sea for <span class="math notranslate nohighlight">\(x_*&gt;0\)</span> and <span class="math notranslate nohighlight">\(x_*&lt;0\)</span>, respectively; imagine you’re at the beach, looking down the coastline, with sand to your right, and water to your left. The land surface changes temperature over the course of the day, but the ocean surface temperature is comparatively constant. You should play with the <span class="math notranslate nohighlight">\(t\)</span>, <span class="math notranslate nohighlight">\(Q_0\)</span>, <span class="math notranslate nohighlight">\(H\)</span> and <span class="math notranslate nohighlight">\(L\)</span> sliders to see how the forcing <span class="math notranslate nohighlight">\(Q_*\)</span> changes. Also, with <span class="math notranslate nohighlight">\(Q_*\)</span> given by <span class="math notranslate nohighlight">\(\eqref{Q_sea_breeze_dim}\)</span> we can solve <span class="math notranslate nohighlight">\(\text{\eqref{u_mom_dim}-\eqref{boundary_dim}}\)</span> analytically! Switching on the quiver plot shows the <span class="math notranslate nohighlight">\((u, w)\)</span> vectors overlaid on <span class="math notranslate nohighlight">\(Q\)</span>. You can also change the shading from <span class="math notranslate nohighlight">\(Q\)</span> to another variable, e.g. <span class="math notranslate nohighlight">\(v\)</span>. If the applets are laggy in Firefox, abandon computer communism, and embrace Chrome counter-revolution instead.</p>
 </section>
 <section id="non-dimensionalization">
 <span id="non-dim"></span><h2>Non-Dimensionalization<a class="headerlink" href="#non-dimensionalization" title="Link to this heading"></a></h2>
@@ -406,26 +407,18 @@ A &amp;= B/C.
                 nonDimSliders.sigmaNonDimSlider = getSigmaNonDimSlider(containerID);
                 dimSliders.sigmaDimSlider = getSigmaDimSlider(containerID);
                 
-                const coordinateToggle = createCoordinateSelectionRow(containerID);
+                const startingCoords = "dimensional";
+                const coordToggle = createCoordinateSelectionRow(containerID, startingCoords);
                 const overlayToggle = createOverlayToggleRow(containerID);
+                overlayToggle.querySelector(
+                    `#${containerID}-displacement-checkbox`
+                ).checked = true;
+                
                 const imshowSelection = createFieldSelectionRow(
                     containerID,
                     ["psi", "u", "v", "w", "phi"],
                     ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
                 );
-                // TODO: Implement multiple quiver options
-                // const quiverSelection = createFieldSelectionRow(
-                //     containerID,
-                //     ["velocity", "acceleration", "buoyancy", "coriolis", "grad_phi"],
-                //     [
-                //         "\\( \\mathbf{u} \\)",
-                //         "\\( \\frac{\\partial}{\\partial t} \\mathbf{u} \\)",
-                //         "\\(b\\mathbf{k} \\)",
-                //         "\\( \\mathbf{u} \\times f\\mathbf{k} \\)",
-                //         "\\( - \\nabla \\phi \\)",
-                //     ],
-                //     "quiver"
-                // );
                 const quiverSelection = createFieldSelectionRow(
                     containerID,
                     ["velocity", "grad_phi", "buoyancy", "coriolis", "acceleration"],
@@ -449,14 +442,9 @@ A &amp;= B/C.
                 // Get the relevant div container
                 container = document.querySelector(`#${containerID} #main-content #controls`);
                 // Append all the control rows to the container
-                container.append(
-                    coordinateToggle,
-                    overlayToggle,
-                    imshowSelection,
-                    quiverSelection
-                );
+                container.append(coordToggle, overlayToggle, imshowSelection, quiverSelection);
                 container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
-                setupCoordinateToggle(containerID);
+                setupCoordinateToggle(containerID, startingCoords);
             })('plane_wave');
         </script>
         <py-script 
