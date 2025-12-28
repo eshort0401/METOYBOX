@@ -24,7 +24,7 @@ overlayToggle.querySelector(
     `#${containerID}-displacement-checkbox`
 ).checked = true;
 
-const imshowSelection = createFieldSelectionRow(
+const imshowSelection = createFieldSelectionRow(    
     containerID,
     ["psi", "u", "v", "w", "phi"],
     ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(\\phi\\)"]
@@ -50,7 +50,7 @@ const quiverSelection = createFieldSelectionRow(
 );
 
 // Get the relevant div container
-container = document.querySelector(`#${containerID} #main-content #controls`);
+const container = document.querySelector(`#${containerID} #main-content #controls`);
 // Append all the control rows to the container
 container.append(coordToggle, overlayToggle, imshowSelection, quiverSelection);
 container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));

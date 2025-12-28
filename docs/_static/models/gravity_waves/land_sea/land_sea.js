@@ -21,7 +21,7 @@ const imshowSelection = createFieldSelectionRow(
 );
 
 // Get the relevant div container
-container = document.querySelector(`#${containerID} #main-content #controls`);
+const container = document.querySelector(`#${containerID} #main-content #controls`);
 // Append all the control rows to the container
 container.append(coordinateToggle, overlayToggle, imshowSelection);
 container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));

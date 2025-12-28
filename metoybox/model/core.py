@@ -38,12 +38,14 @@ def get_default_scalings(
     # Get the other dimensional parameters
     H, Q_0 = dimensional_variables["H"], dimensional_variables["Q_0"]
 
-    x_scale = (N / omega) * H  # times x to redimensionalize
-    y_scale = (N / omega) * H  # times y to redimensionalize
+    x_scale = N * H / omega  # times x to redimensionalize
+    y_scale = N * H / omega  # times y to redimensionalize
     z_scale = H  # times z to redimensionalize
-    psi_scale = Q_0 * H / (N / omega)  # times psi to redimensionalize
+    psi_scale = Q_0 * H / (N * omega)  # times psi to redimensionalize
     u_scale = Q_0 / (N * omega)  # times u to redimensionalize
     v_scale = Q_0 / (N * omega)  # times v to redimensionalize
+    xi_scale = Q_0 / (N * omega**2)  # times xi to redimensionalize
+    zeta_scale = Q_0 / (N**2 * omega)  # times zeta to redimensionalize
     w_scale = Q_0 / (N**2)  # times w to redimensionalize
     Q_scale = Q_0  # times Q to redimensionalize
     t_scale = 1 / omega  # times t to redimensionalize
@@ -52,7 +54,7 @@ def get_default_scalings(
     M_scale = omega / N  # times omega / N to redimensionalize
     sigma_scale = omega  # times sigma to redimensionalize
     scalings = {"x": x_scale, "y": y_scale, "z": z_scale, "psi": psi_scale}
-    scalings.update({"xi": x_scale, "zeta": z_scale})
+    scalings.update({"xi": xi_scale, "zeta": zeta_scale})
     scalings.update({"u": u_scale, "v": v_scale, "w": w_scale, "Q": Q_scale})
     scalings.update({"t": t_scale, "b": b_scale, "phi": phi_scale, "b_w": b_scale})
     scalings.update({"phi_x": phi_scale / x_scale, "phi_z": phi_scale / z_scale})
@@ -427,8 +429,8 @@ class BaseWaveModel:
         z_limits: tuple[float, float] | None,
         active_imshow_field: str = "psi",
         active_quiver_field: str = "velocity",
-        dimensional_variables: dict[str, float] = default_dimensional,
-        non_dimensional_variables: dict[str, float] = default_non_dimensional,
+        dimensional_variables: dict[str, float] | None = None,
+        non_dimensional_variables: dict[str, float] | None = None,
         x_unit_formatter: UnitFormatter = UnitFormatter("km", 1e-3),
         z_unit_formatter: UnitFormatter = UnitFormatter("km", 1e-3),
         figure_size: tuple[float] = (6.5, 5),
@@ -437,7 +439,7 @@ class BaseWaveModel:
         get_scalings: GetScalingsFunction = get_default_scalings,
         match_dimensional: MatchVariablesFunction = match_dimensional,
         match_non_dimensional: MatchVariablesFunction = match_non_dimensional,
-        scalings: dict[str, float] = {},
+        scalings: dict[str, float] | None = None,
         max_upper_scale: float = 1.5,
     ):
         """Initialize the model."""
@@ -446,6 +448,10 @@ class BaseWaveModel:
         self.ax: plt.Axes = None
         self.figure_size = figure_size
         self.suptitle_height = suptitle_height
+        if dimensional_variables is None:
+            dimensional_variables = default_dimensional.copy()
+        if non_dimensional_variables is None:
+            non_dimensional_variables = default_non_dimensional.copy()
         self.dimensional_variables = dimensional_variables
         self.non_dimensional_variables = non_dimensional_variables
         self.x, self.z, self.x_ticks, self.z_ticks = x, z, x_ticks, z_ticks
@@ -473,7 +479,7 @@ class BaseWaveModel:
         # Always start in non-dimensional coordinates
         self.coordinates: Literal["dimensional", "non-dimensional"] = "non-dimensional"
         self.get_scalings = get_scalings
-        self.scalings = scalings
+        self.scalings = scalings if scalings is not None else {}
         self.match_dimensional = match_dimensional
         self.match_non_dimensional = match_non_dimensional
         coord = self.coordinates
@@ -548,7 +554,7 @@ class BaseWaveModel:
         self.quiver_key = self.ax.quiverkey(*args, **kwargs)
 
         # Initialize the displacements
-        kwargs = {"color": "k", "linewidth": 1.0, "zorder": 1, "markersize": 3}
+        kwargs = {"color": "k", "linewidth": 1.0, "zorder": 1, "markersize": 4}
         kwargs.update({"markevery": 2 * self.displacement_lines.step})
         kwargs.update({"rasterized": True, "color": "#333333", "marker": "s"})
         for height in self.displacement_lines.base_heights:
@@ -786,6 +792,18 @@ class BaseWaveModel:
 
         xi = np.real(xi * np.exp(1j * sigma * t))
         zeta = np.real(zeta * np.exp(1j * sigma * t))
+        # Surprisingly, xi and zeta are the only fields whose data we actually
+        # need to scale depending on whether we are in dimensional or non-dimensional
+        # coordinates - note for every other field we just adjust labels. The scalings
+        # to get xi_* and zeta_* follow from integrating u_* and w_* in time, then
+        # re-expressing in u and t. Note that while xi_* and zeta_* have the same units
+        # as x_* and z_*, their scales are different. To complicate things further,
+        # because we always create our figures in non-dimensional coords, then just
+        # adjust labels, we also need to rescale xi and zeta back from (x_*, z_*) to
+        # (x, z)! This is all very annoying and confusing.
+        if self.coordinates == "dimensional":
+            xi = xi * self.scalings["xi"] / self.scalings["x"]
+            zeta = zeta * self.scalings["zeta"] / self.scalings["z"]
 
         for i, line in enumerate(disp_lines.lines):
             zeta_i = zeta_mag[i, :]

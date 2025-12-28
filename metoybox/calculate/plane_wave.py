@@ -34,8 +34,8 @@ def calculate_fields_spatial(
     A, B = calculate_constants(f_omega, alpha_omega, N_omega, sigma)
 
     m = k / A
-    # Use an amplitude of 0.1 for psi to get plausible dimensional values
-    psi = 0.1 * np.exp(1j * (k * X + m * Z))
+    # Use an amplitude of 0.075 for psi to get plausible dimensional values
+    psi = 0.075 * np.exp(1j * (k * X + m * Z))
     u = 1j * m * psi
     w = -1j * k * psi
 

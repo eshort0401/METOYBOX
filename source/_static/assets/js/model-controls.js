@@ -427,15 +427,20 @@ function getHSlider(container_id) {
     );
 }
 
+const Q0Min = 1e-6;
+const Q0Max = 3.6e-5;
+const Q0Value = 1.2e-5;
+const Q0Step = (Q0Max - Q0Min) * stepRatio;
+
 function getQ0Slider(container_id) {
     return createSliderRow(
         `${container_id}-Q_0-slider`,
         `${container_id}-Q_0-output`,
         "\\(Q_0:\\)",
-        1e-6,
-        10e-5,
-        1.2e-5,
-        1e-6,
+        Q0Min,
+        Q0Max,
+        Q0Value,
+        Q0Step,
         "dimensional",
         "m s⁻³"
     );
@@ -715,11 +720,9 @@ function getMNonDimSlider(container_id) {
  * @returns {{tSlider: HTMLDivElement, fOmegaSlider: HTMLDivElement, alphaOmegaSlider: HTMLDivElement, NOmegaSlider: HTMLDivElement}}
  */
 function coreWaveSlidersNonDim(container_id) {
-    const className = "non-dimensional";
-    tSlider = getTNonDimSlider(container_id);
-    fOmegaSlider = getFNonDimSlider(container_id);
-    alphaOmegaSlider = getAlphaNonDimSlider(container_id);
-    NOmegaSlider = getNNonDimSlider(container_id);
-    LSlider = getLNonDimSlider(container_id);
+    const tSlider = getTNonDimSlider(container_id);
+    const fOmegaSlider = getFNonDimSlider(container_id);
+    const alphaOmegaSlider = getAlphaNonDimSlider(container_id);
+    const NOmegaSlider = getNNonDimSlider(container_id);
     return { tSlider, fOmegaSlider, alphaOmegaSlider, NOmegaSlider };
 }

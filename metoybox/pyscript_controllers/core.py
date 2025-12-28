@@ -41,10 +41,8 @@ class BaseWaveController:
         self,
         model: BaseWaveModel,
         container_id: str,
-        dimensional_variables: Iterable[str] = default_dimensional,
-        non_dimensional_variables: Iterable[str] = default_non_dimensional,
-        # active_target: str = "figure-output-A",
-        # inactive_target: str = "figure-output-B",
+        dimensional_variables: Iterable[str] | None = None,
+        non_dimensional_variables: Iterable[str] | None = None,
     ):
         """
         Initialize the controller. This sets up the web cache and registers all the
@@ -56,6 +54,10 @@ class BaseWaveController:
         self.active_target = f"{container_id}-figure-output-A"
         self.inactive_target = f"{container_id}-figure-output-B"
         self.model = model
+        if dimensional_variables is None:
+            dimensional_variables = default_dimensional.copy()
+        if non_dimensional_variables is None:
+            non_dimensional_variables = default_non_dimensional.copy()
         self.dimensional_variables = dimensional_variables
         self.non_dimensional_variables = non_dimensional_variables
         self.dimensional_sliders = [

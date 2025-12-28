@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plane Wave &mdash; metoybox 0.0.1 documentation</title>
+  <title>Land-Sea Breeze &mdash; metoybox 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
@@ -15,7 +15,7 @@
       <link rel="stylesheet" type="text/css" href="https://pyscript.net/releases/2024.1.1/core.css" />
 
   
-    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/gravity_waves/plane_wave.html" />
+    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/gravity_waves/test.html" />
       <script src="../_static/jquery.js?v=5d32c60e"></script>
       <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
       <script src="../_static/documentation_options.js?v=d45e8c67"></script>
@@ -28,8 +28,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Land-Sea Breeze" href="test.html" />
-    <link rel="prev" title="Point Forcing Over Slope" href="point_forcing_over_slope.html" /> 
+    <link rel="prev" title="Plane Wave" href="plane_wave.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -60,8 +59,8 @@
 <li class="toctree-l2"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
 <li class="toctree-l2"><a class="reference internal" href="point_forcing_over_slope.html">Point Forcing Over Slope</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Plane Wave</a></li>
-<li class="toctree-l2"><a class="reference internal" href="test.html">Land-Sea Breeze</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plane_wave.html">Plane Wave</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Land-Sea Breeze</a></li>
 </ul>
 </li>
 </ul>
@@ -81,9 +80,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Inertia-Gravity Waves</a></li>
-      <li class="breadcrumb-item active">Plane Wave</li>
+      <li class="breadcrumb-item active">Land-Sea Breeze</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/gravity_waves/plane_wave.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/gravity_waves/test.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -91,9 +90,60 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="plane-wave">
-<h1>Plane Wave<a class="headerlink" href="#plane-wave" title="Link to this heading"></a></h1>
-<div id="plane_wave">
+  <section id="land-sea-breeze">
+<h1>Land-Sea Breeze<a class="headerlink" href="#land-sea-breeze" title="Link to this heading"></a></h1>
+<div id="land_sea">
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+        <p><small>This can take a few minutes!</small></p>
+    </div>
+    <div id="main-content">
+        <div id="figure-output">
+            <!-- Use two layers to prevent flickering in firefox -->
+            <div id="land_sea-figure-output-A" class="figure-layer is-active"></div>
+            <div id="land_sea-figure-output-B" class="figure-layer is-passive"></div>
+        </div>
+        <div id="controls"></div>
+        <script>
+            (function(containerID) {
+                // Note containerID is set by utils.py
+                
+                const dimSliders = coreWaveSlidersDim(containerID);
+                const nonDimSliders = coreWaveSlidersNonDim(containerID);
+                
+                // Change starting values of t and alpha sliders
+                // Remember the "input" objects here are the sliders themselves.
+                nonDimSliders.tSlider.querySelector('input').value = Math.PI / 2;
+                nonDimSliders.alphaOmegaSlider.querySelector('input').value = 0.1;
+                
+                // Add new sliders for L
+                nonDimSliders.LNonDimSlider = getLNonDimSlider(containerID);
+                dimSliders.LDimSlider = getLDimSlider(containerID);
+                
+                const coordinateToggle = createCoordinateSelectionRow(containerID);
+                const overlayToggle = createOverlayToggleRow(containerID);
+                const imshowSelection = createFieldSelectionRow(
+                    containerID,
+                    ["psi", "u", "v", "w", "Q"],
+                    ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(Q\\)"]
+                );
+                
+                // Get the relevant div container
+                const container = document.querySelector(`#${containerID} #main-content #controls`);
+                // Append all the control rows to the container
+                container.append(coordinateToggle, overlayToggle, imshowSelection);
+                container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
+                setupCoordinateToggle(containerID);
+            })('land_sea');
+        </script>
+        <py-script 
+            src="/METOYBOX/_static/models/gravity_waves/land_sea/land_sea.py" 
+            config="/METOYBOX/_static/assets/pyscript.toml"
+            data-container-id="land_sea">
+        </py-script>
+    </div>
+</div><div id="plane_wave">
     <div id="loading-screen">
         <div class="spinner"></div>
         <p>Loading...</p>
@@ -180,8 +230,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="point_forcing_over_slope.html" class="btn btn-neutral float-left" title="Point Forcing Over Slope" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="test.html" class="btn btn-neutral float-right" title="Land-Sea Breeze" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="plane_wave.html" class="btn btn-neutral float-left" title="Plane Wave" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
