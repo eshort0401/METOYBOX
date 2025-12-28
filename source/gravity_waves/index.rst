@@ -11,4 +11,3 @@ Inertia-Gravity Waves
     slope_breeze.rst
     point_forcing_over_slope.rst
     plane_wave.rst
-    test.rst
