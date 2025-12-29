@@ -787,11 +787,7 @@ class BaseWaveModel:
         z = z[disp_lines.subset]
         t = self.non_dimensional_variables["t"]
         sigma = self.non_dimensional_variables["sigma"]
-        xi_mag = np.abs(xi)
-        zeta_mag = np.abs(zeta)
 
-        xi = np.real(xi * np.exp(1j * sigma * t))
-        zeta = np.real(zeta * np.exp(1j * sigma * t))
         # Surprisingly, xi and zeta are the only fields whose data we actually
         # need to scale depending on whether we are in dimensional or non-dimensional
         # coordinates - note for every other field we just adjust labels. The scalings
@@ -804,6 +800,14 @@ class BaseWaveModel:
         if self.coordinates == "dimensional":
             xi = xi * self.scalings["xi"] / self.scalings["x"]
             zeta = zeta * self.scalings["zeta"] / self.scalings["z"]
+
+        # Get the magnitudes after rescaling
+        xi_mag = np.abs(xi)
+        zeta_mag = np.abs(zeta)
+
+        # Now get the time-dependent real parts
+        xi = np.real(xi * np.exp(1j * sigma * t))
+        zeta = np.real(zeta * np.exp(1j * sigma * t))
 
         for i, line in enumerate(disp_lines.lines):
             zeta_i = zeta_mag[i, :]

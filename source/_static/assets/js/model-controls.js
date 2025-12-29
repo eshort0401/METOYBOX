@@ -395,8 +395,8 @@ function getAlphaSlider(container_id) {
     );
 }
 
-const NMin = 1e-1 * Omega;
-const NMax = (0.1 / Omega) * Omega;
+const NMin = 1e-3;
+const NMax = 2e-1;
 const NDimStep = (NMax - NMin) * stepRatio;
 
 function getNSlider(container_id) {
