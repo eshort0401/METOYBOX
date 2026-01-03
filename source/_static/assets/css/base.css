@@ -64,7 +64,9 @@ table {
     margin: 0 auto;  /* Center the table */
     border-collapse: collapse;  /* Remove double borders */
     width: auto;  /* Or set a specific width */
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: large;
+    font-family: serif;
 }
 
 table td, table th {

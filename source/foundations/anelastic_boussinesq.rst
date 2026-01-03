@@ -144,10 +144,10 @@ Summarizing, we have
 .. admonition:: Anelastic Equations
     
     .. math::
-        \begin{align*}
+        \begin{align}
         \frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v} &= -\nabla \left(\frac{p}{\overline{\rho}}\right) + g\delta \phi \mathbf{k}, & \\
         \nabla \cdot \left(\overline{\rho} \mathbf{v}\right) &= 0 &
-        \end{align*}
+        \end{align}
 
 
 Exploration

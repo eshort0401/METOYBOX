@@ -15,14 +15,25 @@ class ScaleTable {
 
         const tbody = document.createElement("tbody");
         for (let i = 0; i < terms.length; i++) {
-            const tr = document.createElement("tr");
+            const label_tr = document.createElement("tr");
+            const value_tr = document.createElement("tr");
             for (let j = 0; j < terms[i].length; j++) {
-                const td = document.createElement("td");
-                td.id = this.ids[i][j];
-                this._updateElement(td, i, j);
-                tr.appendChild(td);
+                const label_td = document.createElement("td");
+                const value_td = document.createElement("td");
+                // Set the value td to have the id for updating later
+                value_td.id = this.ids[i][j];
+
+                const term = this.terms[i][j];
+                const value = this.values[i][j];
+                const unit = this.units[i][j];
+                const scale = Math.log10(Math.abs(value));
+                label_td.innerHTML = `\\(${term}\\)`;
+                value_td.innerHTML = `\\(10^{${scale.toFixed(1)}} \\) ${unit}`;
+
+                label_tr.appendChild(label_td);
+                value_tr.appendChild(value_td);
             }
-            tbody.appendChild(tr);
+            tbody.append(label_tr, value_tr);
         }
         table.appendChild(tbody);
         this.table = table;
@@ -48,7 +59,7 @@ class ScaleTable {
      * @param {number} i - The row index
      * @param {number} j - The column index
      */
-    _updateElement(td, i, j) {
+    _updateElement(label_td, i, j) {
         const term = this.terms[i][j];
         const value = this.values[i][j];
         const unit = this.units[i][j];

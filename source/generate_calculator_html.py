@@ -14,24 +14,6 @@ _div_open = """<div id="{container_id}">
         <script>
 """
 
-
-# Note we wrap in a container div and scope js to allow multiple models on one page
-_div_open = """<div id="{container_id}">
-    <div id="loading-screen">
-        <div class="spinner"></div>
-        <p>Loading...</p>
-        <p><small>This can take a few minutes!</small></p>
-    </div>
-    <div id="main-content">
-        <div id="figure-output">
-            <!-- Use two layers to prevent flickering in firefox -->
-            <div id="{container_id}-figure-output-A" class="figure-layer is-active"></div>
-            <div id="{container_id}-figure-output-B" class="figure-layer is-passive"></div>
-        </div>
-        <div id="controls"></div>
-        <script>
-"""
-
 _div_close = """
         </script>
     </div>
@@ -64,8 +46,12 @@ def generate_html(
     # Wrap the stub in a function to scope it to the container and indent appropriately
     stub_lines = stub.splitlines()
     indented_stub_content = "\n".join(["    " + line for line in stub_lines])
-    wrapped_stub = f"(function(containerID) {{\n{indented_stub_content}\n}})('{container_id}');"
-    indented_stub = "\n".join(["            " + line for line in wrapped_stub.splitlines()])
+    wrapped_stub = (
+        f"(function(containerID) {{\n{indented_stub_content}\n}})('{container_id}');"
+    )
+    indented_stub = "\n".join(
+        ["            " + line for line in wrapped_stub.splitlines()]
+    )
 
     with open(html_path, "w") as f:
         # f.write(_header)

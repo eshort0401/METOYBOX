@@ -133,6 +133,8 @@ def setup(app):
     # Build the html snippets for each model from the js stubs
     # The local parent path will get switched to METOYBOX/_static for the python scripts
     local_parent = _parent / "source/_static"
+    print("Building model HTML snippets...")
     model_html.generate_all_html(local_parent / "models", local_parent)
+    print("Building calculator HTML snippets...")
     calc_html.generate_all_html(local_parent / "calculators", local_parent)
 
