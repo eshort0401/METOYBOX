@@ -1,63 +1,58 @@
-/**
- * Create a scale table for the given terms and values
- * @param {string[][]} ids - Array of element ids
- * @param {string[][]} terms - Array of term labels
- * @param {string[][]} values - Array of corresponding values
- * @returns {HTMLTableElement} - The created table element
- */
-function createScaleTable(ids, terms, values, units) {
-    const table = document.createElement("table");
-    table.ids = ids;
-    table.terms = terms;
-    table.units = units;
+class ScaleTable {
+    /**
+     * Initialize a ScaleTable instance
+     * @param {string[][]} ids - Array of element ids
+     * @param {string[][]} terms - Array of term labels
+     * @param {string[][]} values - Array of corresponding values
+     * @param {string[][]} units - Array of corresponding units
+     */
+    constructor(ids, terms, values, units) {
+        this.ids = ids;
+        this.terms = terms;
+        this.values = values;
+        this.units = units;
+        const table = document.createElement("table");
 
-    // Create header
-    // const thead = document.createElement('thead');
-    // const headerRow = document.createElement('tr');
-    // data.headers.forEach(header => {
-    //     const th = document.createElement('th');
-    //     th.textContent = header;
-    //     headerRow.appendChild(th);
-    // });
-    // thead.appendChild(headerRow);
-    // table.appendChild(thead);
-
-    // Create body
-    // const tbody = document.createElement('tbody');
-    // data.rows.forEach(rowData => {
-    //     const tr = document.createElement('tr');
-    //     rowData.forEach(cellData => {
-    //         const td = document.createElement('td');
-    //         td.textContent = cellData;
-    //         tr.appendChild(td);
-    //     });
-    //     tbody.appendChild(tr);
-    // });
-
-    const tbody = document.createElement("tbody");
-    for (let i = 0; i < terms.length; i++) {
-        const tr = document.createElement("tr");
-        for (let j = 0; j < terms[i].length; j++) {
-            const td = document.createElement("td");
-            td.id = ids[i][j];
-            const scale = Math.log10(Math.abs(values[i][j]));
-            td.innerHTML = `\\(${terms[i][j]} \\sim 10^{${scale}}\\) ${units[i][j]}`;
-            tr.appendChild(td);
+        const tbody = document.createElement("tbody");
+        for (let i = 0; i < terms.length; i++) {
+            const tr = document.createElement("tr");
+            for (let j = 0; j < terms[i].length; j++) {
+                const td = document.createElement("td");
+                td.id = this.ids[i][j];
+                this._updateElement(td, i, j);
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
         }
-        tbody.appendChild(tr);
+        table.appendChild(tbody);
+        this.table = table;
     }
 
-    table.appendChild(tbody);
+    /**
+     * Update the scale table in the DOM with new values. Assumes the table
+     * has already been created and added to the DOM.
+     */
+    update() {
+        for (let i = 0; i < this.ids.length; i++) {
+            for (let j = 0; j < this.ids[i].length; j++) {
+                const td = document.getElementById(this.ids[i][j]);
+                this._updateElement(td, i, j);
+                MathJax.typesetPromise([td]);
+            }
+        }
+    }
 
-    return table;
+    /**
+     * Convenience method to update a single table element
+     * @param {HTMLElement} td - The table cell to update
+     * @param {number} i - The row index
+     * @param {number} j - The column index
+     */
+    _updateElement(td, i, j) {
+        const term = this.terms[i][j];
+        const value = this.values[i][j];
+        const unit = this.units[i][j];
+        const scale = Math.log10(Math.abs(value));
+        td.innerHTML = `\\(${term} \\sim 10^{${scale.toFixed(1)}}\\) ${unit}`;
+    }
 }
-
-// // Usage
-// const tableData = {
-//     headers: ["Term", "Scale"],
-//     rows: [
-//         ["u ∂u/∂x", "10 m/s²"],
-//         ["∂p/∂x", "5 Pa/m"],
-//     ],
-// };
-// document.getElementById("container").appendChild(createTable(tableData));

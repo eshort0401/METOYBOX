@@ -1,4 +1,30 @@
 // Note containerID is set by utils.py
+const table_container = document.querySelector(
+    `#${containerID} #main-content #scale-table`
+);
+
+// Build the scale table
+const scaleTable = new ScaleTable(
+    [
+        [`${containerID}-a`, `${containerID}-b`],
+        [`${containerID}-c`, null],
+    ],
+    [
+        ["u", "w"],
+        ["\\rho", null],
+    ],
+    [
+        [10, 10],
+        [1, null],
+    ],
+    [
+        ["m s⁻¹", "Pa"],
+        ["kg m⁻³", null],
+    ]
+);
+scaleTable.id = `${containerID}-scale-table`;
+// Append the table to the container
+table_container.appendChild(scaleTable.table);
 
 // Setup constants
 const c_p = 1005; // J kg^-1 K^-1
@@ -6,38 +32,60 @@ const c_v = 718; // J kg^-1 K^-1
 const gamma = c_p / c_v;
 const R = c_p - c_v; // J kg^-1 K^-1
 const g = 9.81; // m s^-2
+const Omega = (2 * Math.PI) / (24 * 3600); // rad s^-1
 
 // Define reference values
 const p_s = 1e5; // Pa
 const T_s = 300; // K
 const rho_s = p_s / (R * T_s); // Ideal gas law
 
-createSliderRow(
+const uSliderRow = createSliderRow(
     `${containerID}-u-slider`,
     `${containerID}-u-output`,
     "\\(u:\\)",
     1,
-    50,
+    100,
     10,
+    1,
     "dimensional",
-    "m s⁻1"
+    "m s⁻¹"
 );
 
-createSliderRow(
+const wSliderRow = createSliderRow(
     `${containerID}-w-slider`,
     `${containerID}-w-output`,
     "\\(w:\\)",
     1,
-    50,
+    100,
     10,
+    1,
     "dimensional",
-    "m s⁻1"
+    "m s⁻¹"
 );
 
 // Get the relevant div container
-const container = document.querySelector(
+const controls = document.querySelector(
     `#${containerID} #main-content #controls`
 );
 // Append all the control rows to the container
+controls.append(uSliderRow, wSliderRow);
 
-container.append(...Object.values(sliders));
+const tableElement = document.getElementById(`${containerID}-a`);
+const uSlider = document.getElementById(`${containerID}-u-slider`);
+const uOutput = document.getElementById(`${containerID}-u-output`);
+uSlider.addEventListener("input", function () {
+    const value = parseFloat(uSlider.value);
+    uOutput.textContent = `${value.toExponential(1)} ${uOutput.units}`;
+    scaleTable.values[0][0] = value;
+    scaleTable.update();
+});
+
+// Hide loading screen and show main content
+const container = document.querySelector(`#${containerID}`);
+const loading_screen = container.querySelector("#loading-screen");
+const main_content = container.querySelector("#main-content");
+
+loading_screen.style.display = "none";
+main_content.style.display = "block";
+
+container.classList.add("dimensional-mode");

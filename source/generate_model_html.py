@@ -52,10 +52,6 @@ def generate_html(
     # Now convert to web path
     python_path = str(web_parent / Path(python_path).relative_to(local_parent))
 
-    with open("/tmp/my_debug.log", "a") as f:
-        f.write(f"python_path: {python_path}\n")
-        f.write(f"web_parent: {web_parent}\n")
-
     if container_id is None:
         # Use the filename without extension as container id
         container_id = Path(stub_path).stem

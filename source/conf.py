@@ -6,7 +6,8 @@ import subprocess
 import shutil
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-import source.generate_html as generate_html
+import source.generate_model_html as model_html
+import source.generate_calculator_html as calc_html
 
 # -- Project information
 
@@ -130,7 +131,8 @@ def setup(app):
         print("Wheel is up to date; skipping build.")
 
     # Build the html snippets for each model from the js stubs
-    stub_directory = _parent / "source/_static/models"
     # The local parent path will get switched to METOYBOX/_static for the python scripts
     local_parent = _parent / "source/_static"
-    generate_html.generate_all_html(stub_directory, local_parent=local_parent)
+    model_html.generate_all_html(local_parent / "models", local_parent)
+    calc_html.generate_all_html(local_parent / "calculators", local_parent)
+

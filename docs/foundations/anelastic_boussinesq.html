@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=815d0911" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=bc56588b" />
       <link rel="stylesheet" type="text/css" href="../_static/assets/css/controls.css?v=9385b007" />
       <link rel="stylesheet" type="text/css" href="https://pyscript.net/releases/2024.1.1/core.css" />
 
@@ -25,7 +25,7 @@
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
       <script src="../_static/assets/js/model-controls.js?v=f44fd996"></script>
-      <script src="../_static/assets/js/scale-table.js?v=03d11e57"></script>
+      <script src="../_static/assets/js/scale-table.js?v=735d02c8"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -198,7 +198,7 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
 </section>
 <section id="exploration">
 <h2>Exploration<a class="headerlink" href="#exploration" title="Link to this heading"></a></h2>
-<p>The above derivation is probably the most accessible I have encountered, but it is still challenging. To build intuition, let’s explicitly compare the sizes of terms at all the places we discarded terms in the <a class="reference internal" href="#derivation"><span class="std std-ref">derivation</span></a> above.</p>
+<p>Let’s explicitly compare the magnitudes of terms in all the equations of our <a class="reference internal" href="#derivation"><span class="std std-ref">derivation</span></a> where things were discarded.</p>
 <div id="anelastic_vallis">
     <div id="loading-screen">
         <div class="spinner"></div>
@@ -216,7 +216,7 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
                 );
 
                 // Build the scale table
-                const scaleTable = createScaleTable(
+                const scaleTable = new ScaleTable(
                     [
                         [`${containerID}-a`, `${containerID}-b`],
                         [`${containerID}-c`, null]
@@ -234,8 +234,9 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
                         ["kg m⁻³", null]
                     ]
                 );
-
-                table_container.appendChild(scaleTable);
+                scaleTable.id = `${containerID}-scale-table`;
+                // Append the table to the container
+                table_container.appendChild(scaleTable.table);
 
                 // Setup constants
                 const c_p = 1005; // J kg^-1 K^-1
@@ -254,7 +255,7 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
                     `${containerID}-u-output`,
                     "\\(u:\\)",
                     1,
-                    50,
+                    100,
                     10,
                     1,
                     "dimensional",
@@ -266,7 +267,7 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
                     `${containerID}-w-output`,
                     "\\(w:\\)",
                     1,
-                    50,
+                    100,
                     10,
                     1,
                     "dimensional",
@@ -282,9 +283,12 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
 
                 const tableElement = document.getElementById(`${containerID}-a`);
                 const uSlider = document.getElementById(`${containerID}-u-slider`);
+                const uOutput = document.getElementById(`${containerID}-u-output`);
                 uSlider.addEventListener("input", function () {
-                    tableElement.innerHTML = `\\(\\psi\\) value: ${this.value} m s⁻1`;
-                    MathJax.typesetPromise([tableElement]); // Re-render MathJax
+                    const value = parseFloat(uSlider.value);
+                    uOutput.textContent = `${value.toExponential(1)} ${uOutput.units}`;
+                    scaleTable.values[0][0] = value;
+                    scaleTable.update();
                 });
 
                 // Hide loading screen and show main content

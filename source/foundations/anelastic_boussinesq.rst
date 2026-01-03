@@ -151,8 +151,8 @@ Summarizing, we have
 
 
 Exploration
----------------------------------------
-The above derivation is probably the most accessible I have encountered, but it is still challenging. To build intuition, let's explicitly compare the sizes of terms at all the places we discarded terms in the :ref:`derivation <derivation>` above.
+-------------------------------------------------------------------
+Let's explicitly compare the magnitudes of terms in all the equations of our :ref:`derivation <derivation>` where things were discarded.
 
 .. raw:: html
     :file: ../_static/calculators/anelastic_vallis/anelastic_vallis.html
