@@ -59,3 +59,25 @@ body {
     pointer-events: none;
     z-index: 1;
 }
+
+table {
+    margin: 0 auto;  /* Center the table */
+    border-collapse: collapse;  /* Remove double borders */
+    width: auto;  /* Or set a specific width */
+}
+
+table td, table th {
+    border: 1px solid #ddd;  /* Light gray borders */
+    padding: 8px;  /* Add some spacing */
+    text-align: center;  /* Center cell content */
+}
+
+table tr {
+    border-bottom: 1px solid #ddd;  /* Dividing lines between rows */
+}
+
+/* Optional: Style header row differently */
+table thead tr {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}

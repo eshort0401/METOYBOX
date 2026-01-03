@@ -10,8 +10,8 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=3a193a7f" />
-      <link rel="stylesheet" type="text/css" href="../_static/assets/css/controls.css?v=48e535e7" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=815d0911" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/controls.css?v=9385b007" />
       <link rel="stylesheet" type="text/css" href="https://pyscript.net/releases/2024.1.1/core.css" />
 
   
@@ -25,6 +25,7 @@
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
       <script src="../_static/assets/js/model-controls.js?v=f44fd996"></script>
+      <script src="../_static/assets/js/scale-table.js?v=03d11e57"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -205,28 +206,36 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
         <p><small>This can take a few minutes!</small></p>
     </div>
     <div id="main-content">
-        <table>
-            <tr>
-                <td>
-                    <div id="anelastic_vallis-a">asdf</div>
-                </td>
-                <td>
-                    <div id="anelastic_vallis-b">asdf</div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div id="anelastic_vallis-c">asdf</div>
-                </td>
-                <td>
-                    <div id="anelastic_vallis-d">asdf</div>
-                </td>
-            </tr>
-        </table>
+        <div id="scale-table"></div>
         <div id="controls"></div>
         <script>
             (function (containerID) {
                 // Note containerID is set by utils.py
+                const table_container = document.querySelector(
+                    `#${containerID} #main-content #scale-table`
+                );
+
+                // Build the scale table
+                const scaleTable = createScaleTable(
+                    [
+                        [`${containerID}-a`, `${containerID}-b`],
+                        [`${containerID}-c`, null]
+                    ],
+                    [
+                        ["u", "w"],
+                        ["\\rho", null]
+                    ],
+                    [
+                        [10, 10],
+                        [1, null]
+                    ],
+                    [
+                        ["m s⁻¹", "Pa"],
+                        ["kg m⁻³", null]
+                    ]
+                );
+
+                table_container.appendChild(scaleTable);
 
                 // Setup constants
                 const c_p = 1005; // J kg^-1 K^-1
@@ -276,7 +285,7 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
                 uSlider.addEventListener("input", function () {
                     tableElement.innerHTML = `\\(\\psi\\) value: ${this.value} m s⁻1`;
                     MathJax.typesetPromise([tableElement]); // Re-render MathJax
-                });                
+                });
 
                 // Hide loading screen and show main content
                 const container = document.querySelector(`#${containerID}`);
@@ -285,12 +294,6 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
 
                 loading_screen.style.display = "none"
                 main_content.style.display = "block"
-
-                console.log("containerID:", containerID);
-                console.log("uSliderRow:", uSliderRow);
-                console.log("controls element:", controls);
-                controls.append(uSliderRow, wSliderRow);
-                console.log("Appended sliders");
 
                 container.classList.add("dimensional-mode");
 

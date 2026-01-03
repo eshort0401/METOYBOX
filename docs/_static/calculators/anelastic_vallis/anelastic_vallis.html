@@ -5,28 +5,36 @@
         <p><small>This can take a few minutes!</small></p>
     </div>
     <div id="main-content">
-        <table>
-            <tr>
-                <td>
-                    <div id="anelastic_vallis-a">asdf</div>
-                </td>
-                <td>
-                    <div id="anelastic_vallis-b">asdf</div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div id="anelastic_vallis-c">asdf</div>
-                </td>
-                <td>
-                    <div id="anelastic_vallis-d">asdf</div>
-                </td>
-            </tr>
-        </table>
+        <div id="scale-table"></div>
         <div id="controls"></div>
         <script>
             (function (containerID) {
                 // Note containerID is set by utils.py
+                const table_container = document.querySelector(
+                    `#${containerID} #main-content #scale-table`
+                );
+
+                // Build the scale table
+                const scaleTable = createScaleTable(
+                    [
+                        [`${containerID}-a`, `${containerID}-b`],
+                        [`${containerID}-c`, null]
+                    ],
+                    [
+                        ["u", "w"],
+                        ["\\rho", null]
+                    ],
+                    [
+                        [10, 10],
+                        [1, null]
+                    ],
+                    [
+                        ["m s⁻¹", "Pa"],
+                        ["kg m⁻³", null]
+                    ]
+                );
+
+                table_container.appendChild(scaleTable);
 
                 // Setup constants
                 const c_p = 1005; // J kg^-1 K^-1
@@ -76,7 +84,7 @@
                 uSlider.addEventListener("input", function () {
                     tableElement.innerHTML = `\\(\\psi\\) value: ${this.value} m s⁻1`;
                     MathJax.typesetPromise([tableElement]); // Re-render MathJax
-                });                
+                });
 
                 // Hide loading screen and show main content
                 const container = document.querySelector(`#${containerID}`);
@@ -85,12 +93,6 @@
 
                 loading_screen.style.display = "none"
                 main_content.style.display = "block"
-
-                console.log("containerID:", containerID);
-                console.log("uSliderRow:", uSliderRow);
-                console.log("controls element:", controls);
-                controls.append(uSliderRow, wSliderRow);
-                console.log("Appended sliders");
 
                 container.classList.add("dimensional-mode");
 

@@ -87,6 +87,7 @@ html_css_files = [
 html_js_files = [
     ("https://pyscript.net/releases/2024.1.1/core.js", {"type": "module"}),
     "assets/js/model-controls.js",
+    "assets/js/scale-table.js",
 ]
 
 
