@@ -3,6 +3,8 @@ Introduction
 
 Here we present models that feature inertia-gravity wave dynamics. Most of our models are derived from the work of `Rotunno (1983)`_. We can often solve these models purely analytically, sometimes discovering interesting connections between the maths, logic and physics. On this page, we use the original `Rotunno (1983)`_ model to introduce some key ideas; further details on the `Rotunno (1983)`_ model itself can be found on the :doc:`land_sea` page.
 
+.. _inertia-gravity-wave-equations:
+
 Governing equations
 ---------------------------------------
 We first linearize the governing equations and make the `Boussinesq/shallow-anelastic`_ and :math:`f`-plane approximations. The symbol :math:`*` indicates our variables our "dimensional", i.e. they have physical units; we discuss the corresponding unit-less "non-dimensional" later.

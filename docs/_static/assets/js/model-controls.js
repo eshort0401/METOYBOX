@@ -112,9 +112,6 @@ function createCheckboxGroupRow(labelText, checkboxes) {
     checkboxContainer.append(...checkboxes);
     row.appendChild(checkboxContainer);
 
-    // Apply any additional attributes
-    // applyAttributes(config, [row, checkboxContainer], ["className"]);
-
     return row;
 }
 
@@ -184,24 +181,24 @@ function createRadioGroupRow(labelText, buttons) {
 
 /**
  * Create coordinate selection control row.
- * @param {string} container_id - The container id to prefix element ids
+ * @param {string} containerID - The container id to prefix element ids
  * @param {string} starting_coordinates - "non-dimensional" or "dimensional"
  */
 function createCoordinateSelectionRow(
-    container_id,
+    containerID,
     starting_coordinates = "non-dimensional"
 ) {
     const nonDimButton = createRadioButton(
-        `${container_id}-non-dimensional-button`,
+        `${containerID}-non-dimensional-button`,
         "Non-dimensional",
-        `${container_id}-coordinates`,
+        `${containerID}-coordinates`,
         "non-dimensional",
         starting_coordinates === "non-dimensional"
     );
     const dimButton = createRadioButton(
-        `${container_id}-dimensional-button`,
+        `${containerID}-dimensional-button`,
         "Dimensional",
-        `${container_id}-coordinates`,
+        `${containerID}-coordinates`,
         "dimensional",
         starting_coordinates === "dimensional"
     );
@@ -210,25 +207,25 @@ function createCoordinateSelectionRow(
 
 /**
  * Create overlay toggle checkbox row.
- * @param {string} container_id - The container id to prefix element ids
+ * @param {string} containerID - The container id to prefix element ids
  */
-function createOverlayToggleRow(container_id) {
+function createOverlayToggleRow(containerID) {
     const displacementCheckbox = createCheckbox(
-        `${container_id}-displacement-checkbox`,
+        `${containerID}-displacement-checkbox`,
         "Displacement",
-        `${container_id}-overlay`,
+        `${containerID}-overlay`,
         false
     );
     const quiverCheckbox = createCheckbox(
-        `${container_id}-quiver-checkbox`,
+        `${containerID}-quiver-checkbox`,
         "Arrows",
-        `${container_id}-overlay`,
+        `${containerID}-overlay`,
         true
     );
     const imshowCheckbox = createCheckbox(
-        `${container_id}-imshow-checkbox`,
+        `${containerID}-imshow-checkbox`,
         "Shading",
-        `${container_id}-overlay`,
+        `${containerID}-overlay`,
         true
     );
     return createCheckboxGroupRow("Show:", [
@@ -240,13 +237,13 @@ function createOverlayToggleRow(container_id) {
 
 /**
  * Create imshow field selection radio button group
- * @param {string} container_id - The container id to prefix element ids
+ * @param {string} containerID - The container id to prefix element ids
  * @param {Array|null} fields - Array of field names
  * @param {Array|null} labels - Array of corresponding labels
  * @param {string} feature - Feature name - imshow, quiver, displacement
  */
 function createFieldSelectionRow(
-    container_id,
+    containerID,
     fields = null,
     labels = null,
     feature = "imshow",
@@ -273,9 +270,9 @@ function createFieldSelectionRow(
     // Create a list of radio buttons configs
     const buttons = fields.map((field, index) => {
         return createRadioButton(
-            `${container_id}-${feature}-${field}-button`,
+            `${containerID}-${feature}-${field}-button`,
             labels[index] || field,
-            `${container_id}-${feature}-field`,
+            `${containerID}-${feature}-field`,
             field,
             index === 0, // First button checked by default
             nonDimLabels[index] || labels[index] || field
@@ -288,23 +285,23 @@ function createFieldSelectionRow(
 
 /**
  * Create stacked model control rows
- * @param {string} container_id - The unique container id to put all controls in
+ * @param {string} containerID - The unique container id to put all controls in
  * @param {string} starting_coordinates - "non-dimensional" or "dimensional"
  *
  */
 function setupCoordinateToggle(
-    container_id,
+    containerID,
     starting_coordinates = "non-dimensional"
 ) {
     // Get the container to put all the controls in
-    const container = document.getElementById(container_id);
+    const container = document.getElementById(containerID);
 
     // Set up radio button listeners to toggle CSS classes on container
     const nonDimRadio = container.querySelector(
-        `#${container_id}-non-dimensional-button`
+        `#${containerID}-non-dimensional-button`
     );
     const dimRadio = container.querySelector(
-        `#${container_id}-dimensional-button`
+        `#${containerID}-dimensional-button`
     );
 
     if (nonDimRadio)
@@ -345,10 +342,10 @@ const tDimMax = (4 * Math.PI) / Omega; // 48 hours in seconds
 const tDimStep = tDimMax * stepRatio;
 
 // Create some convenience functions to build commonly used sliders
-function getTDimSlider(container_id) {
+function getTDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-t_dim-slider`,
-        `${container_id}-t_dim-output`,
+        `${containerID}-t_dim-slider`,
+        `${containerID}-t_dim-output`,
         "\\(t:\\)",
         0,
         tDimMax,
@@ -363,10 +360,10 @@ const fMax = 2 * Omega;
 const fValue = 0.5 * Omega;
 const fDimStep = fMax * stepRatio;
 
-function getFSlider(container_id) {
+function getFSlider(containerID) {
     return createSliderRow(
-        `${container_id}-f-slider`,
-        `${container_id}-f-output`,
+        `${containerID}-f-slider`,
+        `${containerID}-f-output`,
         "\\(f:\\)",
         0,
         fMax,
@@ -381,10 +378,10 @@ const alphaMin = 1e-2 * Omega;
 const alphaMax = 2 * Omega;
 const alphaDimStep = (alphaMax - alphaMin) * stepRatio;
 
-function getAlphaSlider(container_id) {
+function getAlphaSlider(containerID) {
     return createSliderRow(
-        `${container_id}-alpha-slider`,
-        `${container_id}-alpha-output`,
+        `${containerID}-alpha-slider`,
+        `${containerID}-alpha-output`,
         "\\(\\alpha:\\)",
         alphaMin,
         alphaMax,
@@ -399,10 +396,10 @@ const NMin = 1e-3;
 const NMax = 2e-1;
 const NDimStep = (NMax - NMin) * stepRatio;
 
-function getNSlider(container_id) {
+function getNSlider(containerID) {
     return createSliderRow(
-        `${container_id}-N-slider`,
-        `${container_id}-N-output`,
+        `${containerID}-N-slider`,
+        `${containerID}-N-output`,
         "\\(N:\\)",
         NMin,
         NMax,
@@ -413,10 +410,10 @@ function getNSlider(container_id) {
     );
 }
 
-function getHSlider(container_id) {
+function getHSlider(containerID) {
     return createSliderRow(
-        `${container_id}-H-slider`,
-        `${container_id}-H-output`,
+        `${containerID}-H-slider`,
+        `${containerID}-H-output`,
         "\\(H:\\)",
         100,
         5e3,
@@ -432,10 +429,10 @@ const Q0Max = 3.6e-5;
 const Q0Value = 1.2e-5;
 const Q0Step = (Q0Max - Q0Min) * stepRatio;
 
-function getQ0Slider(container_id) {
+function getQ0Slider(containerID) {
     return createSliderRow(
-        `${container_id}-Q_0-slider`,
-        `${container_id}-Q_0-output`,
+        `${containerID}-Q_0-slider`,
+        `${containerID}-Q_0-output`,
         "\\(Q_0:\\)",
         Q0Min,
         Q0Max,
@@ -451,10 +448,10 @@ const LDimMax = 1 * xScale;
 const LDimValue = 0.2 * xScale;
 const LDimStep = (LDimMax - LDimMin) * stepRatio;
 
-function getLDimSlider(container_id) {
+function getLDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-L_dim-slider`,
-        `${container_id}-L_dim-output`,
+        `${containerID}-L_dim-slider`,
+        `${containerID}-L_dim-output`,
         "\\(L:\\)",
         LDimMin,
         LDimMax,
@@ -465,10 +462,10 @@ function getLDimSlider(container_id) {
     );
 }
 
-function getOmegaSlider(container_id) {
+function getOmegaSlider(containerID) {
     return createSliderRow(
-        `${container_id}-omega-slider`,
-        `${container_id}-omega-output`,
+        `${containerID}-omega-slider`,
+        `${containerID}-omega-output`,
         "\\(\\omega:\\)",
         Omega * stepRatio,
         2 * Omega,
@@ -485,10 +482,10 @@ const kMaxDim = 10 * Math.PI * kScale;
 const kValueDim = Math.PI * kScale;
 const kStepDim = (kMaxDim - kMinDim) * stepRatio;
 
-function getKDimSlider(container_id) {
+function getKDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-k_dim-slider`,
-        `${container_id}-k_dim-output`,
+        `${containerID}-k_dim-slider`,
+        `${containerID}-k_dim-output`,
         "\\(k:\\)",
         kStepDim,
         kMaxDim,
@@ -503,10 +500,10 @@ const sigmaDimMin = 0.1 * Omega;
 const sigmaDimMax = 5 * Omega;
 const sigmaDimStep = (sigmaDimMax - sigmaDimMin) * stepRatio;
 
-function getSigmaDimSlider(container_id) {
+function getSigmaDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-sigma_dim-slider`,
-        `${container_id}-sigma_dim-output`,
+        `${containerID}-sigma_dim-slider`,
+        `${containerID}-sigma_dim-output`,
         "\\(\\sigma:\\)",
         sigmaDimMin,
         sigmaDimMax,
@@ -522,10 +519,10 @@ const zFDimMax = 3e3;
 const zFDimValue = 1e3;
 const zFDimStep = 3 * stepRatio;
 
-function getZfDimSlider(container_id) {
+function getZfDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-z_f_dim-slider`,
-        `${container_id}-z_f_dim-output`,
+        `${containerID}-z_f_dim-slider`,
+        `${containerID}-z_f_dim-output`,
         "\\(z_f:\\)",
         zFDimMin,
         zFDimMax,
@@ -539,10 +536,10 @@ function getZfDimSlider(container_id) {
 const MMaxDim = 1e-2;
 const MStepDim = MMaxDim * stepRatio;
 
-function getMDimSlider(container_id) {
+function getMDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-M_dim-slider`,
-        `${container_id}-M_dim-output`,
+        `${containerID}-M_dim-slider`,
+        `${containerID}-M_dim-output`,
         "\\(M:\\)",
         0,
         MMaxDim,
@@ -555,16 +552,16 @@ function getMDimSlider(container_id) {
 
 /**
  * Convenience function to build default slider control rows for dimensional coordinates.
- * @param {string} container_id - The unique container id to prefix element ids
+ * @param {string} containerID - The unique container id to prefix element ids
  * @returns {{tDimSlider: HTMLDivElement, fSlider: HTMLDivElement, alphaSlider: HTMLDivElement, NSlider: HTMLDivElement, HSlider: HTMLDivElement, Q0Slider: HTMLDivElement}}
  */
-function coreWaveSlidersDim(container_id) {
-    const tDimSlider = getTDimSlider(container_id);
-    const fSlider = getFSlider(container_id);
-    const alphaSlider = getAlphaSlider(container_id);
-    const NSlider = getNSlider(container_id);
-    const HSlider = getHSlider(container_id);
-    const Q0Slider = getQ0Slider(container_id);
+function coreWaveSlidersDim(containerID) {
+    const tDimSlider = getTDimSlider(containerID);
+    const fSlider = getFSlider(containerID);
+    const alphaSlider = getAlphaSlider(containerID);
+    const NSlider = getNSlider(containerID);
+    const HSlider = getHSlider(containerID);
+    const Q0Slider = getQ0Slider(containerID);
     return { tDimSlider, fSlider, alphaSlider, NSlider, HSlider, Q0Slider };
 }
 
@@ -597,10 +594,10 @@ const kValue = kValueDim / kScale;
 
 const MStep = 3 * stepRatio;
 
-function getTNonDimSlider(container_id) {
+function getTNonDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-t-slider`,
-        `${container_id}-t-output`,
+        `${containerID}-t-slider`,
+        `${containerID}-t-output`,
         "\\(t:\\)",
         0,
         tNonDimMax,
@@ -610,10 +607,10 @@ function getTNonDimSlider(container_id) {
     );
 }
 
-function getFNonDimSlider(container_id) {
+function getFNonDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-f_omega-slider`,
-        `${container_id}-f_omega-output`,
+        `${containerID}-f_omega-slider`,
+        `${containerID}-f_omega-output`,
         "\\(f / \\omega :\\)",
         0,
         fOmMax,
@@ -623,10 +620,10 @@ function getFNonDimSlider(container_id) {
     );
 }
 
-function getAlphaNonDimSlider(container_id) {
+function getAlphaNonDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-alpha_omega-slider`,
-        `${container_id}-alpha_omega-output`,
+        `${containerID}-alpha_omega-slider`,
+        `${containerID}-alpha_omega-output`,
         "\\(\\alpha / \\omega :\\)",
         alOmMin,
         alOmMax,
@@ -636,10 +633,10 @@ function getAlphaNonDimSlider(container_id) {
     );
 }
 
-function getNNonDimSlider(container_id) {
+function getNNonDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-N_omega-slider`,
-        `${container_id}-N_omega-output`,
+        `${containerID}-N_omega-slider`,
+        `${containerID}-N_omega-output`,
         "\\(N / \\omega :\\)",
         NOmegaMin,
         NOmegaMax,
@@ -649,10 +646,10 @@ function getNNonDimSlider(container_id) {
     );
 }
 
-function getLNonDimSlider(container_id) {
+function getLNonDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-L-slider`,
-        `${container_id}-L-output`,
+        `${containerID}-L-slider`,
+        `${containerID}-L-output`,
         "\\(L:\\)",
         LDimMin / xScale,
         LDimMax / xScale,
@@ -662,10 +659,10 @@ function getLNonDimSlider(container_id) {
     );
 }
 
-function getZfNonDimSlider(container_id) {
+function getZfNonDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-z_f-slider`,
-        `${container_id}-z_f-output`,
+        `${containerID}-z_f-slider`,
+        `${containerID}-z_f-output`,
         "\\(z_f:\\)",
         zFDimMin / HValue,
         zFDimMax / HValue,
@@ -675,10 +672,10 @@ function getZfNonDimSlider(container_id) {
     );
 }
 
-function getKNonDimSlider(container_id) {
+function getKNonDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-k-slider`,
-        `${container_id}-k-output`,
+        `${containerID}-k-slider`,
+        `${containerID}-k-output`,
         "\\(k:\\)",
         kStep,
         kMax,
@@ -688,10 +685,10 @@ function getKNonDimSlider(container_id) {
     );
 }
 
-function getSigmaNonDimSlider(container_id) {
+function getSigmaNonDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-sigma-slider`,
-        `${container_id}-sigma-output`,
+        `${containerID}-sigma-slider`,
+        `${containerID}-sigma-output`,
         "\\(\\sigma:\\)",
         sigmaMin,
         sigmaMax,
@@ -701,10 +698,10 @@ function getSigmaNonDimSlider(container_id) {
     );
 }
 
-function getMNonDimSlider(container_id) {
+function getMNonDimSlider(containerID) {
     return createSliderRow(
-        `${container_id}-M-slider`,
-        `${container_id}-M-output`,
+        `${containerID}-M-slider`,
+        `${containerID}-M-output`,
         "\\(M:\\)",
         0,
         3,
@@ -716,13 +713,13 @@ function getMNonDimSlider(container_id) {
 
 /**
  * Convenience function to build default slider control rows for non-dimensional coordinates.
- * @param {string} container_id - The unique container id to prefix element ids
+ * @param {string} containerID - The unique container id to prefix element ids
  * @returns {{tSlider: HTMLDivElement, fOmegaSlider: HTMLDivElement, alphaOmegaSlider: HTMLDivElement, NOmegaSlider: HTMLDivElement}}
  */
-function coreWaveSlidersNonDim(container_id) {
-    const tSlider = getTNonDimSlider(container_id);
-    const fOmegaSlider = getFNonDimSlider(container_id);
-    const alphaOmegaSlider = getAlphaNonDimSlider(container_id);
-    const NOmegaSlider = getNNonDimSlider(container_id);
+function coreWaveSlidersNonDim(containerID) {
+    const tSlider = getTNonDimSlider(containerID);
+    const fOmegaSlider = getFNonDimSlider(containerID);
+    const alphaOmegaSlider = getAlphaNonDimSlider(containerID);
+    const NOmegaSlider = getNNonDimSlider(containerID);
     return { tSlider, fOmegaSlider, alphaOmegaSlider, NOmegaSlider };
 }

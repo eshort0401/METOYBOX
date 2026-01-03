@@ -1,0 +1,100 @@
+<div id="anelastic_vallis">
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+        <p><small>This can take a few minutes!</small></p>
+    </div>
+    <div id="main-content">
+        <table>
+            <tr>
+                <td>
+                    <div id="anelastic_vallis-a">asdf</div>
+                </td>
+                <td>
+                    <div id="anelastic_vallis-b">asdf</div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="anelastic_vallis-c">asdf</div>
+                </td>
+                <td>
+                    <div id="anelastic_vallis-d">asdf</div>
+                </td>
+            </tr>
+        </table>
+        <div id="controls"></div>
+        <script>
+            (function (containerID) {
+                // Note containerID is set by utils.py
+
+                // Setup constants
+                const c_p = 1005; // J kg^-1 K^-1
+                const c_v = 718; // J kg^-1 K^-1
+                const gamma = c_p / c_v;
+                const R = c_p - c_v; // J kg^-1 K^-1
+                const g = 9.81; // m s^-2
+
+                // Define reference values
+                const p_s = 1e5; // Pa
+                const T_s = 300; // K
+                const rho_s = p_s / (R * T_s); // Ideal gas law
+
+                const uSliderRow = createSliderRow(
+                    `${containerID}-u-slider`,
+                    `${containerID}-u-output`,
+                    "\\(u:\\)",
+                    1,
+                    50,
+                    10,
+                    1,
+                    "dimensional",
+                    "m s⁻¹"
+                );
+
+                const wSliderRow = createSliderRow(
+                    `${containerID}-w-slider`,
+                    `${containerID}-w-output`,
+                    "\\(w:\\)",
+                    1,
+                    50,
+                    10,
+                    1,
+                    "dimensional",
+                    "m s⁻¹"
+                );
+
+                // Get the relevant div container
+                const controls = document.querySelector(
+                    `#${containerID} #main-content #controls`
+                );
+                // Append all the control rows to the container
+                controls.append(uSliderRow, wSliderRow);
+
+                const tableElement = document.getElementById(`${containerID}-a`);
+                const uSlider = document.getElementById(`${containerID}-u-slider`);
+                uSlider.addEventListener("input", function () {
+                    tableElement.innerHTML = `\\(\\psi\\) value: ${this.value} m s⁻1`;
+                    MathJax.typesetPromise([tableElement]); // Re-render MathJax
+                });                
+
+                // Hide loading screen and show main content
+                const container = document.querySelector(`#${containerID}`);
+                const loading_screen = container.querySelector("#loading-screen")
+                const main_content = container.querySelector("#main-content")
+
+                loading_screen.style.display = "none"
+                main_content.style.display = "block"
+
+                console.log("containerID:", containerID);
+                console.log("uSliderRow:", uSliderRow);
+                console.log("controls element:", controls);
+                controls.append(uSliderRow, wSliderRow);
+                console.log("Appended sliders");
+
+                container.classList.add("dimensional-mode");
+
+            })('anelastic_vallis');
+        </script>
+    </div>
+</div>

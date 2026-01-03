@@ -1,6 +1,7 @@
 Plane Wave
 =======================================
 
+.. _plane-wave:
 
 .. raw:: html
     :file: ../_static/models/gravity_waves/plane_wave/plane_wave.html

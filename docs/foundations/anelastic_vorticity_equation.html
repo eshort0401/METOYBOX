@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anelastic Vorticity Equation &mdash; metoybox 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=3a193a7f" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/controls.css?v=48e535e7" />
+      <link rel="stylesheet" type="text/css" href="https://pyscript.net/releases/2024.1.1/core.css" />
+
+  
+    <link rel="canonical" href="https://eshort0401.github.io/METOYBOX/foundations/anelastic_vorticity_equation.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=d45e8c67"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+      <script src="../_static/assets/js/model-controls.js?v=f44fd996"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Inertia-Gravity Waves" href="../gravity_waves/index.html" />
+    <link rel="prev" title="The Anelastic Equations" href="anelastic_boussinesq.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            metoybox
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Foundations</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="anelastic_boussinesq.html">The Anelastic Equations</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Anelastic Vorticity Equation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../gravity_waves/index.html">Inertia-Gravity Waves</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">metoybox</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Foundations</a></li>
+      <li class="breadcrumb-item active">Anelastic Vorticity Equation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/foundations/anelastic_vorticity_equation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="anelastic-vorticity-equation">
+<h1>Anelastic Vorticity Equation<a class="headerlink" href="#anelastic-vorticity-equation" title="Link to this heading"></a></h1>
+<p>Recall the anelastic momentum equation is</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v} = -\nabla \left(\frac{p}{\rho_0}\right) + g\delta \phi \mathbf{k},
+\label{eq:anmom}
+\end{equation}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{v}=(u, v, w)\)</span>.</p>
+<p>Let <span class="math notranslate nohighlight">\(\nabla \mathbf{v}\)</span> denote the matrix (i.e. tensor) with columns one, two, and three containing the gradient of <span class="math notranslate nohighlight">\(u, v, w\)</span>, respectively. Note</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\mathbf{v} \cdot \nabla\mathbf{v} &amp;= \left(u,v,w\right)
+\begin{pmatrix}
+u_x &amp; v_x &amp; w_x \\
+u_y &amp; v_y &amp; w_y \\
+u_z &amp; v_z &amp; w_z \\
+\end{pmatrix}\\
+&amp;= \left(uu_x+vu_y+wu_z, uv_x+vv_y+wv_z, uw_x+vw_y+ww_z\right) \\
+&amp;= \nabla\frac{|\mathbf{v}|^2}{2}+\left(vu_y+wu_z-vv_x-ww_x, uv_x+wv_z-uu_y-ww_y, uw_x+vw_y-uu_z-vv_z\right)\\
+&amp;=\nabla\frac{|\mathbf{v}|^2}{2}+
+\begin{vmatrix}
+\mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \\
+w_y-v_z &amp; u_z-w_x &amp; v_x - u_y \\
+u &amp; v &amp; w
+\end{vmatrix} \\
+&amp;=\nabla\frac{|\mathbf{v}|^2}{2}+ \boldsymbol{\omega}\times\mathbf{v}
+\end{align}\end{split}\]</div>
+<p>Following Markowski (2010, p. 21), to derive the vorticity equation, take the curl of both sides of equation <span class="math notranslate nohighlight">\(\eqref{eq:anmom}\)</span> and apply vector identities to obtain</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\nabla\times\left(\frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v}\right) &amp;= -\nabla \left(\frac{p}{\rho_0}\right) + g\delta \phi \mathbf{k} \\
+\frac{D(\boldsymbol{\omega} + f \mathbf{k})}{Dt} + (\boldsymbol{\omega} + f \mathbf{k})(\nabla\cdot \mathbf{v}) &amp;= \left[\left(\boldsymbol{\omega} + f \mathbf{k}\right)\cdot \nabla\right]\mathbf{v} + \nabla \times \left(g\delta \phi \mathbf{k}\right),
+\end{align}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\boldsymbol{\omega} = (\xi, \eta, \zeta)\)</span> is the vorticity vector, and <span class="math notranslate nohighlight">\(\nabla \mathbf{v}\)</span> is a tensor. Considering just the <span class="math notranslate nohighlight">\(y\)</span> component,</p>
+<div class="math notranslate nohighlight">
+\[\frac{D\eta}{Dt} + \eta\left[u_x + v_y + w_z\right] =
+\left(\boldsymbol{\omega}+f\mathbf{k}\right)\cdot\nabla v + g\phi_x,\]</div>
+<p>where <span class="math notranslate nohighlight">\(x, y, z\)</span> subscripts denote partial derivatives. The continuity equation implies</p>
+<div class="math notranslate nohighlight">
+\[-w \eta \frac{1}{\rho_0}\frac{\partial \rho_0}{\partial z} = \eta\left[u_x + v_y + w_z\right].\]</div>
+<p>Substituting into the previous equation and multiplying through by <span class="math notranslate nohighlight">\(\frac{1}{\rho_0}\)</span> gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{D}{Dt}\left(\frac{\eta}{\rho_0}\right) = \underbrace{\frac{1}{\rho_0}\left(\boldsymbol{\omega}+f\mathbf{k}\right)\cdot\nabla v}_{\text{deformation}} + \underbrace{\frac{g}{\rho_0}\frac{\partial \phi}{\partial x}}_{\text{generation}}.
+\label{eq:vort}
+\end{equation}\]</div>
+<p>The quantity <span class="math notranslate nohighlight">\(\frac{\boldsymbol{\omega}}{\rho_0}\)</span> is sometimes called “specific-vorticity” (Petropoulos et al., 2017). Equation <span class="math notranslate nohighlight">\(\eqref{eq:vort}\)</span> says that the horizontal component of a parcel’s (anelastic) specific vorticity can change only through vorticity deformation or baroclinic vorticity generation. In the absence of deformation and generation, if a parcel’s specific volume increases, its horizontal vorticity <span class="math notranslate nohighlight">\(\eta\)</span> must decrease, behavior analogous to that of angular momentum.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="anelastic_boussinesq.html" class="btn btn-neutral float-left" title="The Anelastic Equations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../gravity_waves/index.html" class="btn btn-neutral float-right" title="Inertia-Gravity Waves" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Ewan Short.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
