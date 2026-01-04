@@ -9,80 +9,6 @@
         <div id="controls"></div>
         <script>
             (function(containerID) {
-                // Note containerID is set by utils.py
-                const table_container = document.querySelector(
-                    `#${containerID} #main-content #scale-table`
-                );
-                
-                const delPSliderRow = createSliderRow(
-                    `${containerID}-del_p-slider`,
-                    `${containerID}-del_p-output`,
-                    "\\(\\delta p:\\)",
-                    1, // 1 Pa
-                    10e2, // 10 hPa
-                    10,
-                    1,
-                    "dimensional",
-                    "Pa"
-                );
-                
-                const pBarSliderRow = createSliderRow(
-                    `${containerID}-p_bar-slider`,
-                    `${containerID}-p_bar-output`,
-                    "\\(\\overline{p}:\\)",
-                    100e2, // 100 hPa
-                    1000e2, // 1000 hPa
-                    800e2,
-                    1,
-                    "dimensional",
-                    "Pa"
-                );
-                
-                const delRhoSliderRow = createSliderRow(
-                    `${containerID}-del_rho-slider`,
-                    `${containerID}-del_rho-output`,
-                    "\\(\\delta \\rho:\\)",
-                    1e-3, 
-                    5e-1,
-                    10,
-                    1e-3,
-                    "dimensional",
-                    "Pa"
-                );
-                
-                const rhoBarSliderRow = createSliderRow(
-                    `${containerID}-rho_bar-slider`,
-                    `${containerID}-rho_bar-output`,
-                    "\\(\\overline{\\rho}:\\)",
-                    0.1,
-                    1.25,
-                    1,
-                    .01,
-                    "dimensional",
-                    "Pa"
-                );
-                
-                // Build the scale table
-                const scaleTable = new ScaleTable(
-                    [[`${containerID}-a`, `${containerID}-b`, `${containerID}-c`]],
-                    [[
-                        "\\frac{1}{\\gamma}\\frac{\\delta p}{\\overline{p}}", 
-                        "-\\frac{\\delta \\rho}{\\overline{\\rho}}", 
-                        "R\\left(\\frac{\\delta p}{\\overline{p}}, \\frac{\\delta \\rho}{\\overline{\\rho}}\\right)"]],
-                    [[10, 10, 10]],
-                    [["", "", ""]],
-                );
-                scaleTable.id = `${containerID}-scale-table`;
-                // Append the table to the container
-                table_container.appendChild(scaleTable.table);
-                
-                // Get the relevant div container
-                const controls = document.querySelector(
-                    `#${containerID} #main-content #controls`
-                );
-                // Append all the control rows to the container
-                controls.append(delPSliderRow, pBarSliderRow);
-                
                 // Setup constants
                 const c_p = 1005; // J kg^-1 K^-1
                 const c_v = 718; // J kg^-1 K^-1
@@ -96,27 +22,89 @@
                 const T_s = 300; // K
                 const rho_s = p_s / (R * T_s); // Ideal gas law
                 
-                function calculateTerms(u, w, t, f, p_bar, rho_bar, del_p, del_rho) {
-                    const L = u * t;
-                    const H = w * t;
+                /**
+                 * Calculate the terms for the scale analysis table
+                 * @param {number} del_p
+                 * @param {number} p_bar
+                 * @param {number} del_rho
+                 * @param {number} rho_bar
+                 * @returns
+                 */
+                function calculateTableValues(del_p, p_bar, del_rho, rho_bar) {
                     const del_phi_exact =
                         (1 / gamma) * Math.log((p_bar + del_p) / p_bar) -
                         Math.log((rho_bar + del_rho) / rho_bar);
                     const del_phi_1 = (1 / gamma) * (del_p / p_bar);
                     const del_phi_2 = -(del_rho / rho_bar);
                     const del_phi_3 = del_phi_exact - del_phi_1 - del_phi_2;
-                    return [del_phi_1, del_phi_2, del_phi_3];
+                    return [[del_phi_1, del_phi_2, del_phi_3]];
                 }
                 
-                const tableElement = document.getElementById(`${containerID}-a`);
-                const delPSlider = document.getElementById(`${containerID}-del_p-slider`);
-                const delPOutput = document.getElementById(`${containerID}-del_p-output`);
-                delPSlider.addEventListener("input", function () {
-                    const value = parseFloat(delPSlider.value);
-                    delPOutput.textContent = `${value.toExponential(1)} ${delPOutput.units}`;
-                    scaleTable.values[0][0] = value;
-                    scaleTable.update();
-                });
+                // Create container for the table
+                let tableIndentifer = `#${containerID} #main-content #scale-table`;
+                const table_container = document.querySelector(tableIndentifer);
+                
+                // Create sliders to control scales. Note sliders are logarithmic, but values
+                // stored in scaleTable are linear.
+                
+                // Store the initial exponents and values for each slider
+                const initialExponents = [3, 5, -2, 0];
+                const initialSliderValues = initialExponents.map((exp) => Math.pow(10, exp));
+                
+                // 1e3 Pa = 10 hPa
+                let args = [`${containerID}-del_p-slider`, `${containerID}-del_p-output`];
+                args.push("\\(\\delta p:\\)", 0, 6, initialExponents[0]);
+                args.push(0.1, null, "Pa");
+                const delPSliderRow = createSliderRow(...args);
+                
+                args = [`${containerID}-p_bar-slider`, `${containerID}-p_bar-output`];
+                // 1e5 Pa = 1000 hPa = 1 bar
+                args.push("\\(\\overline{p}:\\)", 0, 6, initialExponents[1]);
+                args.push(0.1, null, "Pa");
+                const pBarSliderRow = createSliderRow(...args);
+                
+                args = [`${containerID}-del_rho-slider`, `${containerID}-del_rho-output`];
+                args.push("\\(\\delta \\rho:\\)", -3, 0.5, initialExponents[2], 0.1);
+                args.push(null, "kg m⁻³");
+                const delRhoSliderRow = createSliderRow(...args);
+                
+                args = [`${containerID}-rho_bar-slider`, `${containerID}-rho_bar-output`];
+                args.push("\\(\\overline{\\rho}:\\)", -3, 0.5, initialExponents[3], 0.1);
+                args.push(null, "kg m⁻³");
+                const rhoBarSliderRow = createSliderRow(...args);
+                
+                let allSliders = [delPSliderRow, pBarSliderRow];
+                allSliders.push(delRhoSliderRow, rhoBarSliderRow);
+                // Fix the initial slider output formats
+                initializeValues(allSliders);
+                
+                // Now append all the slider rows to the controls container
+                let controlsIdentifier = `#${containerID} #main-content #controls`;
+                const controls = document.querySelector(controlsIdentifier);
+                controls.append(...allSliders);
+                
+                // Build the scale table
+                const initialTableValues = calculateTableValues(...initialSliderValues);
+                const scaleTable = new ScaleTable(
+                    [[`${containerID}-a`, `${containerID}-b`, `${containerID}-c`]], // DOM ids
+                    [
+                        [
+                            "\\frac{1}{\\gamma}\\frac{\\delta p}{\\overline{p}}",
+                            "-\\frac{\\delta \\rho}{\\overline{\\rho}}",
+                            "R\\left(\\frac{\\delta p}{\\overline{p}}, \\frac{\\delta \\rho}{\\overline{\\rho}}\\right)",
+                        ],
+                    ],
+                    initialTableValues,
+                    [["", "", ""]] // Everything unitless in this case
+                );
+                scaleTable.id = `${containerID}-scale-table`;
+                table_container.appendChild(scaleTable.table);
+                
+                // Setup the listeners
+                let sliderIDs = [`${containerID}-del_p-slider`, `${containerID}-p_bar-slider`];
+                sliderIDs.push(`${containerID}-del_rho-slider`);
+                sliderIDs.push(`${containerID}-rho_bar-slider`);
+                addListeners(sliderIDs, calculateTableValues, scaleTable);
                 
                 // Hide loading screen and show main content
                 const container = document.querySelector(`#${containerID}`);

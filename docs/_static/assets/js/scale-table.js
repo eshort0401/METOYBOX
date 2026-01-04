@@ -26,10 +26,9 @@ class ScaleTable {
                 const term = this.terms[i][j];
                 const value = this.values[i][j];
                 const unit = this.units[i][j];
-                const scale = Math.log10(Math.abs(value));
+                const exponent = Math.log10(Math.abs(value)).toFixed(1);
                 label_td.innerHTML = `\\(${term}\\)`;
-                value_td.innerHTML = `\\(10^{${scale.toFixed(1)}} \\) ${unit}`;
-
+                value_td.innerHTML = `10<sup>${exponent}</sup> ${unit}`;
                 label_tr.appendChild(label_td);
                 value_tr.appendChild(value_td);
             }
@@ -46,24 +45,83 @@ class ScaleTable {
     update() {
         for (let i = 0; i < this.ids.length; i++) {
             for (let j = 0; j < this.ids[i].length; j++) {
-                const td = document.getElementById(this.ids[i][j]);
-                this._updateElement(td, i, j);
-                MathJax.typesetPromise([td]);
+                const value_td = document.getElementById(this.ids[i][j]);
+                this._updateValue(value_td, i, j);
             }
         }
     }
 
     /**
-     * Convenience method to update a single table element
+     * Convenience method to update a single table value
      * @param {HTMLElement} td - The table cell to update
      * @param {number} i - The row index
      * @param {number} j - The column index
      */
-    _updateElement(label_td, i, j) {
-        const term = this.terms[i][j];
+    _updateValue(value_td, i, j) {
         const value = this.values[i][j];
         const unit = this.units[i][j];
-        const scale = Math.log10(Math.abs(value));
-        td.innerHTML = `\\(${term} \\sim 10^{${scale.toFixed(1)}}\\) ${unit}`;
+        const exponent = Math.log10(Math.abs(value)).toFixed(1);
+        value_td.innerHTML = `10<sup>${exponent}</sup> ${unit}`;
     }
+}
+
+/**
+ * Convenience function to get de-logged slider values from list of slider ids
+ * @param {string[]} sliderIDs - Slider DOM ids
+ * @returns {number[]} - Array of slider values
+ */
+function getSliderValues(sliderIDs) {
+    return sliderIDs.map((id) => {
+        const slider = document.getElementById(id);
+        return Math.pow(10, parseFloat(slider.value));
+    });
+}
+
+/**
+ * Convenience function to update slider output display
+ * @param {HTMLElement} slider - slider input element
+ * @param {HTMLElement} output - slider output element
+ */
+function updateSliderOutput(slider, output) {
+    // Update slider output text
+    let exponent = parseFloat(slider.value).toFixed(1);
+    output.innerHTML = `10<sup>${exponent}</sup> ${output.units}`;
+}
+
+/**
+ * Convenience function to add listeners to sliders to update scale table
+ * @param {string[]} sliderIDs - Array of slider DOM ids
+ * @param {function} calculationFunction - Function to calculate table values
+ * @param {ScaleTable} scaleTable - ScaleTable instance to update
+ */
+function addListeners(sliderIDs, calculationFunction, scaleTable) {
+    sliderIDs.forEach((id) => {
+        const slider = document.getElementById(id);
+        const output_id = id.replace("-slider", "-output");
+        const output = document.getElementById(output_id);
+        slider.addEventListener("input", function () {
+            // Update slider output text
+            updateSliderOutput(slider, output);
+            // Update the scale table
+            const sliderValues = getSliderValues(sliderIDs);
+            const tableValues = calculationFunction(...sliderValues);
+            scaleTable.values = tableValues;
+            scaleTable.update();
+        });
+    });
+}
+
+/**
+ * Convenience function to fix the initial output display for each slider 
+ * before adding to DOM
+ * @param {HTMLElement[]} allSliders - Array of slider row elements
+ */
+function initializeValues(allSliders) {
+    allSliders.forEach((row) => {
+        const input = row.querySelector('input[type="range"]');
+        const output = row.querySelector("output");
+        let value = parseFloat(input.value);
+        let units = output.units;
+        output.innerHTML = `10<sup>${value.toFixed(1)}</sup> ${units}`;
+    });
 }

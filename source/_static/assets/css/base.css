@@ -73,6 +73,7 @@ table td, table th {
     border: 1px solid #ddd;  /* Light gray borders */
     padding: 8px;  /* Add some spacing */
     text-align: center;  /* Center cell content */
+    min-width: 60px;
 }
 
 table tr {
