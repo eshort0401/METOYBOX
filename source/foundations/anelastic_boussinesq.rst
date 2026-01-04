@@ -1,12 +1,12 @@
 The Anelastic Equations
 ==============================================
 
-To get the anelastic equations we do the following.
+Loosely speaking, the anelastic approximation is obtained by
 
-    #. Define a base state, and use this to express our equations in buoyancy form.
-    #. Replace :math:`\rho` with a horizontally uniform :math:`\overline{\rho}(z)` wherever :math:`\rho` appears explicitly in the momentum and continuity equations.
+    #. defining a base state, and using this to express the governing equations in buoyancy form.
+    #. Replacing :math:`\rho` with a horizontally uniform :math:`\overline{\rho}(z)` wherever :math:`\rho` appears explicitly in the momentum and continuity equations.
 
-The Boussinesq equations are a sub-case of the anelastic, with :math:`\overline{\rho}(z)` taken to be a constant :math:`\rho_s`. 
+The Boussinesq equations are similar, but :math:`\overline{\rho}(z)` is taken to be a constant :math:`\rho_s`. These approximations make it easier to draw interesting insights directly from the mathematics. For most people, most of the time, this is all you need to know.
 
 The anelastic approximation filters sound-waves from our system of equations. Back in the day, this filtering had computational advantages when integrating numerically, but we don't care about that here. We like the anelastic approximation because it allows us to play with the maths more directly. 
 
