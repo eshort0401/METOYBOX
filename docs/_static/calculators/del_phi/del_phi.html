@@ -1,4 +1,4 @@
-<div id="anelastic_vallis">
+<div id="del_phi">
     <div id="loading-screen">
         <div class="spinner"></div>
         <p>Loading...</p>
@@ -36,8 +36,9 @@
                         Math.log((rho_bar + del_rho) / rho_bar);
                     const del_phi_1 = (1 / gamma) * (del_p / p_bar);
                     const del_phi_2 = -(del_rho / rho_bar);
-                    const del_phi_3 = del_phi_exact - del_phi_1 - del_phi_2;
-                    return [[del_phi_1, del_phi_2, del_phi_3]];
+                    const R_1 = (1 / gamma) * Math.log((p_bar + del_p) / p_bar) - del_phi_1;
+                    const R_2 = -Math.log((rho_bar + del_rho) / rho_bar) - del_phi_2;
+                    return [[del_phi_1, R_1, del_phi_2, R_2]];
                 }
                 
                 // Create container for the table
@@ -48,7 +49,7 @@
                 // stored in scaleTable are linear.
                 
                 // Store the initial exponents and values for each slider
-                const initialExponents = [3, 5, -2, 0];
+                const initialExponents = [4, 5, -1, 0];
                 const initialSliderValues = initialExponents.map((exp) => Math.pow(10, exp));
                 
                 // 1e3 Pa = 10 hPa
@@ -86,16 +87,24 @@
                 // Build the scale table
                 const initialTableValues = calculateTableValues(...initialSliderValues);
                 const scaleTable = new ScaleTable(
-                    [[`${containerID}-a`, `${containerID}-b`, `${containerID}-c`]], // DOM ids
+                    [
+                        [
+                            `${containerID}-a`,
+                            `${containerID}-b`,
+                            `${containerID}-c`,
+                            `${containerID}-d`,
+                        ],
+                    ], // DOM ids
                     [
                         [
                             "\\frac{1}{\\gamma}\\frac{\\delta p}{\\overline{p}}",
+                            "R_1",
                             "-\\frac{\\delta \\rho}{\\overline{\\rho}}",
-                            "R\\left(\\frac{\\delta p}{\\overline{p}}, \\frac{\\delta \\rho}{\\overline{\\rho}}\\right)",
+                            "R_2",
                         ],
                     ],
                     initialTableValues,
-                    [["", "", ""]] // Everything unitless in this case
+                    [["", "", "", ""]] // Everything unitless in this case
                 );
                 scaleTable.id = `${containerID}-scale-table`;
                 table_container.appendChild(scaleTable.table);
@@ -115,7 +124,7 @@
                 main_content.style.display = "block";
                 
                 container.classList.add("dimensional-mode");
-            })('anelastic_vallis');
+            })('del_phi');
         </script>
     </div>
 </div>

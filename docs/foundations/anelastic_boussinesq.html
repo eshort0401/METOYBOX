@@ -24,7 +24,7 @@
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-      <script src="../_static/assets/js/model-controls.js?v=d8f880fe"></script>
+      <script src="../_static/assets/js/model-controls.js?v=07a4f401"></script>
       <script src="../_static/assets/js/scale-table.js?v=86076c60"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -56,8 +56,9 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Foundations</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">The Anelastic Equations</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#derivation">Derivation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#exploration">Exploration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#derivation-of-anelastic-system">Derivation of Anelastic System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#derivation-of-boussinesq-system">Derivation of Boussinesq System</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extensions">Extensions</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="anelastic_vorticity_equation.html">Anelastic Vorticity Equation</a></li>
@@ -100,93 +101,7 @@
 <li><p>Replacing <span class="math notranslate nohighlight">\(\rho\)</span> with a horizontally uniform <span class="math notranslate nohighlight">\(\overline{\rho}(z)\)</span> wherever <span class="math notranslate nohighlight">\(\rho\)</span> appears explicitly in the momentum and continuity equations.</p></li>
 </ol>
 </div></blockquote>
-<p>The Boussinesq equations are similar, but <span class="math notranslate nohighlight">\(\overline{\rho}(z)\)</span> is taken to be a constant <span class="math notranslate nohighlight">\(\rho_s\)</span>. For most people, most of the time, this is all you need to know about these approximations.</p>
-<p>The anelastic approximation filters sound-waves from our system of equations. Back in the day, this filtering had computational advantages when integrating numerically, but we don’t care about that here. We like the anelastic approximation because it allows us to play with the maths more directly.</p>
-<p>Building intuition for the scope of validity and physical implications of the anelastic approximation has been tortuously difficult for me. One challenge is that different authors use the terms “incompressible”, “anelastic” and “Boussinesq” for different things. Another challenge is that the governing equations can be written in buoyancy form using many distinct coordinate systems, resulting in many different equation sets and lots of very technical papers, with <span class="math notranslate nohighlight">\(*\)</span> and <span class="math notranslate nohighlight">\(\overline{\,}\)</span> symbols spilling out everywhere.</p>
-<p>Below I give a loose derivation mostly plagiarized from <a class="reference external" href="https://doi.org/10.1017/9781107588417">Vallis (2017, p. 75)</a>. This derivation uses our standard variables <span class="math notranslate nohighlight">\(x,y,z,\rho,p\)</span> and so forth, making the maths easier to interpret. However, using garden variety variables results in approximations less numerically accurate than those associated with more exotic variables, to be discussed later.</p>
-<section id="derivation">
-<span id="id1"></span><h2>Derivation<a class="headerlink" href="#derivation" title="Link to this heading"></a></h2>
-<p>Let</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{align*}
-p &amp;= \overline{p}(z) + \delta p(x,y,z,t), \\
-\rho &amp;= \overline{\rho}(z) + \delta \rho(x,y,z,t), \\
-T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
-\end{align*}\end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\overline{p}\)</span>, <span class="math notranslate nohighlight">\(\overline{\rho}\)</span>, and <span class="math notranslate nohighlight">\(\overline{T}\)</span> denote hydrostatic base state variables, assumed to be functions of <span class="math notranslate nohighlight">\(z\)</span> only, with <span class="math notranslate nohighlight">\(\delta p\)</span>, <span class="math notranslate nohighlight">\(\delta \rho\)</span>, and <span class="math notranslate nohighlight">\(\delta T\)</span> the corresponding perturbations. Now define <span class="math notranslate nohighlight">\(\theta = \overline{\theta}(z) + \delta\theta\)</span>, where</p>
-<div class="math notranslate nohighlight">
-\[\theta = T\left(\frac{p_s}{p}\right)^{\frac{R}{c_p}}, \quad \overline{\theta} = \overline{T}\left(\frac{p_s}{\overline{p}}\right)^{\frac{R}{c_p}},\]</div>
-<p>with <span class="math notranslate nohighlight">\(p_s = \overline{p}(0)\)</span>.</p>
-<p>Next, define</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-\overline{\phi} &amp;= \ln\left(\frac{\overline{\theta}}{\theta_s}\right) = \frac{1}{\gamma}\ln\left(\frac{\overline{p}}{p_s}\right)  - \ln\left(\frac{\overline{\rho}}{\rho_s}\right), &amp;\\
-\phi &amp;= \ln\left(\frac{\theta}{\theta_s}\right) = \frac{1}{\gamma}\ln\left(\frac{\overline{p}+\delta p}{p_s}\right)  - \ln\left(\frac{\overline{\rho} + \delta \rho}{\rho_s}\right), &amp;
-\end{align}\end{split}\]</div>
-<p>with <span class="math notranslate nohighlight">\(\theta_s = \overline{\theta}(0)\)</span> and <span class="math notranslate nohighlight">\(\rho_s = \overline{\rho}(0)\)</span>. Note the subscript <span class="math notranslate nohighlight">\(s\)</span> terms are there because I’m pedantic about unit consistency; we are not restricting to the Boussinesq system yet! Continuing,</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-\delta \phi = \phi - \overline{\phi} &amp;=  \frac{1}{\gamma}\ln\left(\frac{\overline{p} + \delta p}{\overline{p}}\right)  - \ln\left(\frac{\overline{\rho}+\delta \rho}{\overline{\rho}}\right) &amp; \nonumber \\
-&amp;=  \frac{1}{\gamma}\frac{\delta p}{\overline{p}}  - \frac{\delta \rho}{\overline{\rho}} + O\left(\left[\frac{\delta p}{\overline{p}}\right]^2\right) + O\left(\left[\frac{\delta \rho}{\overline{\rho}}\right]^2\right) \label{eq:delphi_raw} &amp;
-\end{align}\end{split}\]</div>
-<p>by Taylor’s Theorem, where <span class="math notranslate nohighlight">\(\gamma = \frac{c_v}{c_p}\)</span>. Note <span class="math notranslate nohighlight">\(g\delta \phi = g\ln\left(\frac{\overline{\theta} + \delta \theta}{\overline{\theta}}\right) = g\frac{\delta \theta}{\overline{\theta}} + O\left(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\right)\)</span> corresponds to buoyancy <span class="math notranslate nohighlight">\(b\)</span> provided <span class="math notranslate nohighlight">\(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\)</span> is small. Similarly, if <span class="math notranslate nohighlight">\(\left[\frac{\delta p}{\overline{p}}\right]^2\)</span> and <span class="math notranslate nohighlight">\(\left[\frac{\delta \rho}{\overline{\rho}}\right]^2\)</span> are small, we may discard the associated terms in <span class="math notranslate nohighlight">\(\eqref{eq:delphi_raw}\)</span> to get</p>
-<div class="math notranslate nohighlight">
-\[\begin{equation}
-    \delta \phi  = \frac{1}{\gamma}\frac{\delta p}{\overline{p}}  - \frac{\delta \rho}{\overline{\rho}}.
-\label{eq:delphi}
-\end{equation}\]</div>
-<p>Also,</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-\frac{\partial \overline{\phi}}{\partial z} &amp;= \frac{1}{\gamma \overline{p}}\frac{\partial \overline{p}}{\partial z} - \frac{1}{ \overline{\rho}}\frac{\partial \overline{\rho}}{\partial z} \nonumber \\
-&amp;= -\frac{g \overline{\rho}}{\gamma \overline{p}} - \frac{1}{ \overline{\rho}}\frac{\partial \overline{\rho}}{\partial z} \label{eq:bar_phi_z}
-\end{align}\end{split}\]</div>
-<p>as the base state is hydrostatic.</p>
-<p>Having setup all our base state and perturbation variables, we can now re-express our governing equations. Ignoring viscosity, the horizontal momentum equation is</p>
-<div class="math notranslate nohighlight">
-\[(\overline{\rho}+\delta \rho)\left[\frac{D\mathbf{u}}{Dt} + f\mathbf{k}\times \mathbf{u} \right] = -\nabla_h \delta p,\]</div>
-<p>where <span class="math notranslate nohighlight">\(\nabla_h = \left(\frac{\partial }{\partial x}, \frac{\partial }{\partial y} \right)\)</span> is the horizontal gradient operator, and <span class="math notranslate nohighlight">\(\mathbf{u}=(u,v)\)</span> is the horizontal velocity. Neglecting <span class="math notranslate nohighlight">\(\delta \rho\)</span> on the left hand side, we obtain</p>
-<div class="math notranslate nohighlight">
-\[\frac{D\mathbf{u}}{Dt} + f\mathbf{k}\times \mathbf{u} = - \nabla_h \frac{\delta p}{\overline{\rho}}.\]</div>
-<p>The vertical momentum equation is</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
-    (\overline{\rho} + \delta \rho)\frac{D w}{Dt} &amp;= -\frac{\partial \left(\overline{p} + \delta p \right)}{\partial z} - g\left( \overline{\rho} + \rho \right) \nonumber \\
-&amp;= -\frac{\partial \delta p}{\partial z} - g\delta \rho,
-\end{align}\end{split}\]</div>
-<p>exploiting the hydrostasy of the base state. Neglecting <span class="math notranslate nohighlight">\(\delta \rho\)</span> on the left hand side and rearranging gives</p>
-<div class="math notranslate nohighlight">
-\[\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} - g\frac{\delta \rho}{\overline{\rho}}.\]</div>
-<p>Substituting for <span class="math notranslate nohighlight">\(g\frac{\delta \rho}{\overline{\rho}}\)</span> using equation <span class="math notranslate nohighlight">\(\eqref{eq:delphi}\)</span> gives</p>
-<div class="math notranslate nohighlight">
-\[\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} + g\delta \phi - \frac{g}{\gamma}\frac{\delta p}{\overline{p}}.\]</div>
-<p>Substituting the second and fourth terms using <span class="math notranslate nohighlight">\(\frac{\delta p}{\overline{\rho}}\times\eqref{eq:bar_phi_z}\)</span> gives</p>
-<div class="math notranslate nohighlight">
-\[\begin{equation}
-    \frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) +\frac{\delta p}{\overline{\rho}}\frac{\partial \overline{\phi}}{\partial z}. \label{eq:w_t_intermediate}
-\end{equation}\]</div>
-<p>Now consider the expressions</p>
-<div class="math notranslate nohighlight">
-\[\left|\frac{\partial}{\partial z} \ln\left(\frac{\delta p / p_s}{\overline{\rho} / \rho_s}\right)\right|, \quad \left|\frac{\partial}{\partial z} \ln\left(\frac{\overline{\theta}}{\theta_s}\right)\right|.\]</div>
-<p>In most of the atmospheres we care about, the pressure and density scale heights are of similar magnitude, but the  potential temperature scale height is much larger, so the first term above is typically much larger than the second. This implies the second term in <span class="math notranslate nohighlight">\(\eqref{eq:w_t_intermediate}\)</span> is much larger in absolute value than the third, which we discard. We thus have</p>
-<div class="math notranslate nohighlight">
-\[\begin{equation}
-    \frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right).\label{eq:w}
-\end{equation}\]</div>
-<p>We can therefore write the anelastic momentum equations in vector form as</p>
-<div class="math notranslate nohighlight">
-\[\begin{equation}
-    \frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v} = -\nabla \left(\frac{p}{\overline{\rho}}\right) + g\delta \phi \mathbf{k},
-\label{eq:anmom}
-\end{equation}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\mathbf{v}=(u, v, w)\)</span>.</p>
-<p>Mass conservation is given by</p>
-<div class="math notranslate nohighlight">
-\[\frac{\partial \delta \rho}{\partial t} + \nabla \cdot \left[\left(\overline{\rho} + \delta \rho\right)\mathbf{v}\right] = 0,\]</div>
-<p>which after discarding <span class="math notranslate nohighlight">\(\delta \rho\)</span> terms becomes</p>
-<div class="math notranslate nohighlight">
-\[\nabla \cdot \left(\overline{\rho} \mathbf{v}\right) = 0.\]</div>
-<p>Summarizing, we have</p>
+<p>Our governing momentum and continuity equations become</p>
 <div class="admonition-anelastic-equations admonition">
 <p class="admonition-title">Anelastic Equations</p>
 <div class="math notranslate nohighlight">
@@ -195,11 +110,39 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
 \nabla \cdot \left(\overline{\rho} \mathbf{v}\right) &amp;= 0 &amp;
 \end{align}\end{split}\]</div>
 </div>
-</section>
-<section id="exploration">
-<h2>Exploration<a class="headerlink" href="#exploration" title="Link to this heading"></a></h2>
-<p>Let’s explicitly compare the magnitudes of terms in all the equations of our <a class="reference internal" href="#derivation"><span class="std std-ref">derivation</span></a> where things were discarded.</p>
-<div id="anelastic_vallis">
+<p>The Boussinesq equations are very similar, but we instead replace <span class="math notranslate nohighlight">\(\rho\)</span> with a constant <span class="math notranslate nohighlight">\(\rho_s\)</span> in the momentum and continuity equations (but nowhere else!)</p>
+<p>I initially found both these approximations very unpleasant; substituting out a variable in some places but not others made me feel dirty. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Ogura and Phillips (1962)</a> provided the remedy, with a clean derivation based on truncations of asymptotic expansions. However, <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Ogura and Phillips (1962)</a> use the <a class="reference external" href="https://en.wikipedia.org/wiki/Exner_function">Exner function</a> in place of pressure, which produces a more numerically accurate system, but obfuscates physical interpretation. Instead, I provide a derivation using vanilla variables, partly plagiarized from <a class="reference external" href="https://doi.org/10.1017/9781107588417">Vallis (2017, p. 75)</a>.</p>
+<section id="derivation-of-anelastic-system">
+<span id="derivation"></span><h2>Derivation of Anelastic System<a class="headerlink" href="#derivation-of-anelastic-system" title="Link to this heading"></a></h2>
+<p>Our approach here will be to expand key terms as Taylor series, but instead of immediately truncating, we will carry all the residual terms through to the bitter end, performing a scale analysis to justify their final dismissal. To begin, we first decompose our thermodynamic variables into hydrostatic and perturbation components. Let</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align*}
+p &amp;= \overline{p}(z) + \delta p(x,y,z,t), \\
+\rho &amp;= \overline{\rho}(z) + \delta \rho(x,y,z,t), \\
+T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
+\end{align*}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\overline{p}\)</span>, <span class="math notranslate nohighlight">\(\overline{\rho}\)</span>, and <span class="math notranslate nohighlight">\(\overline{T}\)</span> denote the hydrostatic base state terms, assumed to be functions of <span class="math notranslate nohighlight">\(z\)</span> only, with <span class="math notranslate nohighlight">\(\delta p\)</span>, <span class="math notranslate nohighlight">\(\delta \rho\)</span>, and <span class="math notranslate nohighlight">\(\delta T\)</span> the corresponding perturbations. Now define <span class="math notranslate nohighlight">\(\theta = \overline{\theta}(z) + \delta\theta,\)</span> where</p>
+<div class="math notranslate nohighlight">
+\[\theta = T\left(\frac{p_s}{p}\right)^{\frac{R}{c_p}}, \quad \overline{\theta} = \overline{T}\left(\frac{p_s}{\overline{p}}\right)^{\frac{R}{c_p}},\]</div>
+<p>with <span class="math notranslate nohighlight">\(p_s\)</span> a constant reference pressure used to ensure dimensional consistency. Next, form</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\overline{\phi} &amp;= \ln\left(\frac{\overline{\theta}}{\theta_s}\right) = \frac{1}{\gamma}\ln\left(\frac{\overline{p}}{p_s}\right)  - \ln\left(\frac{\overline{\rho}}{\rho_s}\right), &amp;\\
+\phi &amp;= \ln\left(\frac{\theta}{\theta_s}\right) = \frac{1}{\gamma}\ln\left(\frac{\overline{p}+\delta p}{p_s}\right)  - \ln\left(\frac{\overline{\rho} + \delta \rho}{\rho_s}\right), &amp;
+\end{align}\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(\gamma = \frac{c_v}{c_p}\)</span> and <span class="math notranslate nohighlight">\(\theta_s\)</span> and <span class="math notranslate nohighlight">\(\rho_s\)</span> constant reference values. Then,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\delta \phi = \phi - \overline{\phi} &amp;=  \frac{1}{\gamma}\ln\left(\frac{\overline{p} + \delta p}{\overline{p}}\right)  - \ln\left(\frac{\overline{\rho}+\delta \rho}{\overline{\rho}}\right) &amp; \nonumber \\
+&amp;=  \frac{1}{\gamma}\frac{\delta p}{\overline{p}}  - \frac{\delta \rho}{\overline{\rho}} + R_1 + R_2 \label{eq:delphi} &amp;
+\end{align}\end{split}\]</div>
+<p>by <a class="reference external" href="https://en.wikipedia.org/wiki/Taylor%27s_theorem">Taylor’s theorem</a>, where</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+R_1 = O\left(\left[\frac{\delta p}{\overline{p}}\right]^2\right),\quad R_2 = O\left(\left[\frac{\delta \rho}{\overline{\rho}}\right]^2\right).
+\end{equation}\]</div>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Big_O_notation">Big O notation</a> means the magnitude of each residual term is bounded by functions proportional to the squares of <span class="math notranslate nohighlight">\(\frac{\delta p}{\overline{p}}\)</span> and <span class="math notranslate nohighlight">\(\frac{\delta \rho}{\overline{\rho}}\)</span>, respectively. This suggests that if the perturbations are about an order of magnitude smaller than the base state values, the residual terms will each be about an order of magnitude smaller than the other terms. Check this with the applet below if you don’t believe me.</p>
+<div id="del_phi">
     <div id="loading-screen">
         <div class="spinner"></div>
         <p>Loading...</p>
@@ -237,8 +180,9 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
                         Math.log((rho_bar + del_rho) / rho_bar);
                     const del_phi_1 = (1 / gamma) * (del_p / p_bar);
                     const del_phi_2 = -(del_rho / rho_bar);
-                    const del_phi_3 = del_phi_exact - del_phi_1 - del_phi_2;
-                    return [[del_phi_1, del_phi_2, del_phi_3]];
+                    const R_1 = (1 / gamma) * Math.log((p_bar + del_p) / p_bar) - del_phi_1;
+                    const R_2 = -Math.log((rho_bar + del_rho) / rho_bar) - del_phi_2;
+                    return [[del_phi_1, R_1, del_phi_2, R_2]];
                 }
                 
                 // Create container for the table
@@ -249,7 +193,7 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
                 // stored in scaleTable are linear.
                 
                 // Store the initial exponents and values for each slider
-                const initialExponents = [3, 5, -2, 0];
+                const initialExponents = [4, 5, -1, 0];
                 const initialSliderValues = initialExponents.map((exp) => Math.pow(10, exp));
                 
                 // 1e3 Pa = 10 hPa
@@ -287,16 +231,24 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
                 // Build the scale table
                 const initialTableValues = calculateTableValues(...initialSliderValues);
                 const scaleTable = new ScaleTable(
-                    [[`${containerID}-a`, `${containerID}-b`, `${containerID}-c`]], // DOM ids
+                    [
+                        [
+                            `${containerID}-a`,
+                            `${containerID}-b`,
+                            `${containerID}-c`,
+                            `${containerID}-d`,
+                        ],
+                    ], // DOM ids
                     [
                         [
                             "\\frac{1}{\\gamma}\\frac{\\delta p}{\\overline{p}}",
+                            "R_1",
                             "-\\frac{\\delta \\rho}{\\overline{\\rho}}",
-                            "R\\left(\\frac{\\delta p}{\\overline{p}}, \\frac{\\delta \\rho}{\\overline{\\rho}}\\right)",
+                            "R_2",
                         ],
                     ],
                     initialTableValues,
-                    [["", "", ""]] // Everything unitless in this case
+                    [["", "", "", ""]] // Everything unitless in this case
                 );
                 scaleTable.id = `${containerID}-scale-table`;
                 table_container.appendChild(scaleTable.table);
@@ -316,10 +268,255 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
                 main_content.style.display = "block";
                 
                 container.classList.add("dimensional-mode");
-            })('anelastic_vallis');
+            })('del_phi');
         </script>
     </div>
-</div></section>
+</div><p>Note also that</p>
+<div class="math notranslate nohighlight">
+\[g\delta \phi = g\ln\left(\frac{\overline{\theta} + \delta \theta}{\overline{\theta}}\right) = g\frac{\delta \theta}{\overline{\theta}} + O\left(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\right)\]</div>
+<p>is buoyancy <span class="math notranslate nohighlight">\(b\)</span> in the anelastic system. Furthermore,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\frac{\partial \overline{\phi}}{\partial z} &amp;= \frac{1}{\gamma \overline{p}}\frac{\partial \overline{p}}{\partial z} - \frac{1}{ \overline{\rho}}\frac{\partial \overline{\rho}}{\partial z} &amp;\nonumber \\
+&amp;= -\frac{g \overline{\rho}}{\gamma \overline{p}} - \frac{1}{ \overline{\rho}}\frac{\partial \overline{\rho}}{\partial z} \label{eq:bar_phi_z} &amp;
+\end{align}\end{split}\]</div>
+<p>as the base state is hydrostatic.</p>
+<p>Turning now to our governing equations, the inviscid horizontal momentum equation is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+    \frac{D\mathbf{u}}{Dt} + f\mathbf{k}\times \mathbf{u} &amp;= -\frac{1}{\overline{\rho}+\delta \rho}\nabla_h \delta p, &amp; \nonumber \\
+&amp;= -\frac{1}{\overline{\rho}} \nabla_h \delta p + R_3 \nabla_h \delta p, &amp; \label{eq:anumom}
+\end{align}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\nabla_h = \left(\frac{\partial }{\partial x}, \frac{\partial }{\partial y} \right)\)</span> is the horizontal gradient operator, <span class="math notranslate nohighlight">\(\mathbf{u}=(u,v)\)</span> is the horizontal velocity, and</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
+\end{equation}\]</div>
+<p>exploiting Taylor’s theorem once again.</p>
+<p>The vertical momentum equation implies</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+    (\overline{\rho} + \delta \rho)\frac{D w}{Dt} &amp;= -\frac{\partial \left(\overline{p} + \delta p \right)}{\partial z} - g\left( \overline{\rho} + \rho \right) &amp; \nonumber \\
+&amp;= -\frac{\partial \delta p}{\partial z} - g\delta \rho, &amp;
+\end{align}\end{split}\]</div>
+<p>where the second line follows from the hydrostasy of the base state. Dividing through by <span class="math notranslate nohighlight">\(\overline{\rho} + \delta \rho\)</span> gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+    \frac{D w}{Dt} &amp;= -\frac{1}{\overline{\rho}}\frac{\partial \delta p}{\partial z} - g\frac{\delta \rho}{\overline{\rho}} + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right) \\
+&amp;=-\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} - g\frac{\delta \rho}{\overline{\rho}} + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right).
+\end{align}\end{split}\]</div>
+<p>Substituting for <span class="math notranslate nohighlight">\(-g\frac{\delta \rho}{\overline{\rho}}\)</span> using <span class="math notranslate nohighlight">\(g\times \eqref{eq:delphi}\)</span> results in</p>
+<div class="math notranslate nohighlight">
+\[\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} + g\delta \phi - \frac{g}{\gamma}\frac{\delta p}{\overline{p}} - gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right).\]</div>
+<p>Substituting the second and fourth terms using <span class="math notranslate nohighlight">\(\frac{\delta p}{\overline{\rho}}\times\eqref{eq:bar_phi_z}\)</span> gives</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) +\frac{\delta p}{\overline{\rho}}\frac{\partial \overline{\phi}}{\partial z} -gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right). \label{eq:w_t_intermediate}
+\end{equation}\]</div>
+<p>Now, suppose we also require that the base state is neutrally stratified, i.e. that <span class="math notranslate nohighlight">\(\overline{\theta}\)</span>, and therefore <span class="math notranslate nohighlight">\(\overline{\phi}\)</span>, are constant. Then <span class="math notranslate nohighlight">\(\eqref{eq:w_t_intermediate}\)</span> reduces to</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right). \label{eq:anwmom}
+\end{equation}\]</div>
+<p>Next, recall mass conservation is given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \frac{\partial \delta \rho}{\partial t} + \nabla \cdot \left[\left(\overline{\rho} + \delta \rho\right)\mathbf{v}\right] = 0,
+\end{equation}\]</div>
+<p>which we re-express as</p>
+<div class="math notranslate nohighlight">
+\[\begin{equation}
+    \nabla \cdot \left(\overline{\rho} \mathbf{v}\right) = - \nabla \cdot \left(\delta \rho \mathbf{v}\right)-\frac{\partial \delta \rho}{\partial t} \label{eq:anmass}.
+\end{equation}\]</div>
+<p>So the anelastic approximation will be reasonable provided we can discard the terms on the right-hand-side of <span class="math notranslate nohighlight">\(\eqref{eq:anmass}\)</span>, and the residual terms in <span class="math notranslate nohighlight">\(\eqref{eq:anumom}\)</span> and <span class="math notranslate nohighlight">\(\eqref{eq:anwmom}\)</span>. To explore circumstances where discarding these terms is defensible, we perform a scale analysis. This means we specify the length, height and time scales <span class="math notranslate nohighlight">\(L\)</span>, <span class="math notranslate nohighlight">\(H\)</span>, and <span class="math notranslate nohighlight">\(T\)</span> of the processes we care about, and use these to infer representative scales for <span class="math notranslate nohighlight">\(U\)</span>, <span class="math notranslate nohighlight">\(W\)</span>. We can then check which terms in our governing equations are important at these scales.</p>
+<div id="anelastic">
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+        <p><small>This can take a few minutes!</small></p>
+    </div>
+    <div id="main-content">
+        <div id="scale-table"></div>
+        <div id="controls"></div>
+        <script>
+            (function(containerID) {
+                // Setup constants
+                const c_p = 1005; // J kg^-1 K^-1
+                const c_v = 718; // J kg^-1 K^-1
+                const gamma = c_p / c_v;
+                const R = c_p - c_v; // J kg^-1 K^-1
+                const g = 9.81; // m s^-2
+                const Omega = (2 * Math.PI) / (24 * 3600); // rad s^-1
+                const f = Omega
+                
+                // Define reference values
+                const p_s = 1e5; // Pa
+                const T_s = 300; // K
+                const rho_s = p_s / (R * T_s); // Ideal gas law
+                
+                /**
+                 * Calculate the terms for the scale analysis table
+                 * @param {number} del_p
+                 * @param {number} p_bar
+                 * @param {number} del_rho
+                 * @param {number} rho_bar
+                 * @returns
+                 */
+                function calculateTableValues(del_p, p_bar, del_rho, rho_bar, L, H, T) {
+                    const del_phi =
+                        (1 / gamma) * Math.log((p_bar + del_p) / p_bar) -
+                        Math.log((rho_bar + del_rho) / rho_bar);
+                    const del_phi_1 = (1 / gamma) * (del_p / p_bar);
+                    const del_phi_2 = -(del_rho / rho_bar);
+                    const R_1 = (1 / gamma) * Math.log((p_bar + del_p) / p_bar) - del_phi_1;
+                    const R_2 = -Math.log((rho_bar + del_rho) / rho_bar) - del_phi_2;
+                
+                    const R_3 = 1 / (rho_bar + del_rho) - 1 / rho_bar;
+                    U = L / T;
+                    W = H / T;
+                
+                    u_mom_terms = [U / T, f * U, ((1 / rho_bar) * del_p) / L, null, null];
+                    w_mom_terms = [W / T, g * del_phi, del_p / rho_bar / H, g * R_1, g * R_2];
+                
+                    return [u_mom_terms, w_mom_terms];
+                }
+                
+                // Create container for the table
+                let tableIndentifer = `#${containerID} #main-content #scale-table`;
+                const table_container = document.querySelector(tableIndentifer);
+                
+                // Create sliders to control scales. Note sliders are logarithmic, but values
+                // stored in scaleTable are linear.
+                
+                // Store the initial exponents and values for each slider
+                const initialExponents = [4, 5, -1, 0, 4, 4, 3];
+                const initialSliderValues = initialExponents.map((exp) => Math.pow(10, exp));
+                
+                // 1e3 Pa = 10 hPa
+                let args = [`${containerID}-del_p-slider`, `${containerID}-del_p-output`];
+                args.push("\\(\\delta p:\\)", 0, 6, initialExponents[0]);
+                args.push(0.1, null, "Pa");
+                const delPSliderRow = createSliderRow(...args);
+                
+                args = [`${containerID}-p_bar-slider`, `${containerID}-p_bar-output`];
+                // 1e5 Pa = 1000 hPa = 1 bar
+                args.push("\\(\\overline{p}:\\)", 0, 6, initialExponents[1]);
+                args.push(0.1, null, "Pa");
+                const pBarSliderRow = createSliderRow(...args);
+                
+                args = [`${containerID}-del_rho-slider`, `${containerID}-del_rho-output`];
+                args.push("\\(\\delta \\rho:\\)", -3, 0.5, initialExponents[2], 0.1);
+                args.push(null, "kg m⁻³");
+                const delRhoSliderRow = createSliderRow(...args);
+                
+                args = [`${containerID}-rho_bar-slider`, `${containerID}-rho_bar-output`];
+                args.push("\\(\\overline{\\rho}:\\)", -3, 0.5, initialExponents[3], 0.1);
+                args.push(null, "kg m⁻³");
+                const rhoBarSliderRow = createSliderRow(...args);
+                
+                args = [`${containerID}-L-slider`, `${containerID}-L-output`];
+                args.push("\\(L:\\)", -3, 6, initialExponents[4], 0.1);
+                args.push(null, "m");
+                const LSliderRow = createSliderRow(...args);
+                
+                args = [`${containerID}-H-slider`, `${containerID}-H-output`];
+                args.push("\\(H:\\)", -3, 6, initialExponents[5], 0.1);
+                args.push(null, "m");
+                const HSliderRow = createSliderRow(...args);
+                
+                args = [`${containerID}-T-slider`, `${containerID}-T-output`];
+                args.push("\\(T:\\)", -3, 6, initialExponents[5], 0.1);
+                args.push(null, "s");
+                const TSliderRow = createSliderRow(...args);
+                
+                let allSliders = [delPSliderRow, pBarSliderRow, delRhoSliderRow];
+                allSliders.push(rhoBarSliderRow, LSliderRow, HSliderRow, TSliderRow);
+                // Fix the initial slider output formats
+                initializeValues(allSliders);
+                
+                // Now append all the slider rows to the controls container
+                let controlsIdentifier = `#${containerID} #main-content #controls`;
+                const controls = document.querySelector(controlsIdentifier);
+                controls.append(...allSliders);
+                
+                // Build the scale table
+                const initialTableValues = calculateTableValues(...initialSliderValues);
+                const scaleTable = new ScaleTable(
+                    [
+                        [
+                            `${containerID}-a`,
+                            `${containerID}-b`,
+                            `${containerID}-c`,
+                            `${containerID}-d`,
+                            `${containerID}-e`,
+                        ],
+                        [
+                            `${containerID}-f`,
+                            `${containerID}-g`,
+                            `${containerID}-h`,
+                            `${containerID}-i`,
+                            `${containerID}-j`,
+                        ],
+                    ], // DOM ids
+                    [
+                        [
+                            "\\frac{D\\mathbf{u}}{Dt}",
+                            "f\\mathbf{k}\\times \\mathbf{u}",
+                            "-\\frac{1}{\\overline{\\rho}} \\nabla_h \\delta p",
+                            "R_3 \\nabla_h \\delta p",
+                        ],
+                        ["a", "b", "c", "d", "e"],
+                    ],
+                    initialTableValues,
+                    [
+                        ["", "", "", "", ""],
+                        ["", "", "", "", ""],
+                    ] // Everything unitless in this case
+                );
+                scaleTable.id = `${containerID}-scale-table`;
+                table_container.appendChild(scaleTable.table);
+                
+                // Setup the listeners
+                let sliderIDs = [`${containerID}-del_p-slider`, `${containerID}-p_bar-slider`];
+                sliderIDs.push(`${containerID}-del_rho-slider`);
+                sliderIDs.push(`${containerID}-rho_bar-slider`);
+                sliderIDs.push(`${containerID}-L-slider`, `${containerID}-H-slider`);
+                sliderIDs.push(`${containerID}-T-slider`);
+                
+                addListeners(sliderIDs, calculateTableValues, scaleTable);
+                
+                // Hide loading screen and show main content
+                const container = document.querySelector(`#${containerID}`);
+                const loading_screen = container.querySelector("#loading-screen");
+                const main_content = container.querySelector("#main-content");
+                
+                loading_screen.style.display = "none";
+                main_content.style.display = "block";
+                
+                container.classList.add("dimensional-mode");
+            })('anelastic');
+        </script>
+    </div>
+</div><p>Summarizing, we have</p>
+<div class="admonition-anelastic-equations admonition">
+<p class="admonition-title">Anelastic Equations</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v} &amp;= -\nabla \left(\frac{p}{\overline{\rho}}\right) + g\delta \phi \mathbf{k}, &amp; \\
+\nabla \cdot \left(\overline{\rho} \mathbf{v}\right) &amp;= 0 &amp;
+\end{align}\end{split}\]</div>
+</div>
+<p>The above derivation suggests the anelastic approximation will only be as accurate as the difference between the magnitudes of the pressure and density perturbations and the corresponding base state values, given that the base state is also neutrally stratified.</p>
+</section>
+<section id="derivation-of-boussinesq-system">
+<h2>Derivation of Boussinesq System<a class="headerlink" href="#derivation-of-boussinesq-system" title="Link to this heading"></a></h2>
+<p>The derivation of the Boussinesq equations mostly follows the same steps as above; we still define a hydrostatic, neutrally stratified base state and the buoyancy variable <span class="math notranslate nohighlight">\(\delta \phi\)</span>. The simplification of <span class="math notranslate nohighlight">\(\delta \phi\)</span> given by <span class="math notranslate nohighlight">\(\eqref{eq:delphi}\)</span> will be just as accurate as in the anelastic case.</p>
+<p>The difference with the Boussinesq system is we approximate <span class="math notranslate nohighlight">\(\overline{\rho}+\delta \rho\)</span> by a constant reference density <span class="math notranslate nohighlight">\(\rho_s\)</span> on the left hand sides in equations <span class="math notranslate nohighlight">\(\eqref{eq:anumom}\)</span>, <span class="math notranslate nohighlight">\(\eqref{eq:anwmom}\)</span>, and <span class="math notranslate nohighlight">\(\eqref{eq:anmass}\)</span> (but nowhere else!) The Boussinesq system will thus only be numerically accurate when the overall density field <span class="math notranslate nohighlight">\(\rho\)</span> is close to <span class="math notranslate nohighlight">\(\rho_s\)</span> everywhere, which typically only occurs when the vertical scale being considered is much smaller than the density scale height (about 8 km in Earth’s lower atmosphere.)</p>
+</section>
+<section id="extensions">
+<h2>Extensions<a class="headerlink" href="#extensions" title="Link to this heading"></a></h2>
+<p>Elaborating is on my todo list, but in brief, note both the anelastic and Boussinesq systems can be made more numerically accurate by using the Exner function; see <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Ogura and Phillips (1962)</a>. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1989)046&lt;1453:ITAA&gt;2.0.CO;2">Durran (1989)</a> has also grappled with the anelastic system, seeking to remove the requirement of a neutrally stratified base state.</p>
+</section>
 </section>
 
 

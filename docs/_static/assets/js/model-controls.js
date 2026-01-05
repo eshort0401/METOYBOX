@@ -331,7 +331,7 @@ function setupCoordinateToggle(
 
 // Setup variables and steps to help ensure dimensional and non-dimensional sliders match up
 const Omega = (2 * Math.PI) / (24 * 3600); // diurnal frequency in radians per second
-const stepRatio = 5e-3; // Step as a ratio of the quantity's scale
+const stepRatio = 2.5e-3; // Step as a ratio of the quantity's scale
 const HValue = 1e3;
 const alphaValue = 0.2 * Omega;
 const NValue = 1e-2;

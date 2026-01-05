@@ -6,20 +6,26 @@ Loosely speaking, the anelastic approximation is obtained by
     #. defining a base state, and using this to express the governing equations in buoyancy form.
     #. Replacing :math:`\rho` with a horizontally uniform :math:`\overline{\rho}(z)` wherever :math:`\rho` appears explicitly in the momentum and continuity equations.
 
-The Boussinesq equations are similar, but :math:`\overline{\rho}(z)` is taken to be a constant :math:`\rho_s`. These approximations make it easier to draw interesting insights directly from the mathematics. For most people, most of the time, this is all you need to know.
+Our governing momentum and continuity equations become
 
-The anelastic approximation filters sound-waves from our system of equations. Back in the day, this filtering had computational advantages when integrating numerically, but we don't care about that here. We like the anelastic approximation because it allows us to play with the maths more directly. 
+.. admonition:: Anelastic Equations
+    
+    .. math::
+        \begin{align}
+        \frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v} &= -\nabla \left(\frac{p}{\overline{\rho}}\right) + g\delta \phi \mathbf{k}, & \\
+        \nabla \cdot \left(\overline{\rho} \mathbf{v}\right) &= 0 &
+        \end{align}
 
-Building intuition for the scope of validity and physical implications of the anelastic approximation has been tortuously difficult for me. One challenge is that different authors use the terms "incompressible", "anelastic" and "Boussinesq" for different things. Another challenge is that the governing equations can be written in buoyancy form using many distinct coordinate systems, resulting in many different equation sets and lots of very technical papers, with :math:`*` and :math:`\overline{\,}` symbols spilling out everywhere.
+The Boussinesq equations are very similar, but we instead replace :math:`\rho` with a constant :math:`\rho_s` in the momentum and continuity equations (but nowhere else!) 
 
-Below I give a loose derivation mostly plagiarized from `Vallis (2017, p. 75)`_. This derivation uses our standard variables :math:`x,y,z,\rho,p` and so forth, making the maths easier to interpret. However, using garden variety variables results in approximations less numerically accurate than those associated with more exotic variables, to be discussed later. 
+I initially found both these approximations very unpleasant; substituting out a variable in some places but not others made me feel dirty. `Ogura and Phillips (1962)`_ provided the remedy, with a clean derivation based on truncations of asymptotic expansions. However, `Ogura and Phillips (1962)`_ use the `Exner function`_ in place of pressure, which produces a more numerically accurate system, but obfuscates physical interpretation. Instead, I provide a derivation using vanilla variables, partly plagiarized from `Vallis (2017, p. 75)`_.
 
 .. _derivation:
 
-Derivation
----------------------------
+Derivation of Anelastic System
+------------------------------------------
 
-Let
+Our approach here will be to expand key terms as Taylor series, but instead of immediately truncating, we will carry all the residual terms through to the bitter end, performing a scale analysis to justify their final dismissal. To begin, we first decompose our thermodynamic variables into hydrostatic and perturbation components. Let
 
 .. math::
     \begin{align*}
@@ -28,14 +34,12 @@ Let
     T &= \overline{T}(z) + \delta T(x,y,z,t),
     \end{align*}
 
-where :math:`\overline{p}`, :math:`\overline{\rho}`, and :math:`\overline{T}` denote hydrostatic base state variables, assumed to be functions of :math:`z` only, with :math:`\delta p`, :math:`\delta \rho`, and :math:`\delta T` the corresponding perturbations. Now define :math:`\theta = \overline{\theta}(z) + \delta\theta`, where
+where :math:`\overline{p}`, :math:`\overline{\rho}`, and :math:`\overline{T}` denote the hydrostatic base state terms, assumed to be functions of :math:`z` only, with :math:`\delta p`, :math:`\delta \rho`, and :math:`\delta T` the corresponding perturbations. Now define :math:`\theta = \overline{\theta}(z) + \delta\theta,` where
 
 .. math::
 		\theta = T\left(\frac{p_s}{p}\right)^{\frac{R}{c_p}}, \quad \overline{\theta} = \overline{T}\left(\frac{p_s}{\overline{p}}\right)^{\frac{R}{c_p}},
 
-with :math:`p_s = \overline{p}(0)`.
-
-Next, define
+with :math:`p_s` a constant reference pressure used to ensure dimensional consistency. Next, form
 
 .. math::
 	\begin{align}
@@ -43,101 +47,113 @@ Next, define
 	\phi &= \ln\left(\frac{\theta}{\theta_s}\right) = \frac{1}{\gamma}\ln\left(\frac{\overline{p}+\delta p}{p_s}\right)  - \ln\left(\frac{\overline{\rho} + \delta \rho}{\rho_s}\right), &
 	\end{align}
 
-with :math:`\theta_s = \overline{\theta}(0)` and :math:`\rho_s = \overline{\rho}(0)`. Note the subscript :math:`s` terms are there because I'm pedantic about unit consistency; we are not restricting to the Boussinesq system yet! Continuing,
+with :math:`\gamma = \frac{c_v}{c_p}` and :math:`\theta_s` and :math:`\rho_s` constant reference values. Then,
 
 .. math::
 	\begin{align}
 	\delta \phi = \phi - \overline{\phi} &=  \frac{1}{\gamma}\ln\left(\frac{\overline{p} + \delta p}{\overline{p}}\right)  - \ln\left(\frac{\overline{\rho}+\delta \rho}{\overline{\rho}}\right) & \nonumber \\
-	&=  \frac{1}{\gamma}\frac{\delta p}{\overline{p}}  - \frac{\delta \rho}{\overline{\rho}} + O\left(\left[\frac{\delta p}{\overline{p}}\right]^2\right) + O\left(\left[\frac{\delta \rho}{\overline{\rho}}\right]^2\right) \label{eq:delphi_raw} &
+	&=  \frac{1}{\gamma}\frac{\delta p}{\overline{p}}  - \frac{\delta \rho}{\overline{\rho}} + R_1 + R_2 \label{eq:delphi} &
 	\end{align}
 
-by Taylor's Theorem, where :math:`\gamma = \frac{c_v}{c_p}`. Note :math:`g\delta \phi = g\ln\left(\frac{\overline{\theta} + \delta \theta}{\overline{\theta}}\right) = g\frac{\delta \theta}{\overline{\theta}} + O\left(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\right)` corresponds to buoyancy :math:`b` provided :math:`\left[\frac{\delta \theta}{\overline{\theta}}\right]^2` is small. Similarly, if :math:`\left[\frac{\delta p}{\overline{p}}\right]^2` and :math:`\left[\frac{\delta \rho}{\overline{\rho}}\right]^2` are small, we may discard the associated terms in :math:`\eqref{eq:delphi_raw}` to get
+by `Taylor's theorem`_, where
 
 .. math::
-	\begin{equation}
-	\delta \phi  = \frac{1}{\gamma}\frac{\delta p}{\overline{p}}  - \frac{\delta \rho}{\overline{\rho}}.
-    \label{eq:delphi}
+    \begin{equation}
+    R_1 = O\left(\left[\frac{\delta p}{\overline{p}}\right]^2\right),\quad R_2 = O\left(\left[\frac{\delta \rho}{\overline{\rho}}\right]^2\right).
     \end{equation}
 
-Also,
+The `Big O notation`_ means the magnitude of each residual term is bounded by functions proportional to the squares of :math:`\frac{\delta p}{\overline{p}}` and :math:`\frac{\delta \rho}{\overline{\rho}}`, respectively. This suggests that if the perturbations are about an order of magnitude smaller than the base state values, the residual terms will each be about an order of magnitude smaller than the other terms. Check this with the applet below if you don't believe me.
+
+.. raw:: html
+    :file: ../_static/calculators/del_phi/del_phi.html
+
+
+Note also that
+
+.. math::
+    g\delta \phi = g\ln\left(\frac{\overline{\theta} + \delta \theta}{\overline{\theta}}\right) = g\frac{\delta \theta}{\overline{\theta}} + O\left(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\right) 
+
+is buoyancy :math:`b` in the anelastic system. Furthermore,
 
 .. math::
 	\begin{align}
-	\frac{\partial \overline{\phi}}{\partial z} &= \frac{1}{\gamma \overline{p}}\frac{\partial \overline{p}}{\partial z} - \frac{1}{ \overline{\rho}}\frac{\partial \overline{\rho}}{\partial z} \nonumber \\
-	&= -\frac{g \overline{\rho}}{\gamma \overline{p}} - \frac{1}{ \overline{\rho}}\frac{\partial \overline{\rho}}{\partial z} \label{eq:bar_phi_z}
+	\frac{\partial \overline{\phi}}{\partial z} &= \frac{1}{\gamma \overline{p}}\frac{\partial \overline{p}}{\partial z} - \frac{1}{ \overline{\rho}}\frac{\partial \overline{\rho}}{\partial z} &\nonumber \\
+	&= -\frac{g \overline{\rho}}{\gamma \overline{p}} - \frac{1}{ \overline{\rho}}\frac{\partial \overline{\rho}}{\partial z} \label{eq:bar_phi_z} &
 	\end{align}
 
 as the base state is hydrostatic.
 
-Having setup all our base state and perturbation variables, we can now re-express our governing equations. Ignoring viscosity, the horizontal momentum equation is
-
-.. math::
-	(\overline{\rho}+\delta \rho)\left[\frac{D\mathbf{u}}{Dt} + f\mathbf{k}\times \mathbf{u} \right] = -\nabla_h \delta p,
-
-where :math:`\nabla_h = \left(\frac{\partial }{\partial x}, \frac{\partial }{\partial y} \right)` is the horizontal gradient operator, and :math:`\mathbf{u}=(u,v)` is the horizontal velocity. Neglecting :math:`\delta \rho` on the left hand side, we obtain
-
-.. math::
-	\frac{D\mathbf{u}}{Dt} + f\mathbf{k}\times \mathbf{u} = - \nabla_h \frac{\delta p}{\overline{\rho}}.
-
-
-The vertical momentum equation is
+Turning now to our governing equations, the inviscid horizontal momentum equation is
 
 .. math::
     \begin{align}
-	(\overline{\rho} + \delta \rho)\frac{D w}{Dt} &= -\frac{\partial \left(\overline{p} + \delta p \right)}{\partial z} - g\left( \overline{\rho} + \rho \right) \nonumber \\ 
-    &= -\frac{\partial \delta p}{\partial z} - g\delta \rho,
+	\frac{D\mathbf{u}}{Dt} + f\mathbf{k}\times \mathbf{u} &= -\frac{1}{\overline{\rho}+\delta \rho}\nabla_h \delta p, & \nonumber \\
+    &= -\frac{1}{\overline{\rho}} \nabla_h \delta p + R_3 \nabla_h \delta p, & \label{eq:anumom}
     \end{align}
 
-exploiting the hydrostasy of the base state. Neglecting :math:`\delta \rho` on the left hand side and rearranging gives
+where :math:`\nabla_h = \left(\frac{\partial }{\partial x}, \frac{\partial }{\partial y} \right)` is the horizontal gradient operator, :math:`\mathbf{u}=(u,v)` is the horizontal velocity, and
 
 .. math::
-	\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} - g\frac{\delta \rho}{\overline{\rho}}.
+    \begin{equation}
+    R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
+    \end{equation}
 
-Substituting for :math:`g\frac{\delta \rho}{\overline{\rho}}` using equation :math:`\eqref{eq:delphi}` gives
+exploiting Taylor's theorem once again.
+
+The vertical momentum equation implies
 
 .. math::
-	\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} + g\delta \phi - \frac{g}{\gamma}\frac{\delta p}{\overline{p}}.
+    \begin{align}
+	(\overline{\rho} + \delta \rho)\frac{D w}{Dt} &= -\frac{\partial \left(\overline{p} + \delta p \right)}{\partial z} - g\left( \overline{\rho} + \rho \right) & \nonumber \\ 
+    &= -\frac{\partial \delta p}{\partial z} - g\delta \rho, &
+    \end{align}
+
+where the second line follows from the hydrostasy of the base state. Dividing through by :math:`\overline{\rho} + \delta \rho` gives
+
+.. math::
+    \begin{align}
+	\frac{D w}{Dt} &= -\frac{1}{\overline{\rho}}\frac{\partial \delta p}{\partial z} - g\frac{\delta \rho}{\overline{\rho}} + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right) \\
+    &=-\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} - g\frac{\delta \rho}{\overline{\rho}} + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right).
+    \end{align}
+
+Substituting for :math:`-g\frac{\delta \rho}{\overline{\rho}}` using :math:`g\times \eqref{eq:delphi}` results in
+
+.. math::
+	\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} + g\delta \phi - \frac{g}{\gamma}\frac{\delta p}{\overline{p}} - gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right).
 
 Substituting the second and fourth terms using :math:`\frac{\delta p}{\overline{\rho}}\times\eqref{eq:bar_phi_z}` gives
 
 .. math::
     \begin{equation}
-	\frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) +\frac{\delta p}{\overline{\rho}}\frac{\partial \overline{\phi}}{\partial z}. \label{eq:w_t_intermediate}
+	\frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) +\frac{\delta p}{\overline{\rho}}\frac{\partial \overline{\phi}}{\partial z} -gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right). \label{eq:w_t_intermediate}
     \end{equation}
 
-Now consider the expressions
-
-.. math::
-	\left|\frac{\partial}{\partial z} \ln\left(\frac{\delta p / p_s}{\overline{\rho} / \rho_s}\right)\right|, \quad \left|\frac{\partial}{\partial z} \ln\left(\frac{\overline{\theta}}{\theta_s}\right)\right|.
-
-In most of the atmospheres we care about, the pressure and density scale heights are of similar magnitude, but the  potential temperature scale height is much larger, so the first term above is typically much larger than the second. This implies the second term in :math:`\eqref{eq:w_t_intermediate}` is much larger in absolute value than the third, which we discard. We thus have
+Now, suppose we also require that the base state is neutrally stratified, i.e. that :math:`\overline{\theta}`, and therefore :math:`\overline{\phi}`, are constant. Then :math:`\eqref{eq:w_t_intermediate}` reduces to
 
 .. math::
     \begin{equation}
-	\frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right).\label{eq:w}
+	\frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right). \label{eq:anwmom}
     \end{equation}
 
 
-We can therefore write the anelastic momentum equations in vector form as
+Next, recall mass conservation is given by
 
 .. math::
-	\begin{equation}
-	\frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v} = -\nabla \left(\frac{p}{\overline{\rho}}\right) + g\delta \phi \mathbf{k},
-    \label{eq:anmom}
-    \end{equation}
-
-where :math:`\mathbf{v}=(u, v, w)`.
-
-Mass conservation is given by
-
-.. math::
+    \begin{equation}
 	\frac{\partial \delta \rho}{\partial t} + \nabla \cdot \left[\left(\overline{\rho} + \delta \rho\right)\mathbf{v}\right] = 0,
+    \end{equation}
 
-which after discarding :math:`\delta \rho` terms becomes
+which we re-express as 
 
 .. math::
-	\nabla \cdot \left(\overline{\rho} \mathbf{v}\right) = 0.
+    \begin{equation}
+	\nabla \cdot \left(\overline{\rho} \mathbf{v}\right) = - \nabla \cdot \left(\delta \rho \mathbf{v}\right)-\frac{\partial \delta \rho}{\partial t} \label{eq:anmass}.
+    \end{equation}
 
+So the anelastic approximation will be reasonable provided we can discard the terms on the right-hand-side of :math:`\eqref{eq:anmass}`, and the residual terms in :math:`\eqref{eq:anumom}` and :math:`\eqref{eq:anwmom}`. To explore circumstances where discarding these terms is defensible, we perform a scale analysis. This means we specify the length, height and time scales :math:`L`, :math:`H`, and :math:`T` of the processes we care about, and use these to infer representative scales for :math:`U`, :math:`W`. We can then check which terms in our governing equations are important at these scales.
+
+.. raw:: html
+    :file: ../_static/calculators/anelastic/anelastic.html
 
 Summarizing, we have
 
@@ -149,12 +165,31 @@ Summarizing, we have
         \nabla \cdot \left(\overline{\rho} \mathbf{v}\right) &= 0 &
         \end{align}
 
+The above derivation suggests the anelastic approximation will only be as accurate as the difference between the magnitudes of the pressure and density perturbations and the corresponding base state values, given that the base state is also neutrally stratified. 
 
-Exploration
--------------------------------------------------------------------
-Let's explicitly compare the magnitudes of terms in all the equations of our :ref:`derivation <derivation>` where things were discarded.
+.. Note we could probably create a final scale check slider thing here 
 
-.. raw:: html
-    :file: ../_static/calculators/anelastic_vallis/anelastic_vallis.html
+Derivation of Boussinesq System
+------------------------------------------------------------------------
+The derivation of the Boussinesq equations mostly follows the same steps as above; we still define a hydrostatic, neutrally stratified base state and the buoyancy variable :math:`\delta \phi`. The simplification of :math:`\delta \phi` given by :math:`\eqref{eq:delphi}` will be just as accurate as in the anelastic case. 
+
+The difference with the Boussinesq system is we approximate :math:`\overline{\rho}+\delta \rho` by a constant reference density :math:`\rho_s` on the left hand sides in equations :math:`\eqref{eq:anumom}`, :math:`\eqref{eq:anwmom}`, and :math:`\eqref{eq:anmass}` (but nowhere else!) The Boussinesq system will thus only be numerically accurate when the overall density field :math:`\rho` is close to :math:`\rho_s` everywhere, which typically only occurs when the vertical scale being considered is much smaller than the density scale height (about 8 km in Earth's lower atmosphere.)
+
+Extensions
+------------------------------------------------------------------------
+Elaborating is on my todo list, but in brief, note both the anelastic and Boussinesq systems can be made more numerically accurate by using the Exner function; see `Ogura and Phillips (1962)`_. `Durran (1989)`_ has also grappled with the anelastic system, seeking to remove the requirement of a neutrally stratified base state.
+
 
 .. _Vallis (2017, p. 75): https://doi.org/10.1017/9781107588417
+
+.. _Taylor's theorem: https://en.wikipedia.org/wiki/Taylor%27s_theorem
+
+.. _Big O notation: https://en.wikipedia.org/wiki/Big_O_notation
+
+.. _Ogura and Phillips (1962): https://doi.org/10.1175/1520-0469(1962)019<0173:SAODAS>2.0.CO;2
+
+.. _Exner function: https://en.wikipedia.org/wiki/Exner_function
+
+.. _Batchelor (1967, p. 166): https://doi.org/10.1017/CBO9780511800955
+
+.. _Durran (1989): https://doi.org/10.1175/1520-0469(1989)046<1453:ITAA>2.0.CO;2
