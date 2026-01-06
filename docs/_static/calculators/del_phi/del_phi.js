@@ -76,14 +76,7 @@ controls.append(...allSliders);
 // Build the scale table
 const initialTableValues = calculateTableValues(...initialSliderValues);
 const scaleTable = new ScaleTable(
-    [
-        [
-            `${containerID}-a`,
-            `${containerID}-b`,
-            `${containerID}-c`,
-            `${containerID}-d`,
-        ],
-    ], // DOM ids
+    containerID,
     [
         [
             "\\frac{1}{\\gamma}\\frac{\\delta p}{\\overline{p}}",

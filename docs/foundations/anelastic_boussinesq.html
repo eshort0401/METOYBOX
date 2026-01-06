@@ -25,7 +25,7 @@
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
       <script src="../_static/assets/js/model-controls.js?v=07a4f401"></script>
-      <script src="../_static/assets/js/scale-table.js?v=86076c60"></script>
+      <script src="../_static/assets/js/scale-table.js?v=ec224827"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -141,7 +141,7 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
 \[\begin{equation}
 R_1 = O\left(\left[\frac{\delta p}{\overline{p}}\right]^2\right),\quad R_2 = O\left(\left[\frac{\delta \rho}{\overline{\rho}}\right]^2\right).
 \end{equation}\]</div>
-<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Big_O_notation">Big O notation</a> means the magnitude of each residual term is bounded by functions proportional to the squares of <span class="math notranslate nohighlight">\(\frac{\delta p}{\overline{p}}\)</span> and <span class="math notranslate nohighlight">\(\frac{\delta \rho}{\overline{\rho}}\)</span>, respectively. This suggests that if the perturbations are about an order of magnitude smaller than the base state values, the residual terms will each be about an order of magnitude smaller than the other terms. Check this with the applet below if you don’t believe me.</p>
+<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Big_O_notation">Big O notation</a> means the magnitude of each residual term is bounded by functions proportional to the squares of <span class="math notranslate nohighlight">\(\frac{\delta p}{\overline{p}}\)</span> and <span class="math notranslate nohighlight">\(\frac{\delta \rho}{\overline{\rho}}\)</span>, respectively. This suggests that if the perturbations are about an order of magnitude smaller than the base state values, the residual terms will each be about an order of magnitude smaller than the other terms. Check with the applet below if you don’t believe me.</p>
 <div id="del_phi">
     <div id="loading-screen">
         <div class="spinner"></div>
@@ -231,14 +231,7 @@ R_1 = O\left(\left[\frac{\delta p}{\overline{p}}\right]^2\right),\quad R_2 = O\l
                 // Build the scale table
                 const initialTableValues = calculateTableValues(...initialSliderValues);
                 const scaleTable = new ScaleTable(
-                    [
-                        [
-                            `${containerID}-a`,
-                            `${containerID}-b`,
-                            `${containerID}-c`,
-                            `${containerID}-d`,
-                        ],
-                    ], // DOM ids
+                    containerID,
                     [
                         [
                             "\\frac{1}{\\gamma}\\frac{\\delta p}{\\overline{p}}",
@@ -318,7 +311,7 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
 \[\begin{equation}
     \frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right). \label{eq:anwmom}
 \end{equation}\]</div>
-<p>Next, recall mass conservation is given by</p>
+<p>Finally, recall mass conservation is given by</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
     \frac{\partial \delta \rho}{\partial t} + \nabla \cdot \left[\left(\overline{\rho} + \delta \rho\right)\mathbf{v}\right] = 0,
@@ -347,7 +340,7 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                 const R = c_p - c_v; // J kg^-1 K^-1
                 const g = 9.81; // m s^-2
                 const Omega = (2 * Math.PI) / (24 * 3600); // rad s^-1
-                const f = Omega
+                const f = Omega;
                 
                 // Define reference values
                 const p_s = 1e5; // Pa
@@ -375,8 +368,24 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                     U = L / T;
                     W = H / T;
                 
-                    u_mom_terms = [U / T, f * U, ((1 / rho_bar) * del_p) / L, null, null];
-                    w_mom_terms = [W / T, g * del_phi, del_p / rho_bar / H, g * R_1, g * R_2];
+                    u_mom_terms = [
+                        U / T,
+                        U * (U / L),
+                        W * (U / H),
+                        f * U,
+                        ((1 / rho_bar) * del_p) / L,
+                        (R_3 * del_p) / L,
+                        null,
+                    ];
+                    w_mom_terms = [
+                        W / T,
+                        U * (W / L),
+                        W * (W / H),
+                        g * del_phi,
+                        del_p / rho_bar / H,
+                        g * R_1,
+                        g * R_2,
+                    ];
                 
                     return [u_mom_terms, w_mom_terms];
                 }
@@ -442,35 +451,23 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                 // Build the scale table
                 const initialTableValues = calculateTableValues(...initialSliderValues);
                 const scaleTable = new ScaleTable(
+                    containerID,
                     [
                         [
-                            `${containerID}-a`,
-                            `${containerID}-b`,
-                            `${containerID}-c`,
-                            `${containerID}-d`,
-                            `${containerID}-e`,
-                        ],
-                        [
-                            `${containerID}-f`,
-                            `${containerID}-g`,
-                            `${containerID}-h`,
-                            `${containerID}-i`,
-                            `${containerID}-j`,
-                        ],
-                    ], // DOM ids
-                    [
-                        [
-                            "\\frac{D\\mathbf{u}}{Dt}",
+                            "\\frac{\\partial \\mathbf{u}}{\\partial t}",
+                            "\\mathbf{u} \\cdot \\nabla_h \\mathbf{u}",
+                            "w \\frac{\\partial \\mathbf{u}}{\\partial z}",
                             "f\\mathbf{k}\\times \\mathbf{u}",
                             "-\\frac{1}{\\overline{\\rho}} \\nabla_h \\delta p",
                             "R_3 \\nabla_h \\delta p",
+                            "",
                         ],
-                        ["a", "b", "c", "d", "e"],
+                        ["a", "x", "y", "b", "c", "d", "e"],
                     ],
                     initialTableValues,
                     [
-                        ["", "", "", "", ""],
-                        ["", "", "", "", ""],
+                        ["", "", "", "", "", "", ""],
+                        ["", "", "", "", "", "", ""],
                     ] // Everything unitless in this case
                 );
                 scaleTable.id = `${containerID}-scale-table`;

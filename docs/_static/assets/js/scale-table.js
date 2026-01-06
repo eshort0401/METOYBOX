@@ -1,13 +1,18 @@
 class ScaleTable {
     /**
      * Initialize a ScaleTable instance
-     * @param {string[][]} ids - Array of element ids
+     * @param {string} containerID - The container element id
      * @param {string[][]} terms - Array of term labels
      * @param {string[][]} values - Array of corresponding values
      * @param {string[][]} units - Array of corresponding units
      */
-    constructor(ids, terms, values, units) {
-        this.ids = ids;
+    constructor(containerID, terms, values, units) {
+        
+        // Build row and column ids programmatically
+        this.ids = terms.map((row, i) =>
+            row.map((term, j) => `${containerID}-${i}-${j}`)
+        );
+
         this.terms = terms;
         this.values = values;
         this.units = units;
@@ -22,13 +27,10 @@ class ScaleTable {
                 const value_td = document.createElement("td");
                 // Set the value td to have the id for updating later
                 value_td.id = this.ids[i][j];
-
+                // Initialize the table label
                 const term = this.terms[i][j];
-                const value = this.values[i][j];
-                const unit = this.units[i][j];
-                const exponent = Math.log10(Math.abs(value)).toFixed(1);
                 label_td.innerHTML = `\\(${term}\\)`;
-                value_td.innerHTML = `10<sup>${exponent}</sup> ${unit}`;
+                this._updateValue(value_td, i, j);
                 label_tr.appendChild(label_td);
                 value_tr.appendChild(value_td);
             }
@@ -60,8 +62,12 @@ class ScaleTable {
     _updateValue(value_td, i, j) {
         const value = this.values[i][j];
         const unit = this.units[i][j];
-        const exponent = Math.log10(Math.abs(value)).toFixed(1);
-        value_td.innerHTML = `10<sup>${exponent}</sup> ${unit}`;
+        if (value === null) {
+            value_td.innerHTML = "";
+        } else {
+            const exponent = Math.log10(Math.abs(value)).toFixed(1);
+            value_td.innerHTML = `10<sup>${exponent}</sup> ${unit}`;
+        }
     }
 }
 
@@ -112,7 +118,7 @@ function addListeners(sliderIDs, calculationFunction, scaleTable) {
 }
 
 /**
- * Convenience function to fix the initial output display for each slider 
+ * Convenience function to fix the initial output display for each slider
  * before adding to DOM
  * @param {HTMLElement[]} allSliders - Array of slider row elements
  */

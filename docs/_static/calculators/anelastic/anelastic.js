@@ -5,7 +5,7 @@ const gamma = c_p / c_v;
 const R = c_p - c_v; // J kg^-1 K^-1
 const g = 9.81; // m s^-2
 const Omega = (2 * Math.PI) / (24 * 3600); // rad s^-1
-const f = Omega
+const f = Omega;
 
 // Define reference values
 const p_s = 1e5; // Pa
@@ -33,8 +33,24 @@ function calculateTableValues(del_p, p_bar, del_rho, rho_bar, L, H, T) {
     U = L / T;
     W = H / T;
 
-    u_mom_terms = [U / T, f * U, ((1 / rho_bar) * del_p) / L, null, null];
-    w_mom_terms = [W / T, g * del_phi, del_p / rho_bar / H, g * R_1, g * R_2];
+    u_mom_terms = [
+        U / T,
+        U * (U / L),
+        W * (U / H),
+        f * U,
+        ((1 / rho_bar) * del_p) / L,
+        (R_3 * del_p) / L,
+        null,
+    ];
+    w_mom_terms = [
+        W / T,
+        U * (W / L),
+        W * (W / H),
+        g * del_phi,
+        del_p / rho_bar / H,
+        g * R_1,
+        g * R_2,
+    ];
 
     return [u_mom_terms, w_mom_terms];
 }
@@ -100,35 +116,23 @@ controls.append(...allSliders);
 // Build the scale table
 const initialTableValues = calculateTableValues(...initialSliderValues);
 const scaleTable = new ScaleTable(
+    containerID,
     [
         [
-            `${containerID}-a`,
-            `${containerID}-b`,
-            `${containerID}-c`,
-            `${containerID}-d`,
-            `${containerID}-e`,
-        ],
-        [
-            `${containerID}-f`,
-            `${containerID}-g`,
-            `${containerID}-h`,
-            `${containerID}-i`,
-            `${containerID}-j`,
-        ],
-    ], // DOM ids
-    [
-        [
-            "\\frac{D\\mathbf{u}}{Dt}",
+            "\\frac{\\partial \\mathbf{u}}{\\partial t}",
+            "\\mathbf{u} \\cdot \\nabla_h \\mathbf{u}",
+            "w \\frac{\\partial \\mathbf{u}}{\\partial z}",
             "f\\mathbf{k}\\times \\mathbf{u}",
             "-\\frac{1}{\\overline{\\rho}} \\nabla_h \\delta p",
             "R_3 \\nabla_h \\delta p",
+            "",
         ],
-        ["a", "b", "c", "d", "e"],
+        ["a", "x", "y", "b", "c", "d", "e"],
     ],
     initialTableValues,
     [
-        ["", "", "", "", ""],
-        ["", "", "", "", ""],
+        ["", "", "", "", "", "", ""],
+        ["", "", "", "", "", "", ""],
     ] // Everything unitless in this case
 );
 scaleTable.id = `${containerID}-scale-table`;
