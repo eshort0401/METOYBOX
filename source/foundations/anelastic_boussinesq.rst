@@ -62,11 +62,7 @@ by `Taylor's theorem`_, where
     R_1 = O\left(\left[\frac{\delta p}{\overline{p}}\right]^2\right),\quad R_2 = O\left(\left[\frac{\delta \rho}{\overline{\rho}}\right]^2\right).
     \end{equation}
 
-The `Big O notation`_ means the magnitude of each residual term is bounded by functions proportional to the squares of :math:`\frac{\delta p}{\overline{p}}` and :math:`\frac{\delta \rho}{\overline{\rho}}`, respectively. This suggests that if the perturbations are about an order of magnitude smaller than the base state values, the residual terms will each be about an order of magnitude smaller than the other terms. Check with the applet below if you don't believe me.
-
-.. raw:: html
-    :file: ../_static/calculators/del_phi/del_phi.html
-
+The `Big O notation`_ means the magnitude of each residual term is bounded by functions proportional to the squares of :math:`\frac{\delta p}{\overline{p}}` and :math:`\frac{\delta \rho}{\overline{\rho}}`, respectively. This suggests that if the perturbations are about an order of magnitude smaller than the base state values, the residual terms will each be about an order of magnitude smaller than the other terms.
 
 Note also that
 

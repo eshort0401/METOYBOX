@@ -73,15 +73,17 @@ table td, table th {
     border: 1px solid #ddd;  /* Light gray borders */
     padding: 8px;  /* Add some spacing */
     text-align: center;  /* Center cell content */
-    min-width: 60px;
+    min-width: 70px;
 }
 
 table tr {
     border-bottom: 1px solid #ddd;  /* Dividing lines between rows */
 }
 
-/* Optional: Style header row differently */
-table thead tr {
-    background-color: #f2f2f2;
-    font-weight: bold;
+table tr.ruler-bottom {
+    border-bottom: 2px solid #bbb;  /* Thicker darker line for rulers */
+}
+
+table td.ruler-left {
+    border-left: 2px solid #bbb;  /* Thicker darker line for rulers */
 }

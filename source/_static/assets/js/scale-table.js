@@ -4,10 +4,9 @@ class ScaleTable {
      * @param {string} containerID - The container element id
      * @param {string[][]} terms - Array of term labels
      * @param {string[][]} values - Array of corresponding values
-     * @param {string[][]} units - Array of corresponding units
+     * @param {string[]} units - Array of units for each equation
      */
     constructor(containerID, terms, values, units) {
-        
         // Build row and column ids programmatically
         this.ids = terms.map((row, i) =>
             row.map((term, j) => `${containerID}-${i}-${j}`)
@@ -22,6 +21,10 @@ class ScaleTable {
         for (let i = 0; i < terms.length; i++) {
             const label_tr = document.createElement("tr");
             const value_tr = document.createElement("tr");
+            // Add a css class to create rulers between equations (skip last)
+            if (i < terms.length - 1) {
+                value_tr.classList.add("ruler-bottom");
+            }
             for (let j = 0; j < terms[i].length; j++) {
                 const label_td = document.createElement("td");
                 const value_td = document.createElement("td");
@@ -35,7 +38,17 @@ class ScaleTable {
                 value_tr.appendChild(value_td);
             }
             tbody.append(label_tr, value_tr);
+
+            const unit_label_td = document.createElement("td");
+            const unit_value_td = document.createElement("td");
+            unit_label_td.innerHTML = "unit";
+            unit_value_td.innerHTML = this.units[i];
+            unit_label_td.classList.add("ruler-left");
+            unit_value_td.classList.add("ruler-left");
+            label_tr.appendChild(unit_label_td);
+            value_tr.appendChild(unit_value_td);
         }
+
         table.appendChild(tbody);
         this.table = table;
     }
@@ -61,12 +74,11 @@ class ScaleTable {
      */
     _updateValue(value_td, i, j) {
         const value = this.values[i][j];
-        const unit = this.units[i][j];
         if (value === null) {
             value_td.innerHTML = "";
         } else {
             const exponent = Math.log10(Math.abs(value)).toFixed(1);
-            value_td.innerHTML = `10<sup>${exponent}</sup> ${unit}`;
+            value_td.innerHTML = `10<sup>${exponent}</sup>`;
         }
     }
 }
@@ -122,7 +134,7 @@ function addListeners(sliderIDs, calculationFunction, scaleTable) {
  * before adding to DOM
  * @param {HTMLElement[]} allSliders - Array of slider row elements
  */
-function initializeValues(allSliders) {
+function initializeOutputs(allSliders) {
     allSliders.forEach((row) => {
         const input = row.querySelector('input[type="range"]');
         const output = row.querySelector("output");

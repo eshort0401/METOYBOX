@@ -14,50 +14,45 @@ const rho_s = p_s / (R * T_s); // Ideal gas law
 
 /**
  * Calculate the terms for the scale analysis table
- * @param {number} del_p
- * @param {number} p_bar
- * @param {number} del_rho
- * @param {number} rho_bar
+ * @param {number} P_bar - Base state pressure scale
+ * @param {number} R_bar - Base state density scale
+ * @param {number} L - Horizontal length scale
+ * @param {number} U - Horizontal velocity scale
+ * @param {number} W - Vertical velocity scale
  * @returns
  */
-function calculateTableValues(del_p, p_bar, del_rho, rho_bar, L, H, T) {
-    // Lets try inferring L from T...
-    L = T * Math.sqrt(del_p / (rho_bar * (1 + f * T)));
+function calculateTableValues(L, U, W, P_bar, R_bar) {
+    // Infer T and H scales immediately
+    const T = L / U;
+    const H = W * T;
 
-    const del_phi =
-        (1 / gamma) * Math.log((p_bar + del_p) / p_bar) -
-        Math.log((rho_bar + del_rho) / rho_bar);
-    const del_phi_1 = (1 / gamma) * (del_p / p_bar);
-    const del_phi_2 = -(del_rho / rho_bar);
-    const R_1 = (1 / gamma) * Math.log((p_bar + del_p) / p_bar) - del_phi_1;
-    const R_2 = -Math.log((rho_bar + del_rho) / rho_bar) - del_phi_2;
-    const R_3 = 1 / (rho_bar + del_rho) - 1 / rho_bar;
-    const R_4 = -g * R_1 - g * R_2 + R_3 * (-del_p / H - g * del_rho);
+    // Infer Del_P from horizontal momentum equation
+    const Del_P = Math.max(R_bar * U ** 2, R_bar * f * U * L);
+
+    // Infer Del_R from vertical momentum equation
+    const Del_R = Math.max((W ** 2 * R_bar) / (g * H), Del_P / (g * H));
+
+    // Buoyancy Scale
+    const Del_Phi =
+        (1 / gamma) * Math.log((P_bar + Del_P) / P_bar) -
+        Math.log((R_bar + Del_R) / R_bar);
+
+    // Residuals
+    const Del_Phi_1 = (1 / gamma) * (Del_P / P_bar);
+    const Del_Phi_2 = -(Del_R / R_bar);
+    const R_1 = (1 / gamma) * Math.log((P_bar + Del_P) / P_bar) - Del_Phi_1;
+    const R_2 = -Math.log((R_bar + Del_R) / R_bar) - Del_Phi_2;
+    const R_3 = 1 / (R_bar + Del_R) - 1 / R_bar;
+    const R_4 = -g * R_1 - g * R_2 + R_3 * (-Del_P / H - g * Del_R);
 
     // Hmm... if the length, time, density and pressure scales are specified, I suspect the height
     // scale will follow from the continuity equation.
 
-    const U = L / T;
-    const W = H / T;
+    u_mom_terms = [U / T, f * U, (1 / R_bar) * (Del_P / L), (R_3 * Del_P) / L];
+    w_mom_terms = [W / T, g * Del_Phi, Del_P / R_bar / H, R_4];
+    cont_terms = [Del_R / T, R_bar / T, R_bar / T, Del_R / T];
 
-    u_mom_terms = [
-        U / T,
-        U * (U / L),
-        W * (U / H),
-        f * U,
-        (1 / rho_bar) * (del_p / L),
-        (R_3 * del_p) / L,
-    ];
-    w_mom_terms = [
-        W / T,
-        U * (W / L),
-        W * (W / H),
-        g * del_phi,
-        del_p / rho_bar / H,
-        R_4,
-    ];
-
-    return [u_mom_terms, w_mom_terms];
+    return [u_mom_terms, w_mom_terms, cont_terms];
 }
 
 // Create container for the table
@@ -67,51 +62,39 @@ const table_container = document.querySelector(tableIndentifer);
 // Create sliders to control scales. Note sliders are logarithmic, but values
 // stored in scaleTable are linear.
 
-// Store the initial exponents and values for each slider
-const initialExponents = [4, 5, -1, 0, 4, 4, 3];
-const initialSliderValues = initialExponents.map((exp) => Math.pow(10, exp));
-
-// 1e3 Pa = 10 hPa
-let args = [`${containerID}-del_p-slider`, `${containerID}-del_p-output`];
-args.push("\\(\\delta p:\\)", 0, 6, initialExponents[0]);
-args.push(0.1, null, "Pa");
-const delPSliderRow = createSliderRow(...args);
-
-args = [`${containerID}-p_bar-slider`, `${containerID}-p_bar-output`];
+args = [`${containerID}-P_bar-slider`, `${containerID}-P_bar-output`];
 // 1e5 Pa = 1000 hPa = 1 bar
-args.push("\\(\\overline{p}:\\)", 0, 6, initialExponents[1]);
+args.push("\\(\\overline{P}:\\)", 4, 6, 5);
 args.push(0.1, null, "Pa");
-const pBarSliderRow = createSliderRow(...args);
+const PBarSliderRow = createSliderRow(...args);
 
-args = [`${containerID}-del_rho-slider`, `${containerID}-del_rho-output`];
-args.push("\\(\\delta \\rho:\\)", -3, 0.5, initialExponents[2], 0.1);
+args = [`${containerID}-R_bar-slider`, `${containerID}-R_bar-output`];
+args.push("\\(\\overline{R}:\\)", -3, 0.5, 0, 0.1);
 args.push(null, "kg m⁻³");
-const delRhoSliderRow = createSliderRow(...args);
+const RBarSliderRow = createSliderRow(...args);
 
-args = [`${containerID}-rho_bar-slider`, `${containerID}-rho_bar-output`];
-args.push("\\(\\overline{\\rho}:\\)", -3, 0.5, initialExponents[3], 0.1);
-args.push(null, "kg m⁻³");
-const rhoBarSliderRow = createSliderRow(...args);
+args = [`${containerID}-U-slider`, `${containerID}-U-output`];
+args.push("\\(U:\\)", -3, 2, 1, 0.1);
+args.push(null, "m");
+const USliderRow = createSliderRow(...args);
+
+args = [`${containerID}-W-slider`, `${containerID}-W-output`];
+args.push("\\(W:\\)", -3, 2, 1, 0.1);
+args.push(null, "m");
+const WSliderRow = createSliderRow(...args);
 
 args = [`${containerID}-L-slider`, `${containerID}-L-output`];
-args.push("\\(L:\\)", -3, 6, initialExponents[4], 0.1);
+args.push("\\(L:\\)", -3, 6, 3, 0.1);
 args.push(null, "m");
 const LSliderRow = createSliderRow(...args);
 
-args = [`${containerID}-H-slider`, `${containerID}-H-output`];
-args.push("\\(H:\\)", -3, 6, initialExponents[5], 0.1);
-args.push(null, "m");
-const HSliderRow = createSliderRow(...args);
+allSliders = [LSliderRow, USliderRow, WSliderRow, PBarSliderRow, RBarSliderRow];
+// Fix the initial slider outputs for exponential formatting
+initializeOutputs(allSliders);
 
-args = [`${containerID}-T-slider`, `${containerID}-T-output`];
-args.push("\\(T:\\)", -3, 6, initialExponents[5], 0.1);
-args.push(null, "s");
-const TSliderRow = createSliderRow(...args);
-
-let allSliders = [delPSliderRow, pBarSliderRow, delRhoSliderRow];
-allSliders.push(rhoBarSliderRow, LSliderRow, HSliderRow, TSliderRow);
-// Fix the initial slider output formats
-initializeValues(allSliders);
+const initialSliderValues = allSliders.map(
+    (slider) => 10 ** slider.querySelector("input").value
+);
 
 // Now append all the slider rows to the controls container
 let controlsIdentifier = `#${containerID} #main-content #controls`;
@@ -120,41 +103,40 @@ controls.append(...allSliders);
 
 // Build the scale table
 const initialTableValues = calculateTableValues(...initialSliderValues);
+const zPressureGradientForce =
+    "-\\frac{\\partial }{\\partial z}" +
+    "\\left(\\frac{\\delta p}{\\overline{\\rho}}\\right)";
 const scaleTable = new ScaleTable(
     containerID,
     [
         [
-            "\\frac{\\partial \\mathbf{u}}{\\partial t}",
-            "\\mathbf{u} \\cdot \\nabla_h \\mathbf{u}",
-            "w \\frac{\\partial \\mathbf{u}}{\\partial z}",
+            "\\frac{D \\mathbf{u}}{D t}",
             "f\\mathbf{k}\\times \\mathbf{u}",
             "-\\frac{1}{\\overline{\\rho}} \\nabla_h \\delta p",
             "R_3 \\nabla_h \\delta p",
         ],
+        ["\\frac{D w}{D t}", "g\\delta \\phi", zPressureGradientForce, "R_4"],
         [
-            "\\frac{\\partial w}{\\partial t}",
-            "\\mathbf{u} \\cdot \\nabla_h w",
-            "w \\frac{\\partial w}{\\partial z}",
-            "g\\delta \\phi",
-            "-\\frac{\\partial }{\\partial z}\\left(\\frac{\\delta p}{\\overline{\\rho}}\\right)",
-            "R_4",
+            "\\frac{\\partial \\delta \\rho}{\\partial t}",
+            "\\nabla_h \\cdot (\\overline{\\rho} \\mathbf{u})",
+            "\\frac{\\partial }{\\partial z}(\\overline{\\rho} w)",
+            "\\nabla \\cdot (\\delta \\rho \\mathbf{v})",
         ],
     ],
     initialTableValues,
-    [
-        ["", "", "", "", "", ""],
-        ["", "", "", "", "", ""],
-    ] // Everything unitless in this case
+    [["m s<sup>-2</sup>"], ["m s<sup>-2</sup>"], ["m s<sup>-2</sup>"]]
 );
 scaleTable.id = `${containerID}-scale-table`;
 table_container.appendChild(scaleTable.table);
 
+// TODO: Setup an "inferred-scales" div, and put the inferred scales in there,
+// e.g. T, H, Del_P, Del_R, Del_Phi, and update these when sliders change
+
 // Setup the listeners
-let sliderIDs = [`${containerID}-del_p-slider`, `${containerID}-p_bar-slider`];
-sliderIDs.push(`${containerID}-del_rho-slider`);
-sliderIDs.push(`${containerID}-rho_bar-slider`);
-sliderIDs.push(`${containerID}-L-slider`, `${containerID}-H-slider`);
-sliderIDs.push(`${containerID}-T-slider`);
+let sliderIDs = [`${containerID}-L-slider`, `${containerID}-U-slider`];
+sliderIDs.push(`${containerID}-W-slider`);
+sliderIDs.push(`${containerID}-P_bar-slider`);
+sliderIDs.push(`${containerID}-R_bar-slider`);
 
 addListeners(sliderIDs, calculateTableValues, scaleTable);
 

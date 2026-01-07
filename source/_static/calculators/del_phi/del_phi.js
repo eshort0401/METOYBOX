@@ -66,7 +66,7 @@ const rhoBarSliderRow = createSliderRow(...args);
 let allSliders = [delPSliderRow, pBarSliderRow];
 allSliders.push(delRhoSliderRow, rhoBarSliderRow);
 // Fix the initial slider output formats
-initializeValues(allSliders);
+initializeOutputs(allSliders);
 
 // Now append all the slider rows to the controls container
 let controlsIdentifier = `#${containerID} #main-content #controls`;
