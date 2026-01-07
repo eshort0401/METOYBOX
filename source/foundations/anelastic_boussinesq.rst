@@ -18,7 +18,7 @@ Our governing momentum and continuity equations become
 
 The Boussinesq equations are very similar, but we instead replace :math:`\rho` with a constant :math:`\rho_s` in the momentum and continuity equations (but nowhere else!) 
 
-I initially found both these approximations very unpleasant; substituting out a variable in some places but not others made me feel dirty. `Ogura and Phillips (1962)`_ provided the remedy, with a clean derivation based on truncations of asymptotic expansions. However, `Ogura and Phillips (1962)`_ use the `Exner function`_ in place of pressure, which produces a more numerically accurate system, but obfuscates physical interpretation. Instead, I provide a derivation using vanilla variables, partly plagiarized from `Vallis (2017, p. 75)`_.
+I initially found both these approximations very unpleasant. Seeing variables substituted out in some places but not others felt dirty. `Ogura and Phillips (1962)`_ provided the remedy, with a clean derivation based on truncations of asymptotic expansions. However, `Ogura and Phillips (1962)`_ use the `Exner function`_ in place of pressure, which produces a more numerically accurate system, but obfuscates physical interpretation. Instead, I provide a derivation using vanilla variables, partly plagiarized from `Vallis (2017, p. 75)`_.
 
 .. _derivation:
 
@@ -104,7 +104,7 @@ The vertical momentum equation implies
 
 .. math::
     \begin{align}
-	(\overline{\rho} + \delta \rho)\frac{D w}{Dt} &= -\frac{\partial \left(\overline{p} + \delta p \right)}{\partial z} - g\left( \overline{\rho} + \rho \right) & \nonumber \\ 
+	(\overline{\rho} + \delta \rho)\frac{D w}{Dt} &= -\frac{\partial \left(\overline{p} + \delta p \right)}{\partial z} - g\left( \overline{\rho} + \delta\rho \right) & \nonumber \\ 
     &= -\frac{\partial \delta p}{\partial z} - g\delta \rho, &
     \end{align}
 
@@ -119,20 +119,29 @@ where the second line follows from the hydrostasy of the base state. Dividing th
 Substituting for :math:`-g\frac{\delta \rho}{\overline{\rho}}` using :math:`g\times \eqref{eq:delphi}` results in
 
 .. math::
-	\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} + g\delta \phi - \frac{g}{\gamma}\frac{\delta p}{\overline{p}} - gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right).
+	\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} + g\delta \phi - \frac{g}{\gamma}\frac{\delta p}{\overline{p}} + R_4,
+
+
+where we have collected all the residual terms into 
+
+.. math::
+    R_4 = -gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right)
+
+just to keep things tidy.
 
 Substituting the second and fourth terms using :math:`\frac{\delta p}{\overline{\rho}}\times\eqref{eq:bar_phi_z}` gives
 
 .. math::
     \begin{equation}
-	\frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) +\frac{\delta p}{\overline{\rho}}\frac{\partial \overline{\phi}}{\partial z} -gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right). \label{eq:w_t_intermediate}
+	\frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) +\frac{\delta p}{\overline{\rho}}\frac{\partial \overline{\phi}}{\partial z} + R_4. \label{eq:w_t_intermediate}
     \end{equation}
+
 
 Now, suppose we also require that the base state is neutrally stratified, i.e. that :math:`\overline{\theta}`, and therefore :math:`\overline{\phi}`, are constant. Then :math:`\eqref{eq:w_t_intermediate}` reduces to
 
 .. math::
     \begin{equation}
-	\frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right). \label{eq:anwmom}
+	\frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) + R_4. \label{eq:anwmom}
     \end{equation}
 
 
@@ -140,7 +149,7 @@ Finally, recall mass conservation is given by
 
 .. math::
     \begin{equation}
-	\frac{\partial \delta \rho}{\partial t} + \nabla \cdot \left[\left(\overline{\rho} + \delta \rho\right)\mathbf{v}\right] = 0,
+	\frac{\partial \delta \rho}{\partial t} + \nabla \cdot \left[\left(\overline{\rho} + \delta \rho\right)\mathbf{v}\right] = 0.
     \end{equation}
 
 which we re-express as 

@@ -21,6 +21,9 @@ const rho_s = p_s / (R * T_s); // Ideal gas law
  * @returns
  */
 function calculateTableValues(del_p, p_bar, del_rho, rho_bar, L, H, T) {
+    // Lets try inferring L from T...
+    L = T * Math.sqrt(del_p / (rho_bar * (1 + f * T)));
+
     const del_phi =
         (1 / gamma) * Math.log((p_bar + del_p) / p_bar) -
         Math.log((rho_bar + del_rho) / rho_bar);
@@ -28,19 +31,22 @@ function calculateTableValues(del_p, p_bar, del_rho, rho_bar, L, H, T) {
     const del_phi_2 = -(del_rho / rho_bar);
     const R_1 = (1 / gamma) * Math.log((p_bar + del_p) / p_bar) - del_phi_1;
     const R_2 = -Math.log((rho_bar + del_rho) / rho_bar) - del_phi_2;
-
     const R_3 = 1 / (rho_bar + del_rho) - 1 / rho_bar;
-    U = L / T;
-    W = H / T;
+    const R_4 = -g * R_1 - g * R_2 + R_3 * (-del_p / H - g * del_rho);
+
+    // Hmm... if the length, time, density and pressure scales are specified, I suspect the height
+    // scale will follow from the continuity equation.
+
+    const U = L / T;
+    const W = H / T;
 
     u_mom_terms = [
         U / T,
         U * (U / L),
         W * (U / H),
         f * U,
-        ((1 / rho_bar) * del_p) / L,
+        (1 / rho_bar) * (del_p / L),
         (R_3 * del_p) / L,
-        null,
     ];
     w_mom_terms = [
         W / T,
@@ -48,8 +54,7 @@ function calculateTableValues(del_p, p_bar, del_rho, rho_bar, L, H, T) {
         W * (W / H),
         g * del_phi,
         del_p / rho_bar / H,
-        g * R_1,
-        g * R_2,
+        R_4,
     ];
 
     return [u_mom_terms, w_mom_terms];
@@ -125,14 +130,20 @@ const scaleTable = new ScaleTable(
             "f\\mathbf{k}\\times \\mathbf{u}",
             "-\\frac{1}{\\overline{\\rho}} \\nabla_h \\delta p",
             "R_3 \\nabla_h \\delta p",
-            "",
         ],
-        ["a", "x", "y", "b", "c", "d", "e"],
+        [
+            "\\frac{\\partial w}{\\partial t}",
+            "\\mathbf{u} \\cdot \\nabla_h w",
+            "w \\frac{\\partial w}{\\partial z}",
+            "g\\delta \\phi",
+            "-\\frac{\\partial }{\\partial z}\\left(\\frac{\\delta p}{\\overline{\\rho}}\\right)",
+            "R_4",
+        ],
     ],
     initialTableValues,
     [
-        ["", "", "", "", "", "", ""],
-        ["", "", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
+        ["", "", "", "", "", ""],
     ] // Everything unitless in this case
 );
 scaleTable.id = `${containerID}-scale-table`;

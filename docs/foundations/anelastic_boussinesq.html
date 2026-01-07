@@ -111,7 +111,7 @@
 \end{align}\end{split}\]</div>
 </div>
 <p>The Boussinesq equations are very similar, but we instead replace <span class="math notranslate nohighlight">\(\rho\)</span> with a constant <span class="math notranslate nohighlight">\(\rho_s\)</span> in the momentum and continuity equations (but nowhere else!)</p>
-<p>I initially found both these approximations very unpleasant; substituting out a variable in some places but not others made me feel dirty. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Ogura and Phillips (1962)</a> provided the remedy, with a clean derivation based on truncations of asymptotic expansions. However, <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Ogura and Phillips (1962)</a> use the <a class="reference external" href="https://en.wikipedia.org/wiki/Exner_function">Exner function</a> in place of pressure, which produces a more numerically accurate system, but obfuscates physical interpretation. Instead, I provide a derivation using vanilla variables, partly plagiarized from <a class="reference external" href="https://doi.org/10.1017/9781107588417">Vallis (2017, p. 75)</a>.</p>
+<p>I initially found both these approximations very unpleasant. Seeing variables substituted out in some places but not others felt dirty. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Ogura and Phillips (1962)</a> provided the remedy, with a clean derivation based on truncations of asymptotic expansions. However, <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Ogura and Phillips (1962)</a> use the <a class="reference external" href="https://en.wikipedia.org/wiki/Exner_function">Exner function</a> in place of pressure, which produces a more numerically accurate system, but obfuscates physical interpretation. Instead, I provide a derivation using vanilla variables, partly plagiarized from <a class="reference external" href="https://doi.org/10.1017/9781107588417">Vallis (2017, p. 75)</a>.</p>
 <section id="derivation-of-anelastic-system">
 <span id="derivation"></span><h2>Derivation of Anelastic System<a class="headerlink" href="#derivation-of-anelastic-system" title="Link to this heading"></a></h2>
 <p>Our approach here will be to expand key terms as Taylor series, but instead of immediately truncating, we will carry all the residual terms through to the bitter end, performing a scale analysis to justify their final dismissal. To begin, we first decompose our thermodynamic variables into hydrostatic and perturbation components. Let</p>
@@ -289,7 +289,7 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
 <p>The vertical momentum equation implies</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
-    (\overline{\rho} + \delta \rho)\frac{D w}{Dt} &amp;= -\frac{\partial \left(\overline{p} + \delta p \right)}{\partial z} - g\left( \overline{\rho} + \rho \right) &amp; \nonumber \\
+    (\overline{\rho} + \delta \rho)\frac{D w}{Dt} &amp;= -\frac{\partial \left(\overline{p} + \delta p \right)}{\partial z} - g\left( \overline{\rho} + \delta\rho \right) &amp; \nonumber \\
 &amp;= -\frac{\partial \delta p}{\partial z} - g\delta \rho, &amp;
 \end{align}\end{split}\]</div>
 <p>where the second line follows from the hydrostasy of the base state. Dividing through by <span class="math notranslate nohighlight">\(\overline{\rho} + \delta \rho\)</span> gives</p>
@@ -300,21 +300,25 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
 \end{align}\end{split}\]</div>
 <p>Substituting for <span class="math notranslate nohighlight">\(-g\frac{\delta \rho}{\overline{\rho}}\)</span> using <span class="math notranslate nohighlight">\(g\times \eqref{eq:delphi}\)</span> results in</p>
 <div class="math notranslate nohighlight">
-\[\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} + g\delta \phi - \frac{g}{\gamma}\frac{\delta p}{\overline{p}} - gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right).\]</div>
+\[\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} + g\delta \phi - \frac{g}{\gamma}\frac{\delta p}{\overline{p}} + R_4,\]</div>
+<p>where we have collected all the residual terms into</p>
+<div class="math notranslate nohighlight">
+\[R_4 = -gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right)\]</div>
+<p>just to keep things tidy.</p>
 <p>Substituting the second and fourth terms using <span class="math notranslate nohighlight">\(\frac{\delta p}{\overline{\rho}}\times\eqref{eq:bar_phi_z}\)</span> gives</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-    \frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) +\frac{\delta p}{\overline{\rho}}\frac{\partial \overline{\phi}}{\partial z} -gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right). \label{eq:w_t_intermediate}
+    \frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) +\frac{\delta p}{\overline{\rho}}\frac{\partial \overline{\phi}}{\partial z} + R_4. \label{eq:w_t_intermediate}
 \end{equation}\]</div>
 <p>Now, suppose we also require that the base state is neutrally stratified, i.e. that <span class="math notranslate nohighlight">\(\overline{\theta}\)</span>, and therefore <span class="math notranslate nohighlight">\(\overline{\phi}\)</span>, are constant. Then <span class="math notranslate nohighlight">\(\eqref{eq:w_t_intermediate}\)</span> reduces to</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-    \frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right). \label{eq:anwmom}
+    \frac{D w}{Dt} =  g\delta \phi -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) + R_4. \label{eq:anwmom}
 \end{equation}\]</div>
 <p>Finally, recall mass conservation is given by</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-    \frac{\partial \delta \rho}{\partial t} + \nabla \cdot \left[\left(\overline{\rho} + \delta \rho\right)\mathbf{v}\right] = 0,
+    \frac{\partial \delta \rho}{\partial t} + \nabla \cdot \left[\left(\overline{\rho} + \delta \rho\right)\mathbf{v}\right] = 0.
 \end{equation}\]</div>
 <p>which we re-express as</p>
 <div class="math notranslate nohighlight">
@@ -356,6 +360,9 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                  * @returns
                  */
                 function calculateTableValues(del_p, p_bar, del_rho, rho_bar, L, H, T) {
+                    // Lets try inferring L from T...
+                    L = T * Math.sqrt(del_p / (rho_bar * (1 + f * T)));
+                
                     const del_phi =
                         (1 / gamma) * Math.log((p_bar + del_p) / p_bar) -
                         Math.log((rho_bar + del_rho) / rho_bar);
@@ -363,19 +370,22 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                     const del_phi_2 = -(del_rho / rho_bar);
                     const R_1 = (1 / gamma) * Math.log((p_bar + del_p) / p_bar) - del_phi_1;
                     const R_2 = -Math.log((rho_bar + del_rho) / rho_bar) - del_phi_2;
-                
                     const R_3 = 1 / (rho_bar + del_rho) - 1 / rho_bar;
-                    U = L / T;
-                    W = H / T;
+                    const R_4 = -g * R_1 - g * R_2 + R_3 * (-del_p / H - g * del_rho);
+                
+                    // Hmm... if the length, time, density and pressure scales are specified, I suspect the height
+                    // scale will follow from the continuity equation.
+                
+                    const U = L / T;
+                    const W = H / T;
                 
                     u_mom_terms = [
                         U / T,
                         U * (U / L),
                         W * (U / H),
                         f * U,
-                        ((1 / rho_bar) * del_p) / L,
+                        (1 / rho_bar) * (del_p / L),
                         (R_3 * del_p) / L,
-                        null,
                     ];
                     w_mom_terms = [
                         W / T,
@@ -383,8 +393,7 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                         W * (W / H),
                         g * del_phi,
                         del_p / rho_bar / H,
-                        g * R_1,
-                        g * R_2,
+                        R_4,
                     ];
                 
                     return [u_mom_terms, w_mom_terms];
@@ -460,14 +469,20 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                             "f\\mathbf{k}\\times \\mathbf{u}",
                             "-\\frac{1}{\\overline{\\rho}} \\nabla_h \\delta p",
                             "R_3 \\nabla_h \\delta p",
-                            "",
                         ],
-                        ["a", "x", "y", "b", "c", "d", "e"],
+                        [
+                            "\\frac{\\partial w}{\\partial t}",
+                            "\\mathbf{u} \\cdot \\nabla_h w",
+                            "w \\frac{\\partial w}{\\partial z}",
+                            "g\\delta \\phi",
+                            "-\\frac{\\partial }{\\partial z}\\left(\\frac{\\delta p}{\\overline{\\rho}}\\right)",
+                            "R_4",
+                        ],
                     ],
                     initialTableValues,
                     [
-                        ["", "", "", "", "", "", ""],
-                        ["", "", "", "", "", "", ""],
+                        ["", "", "", "", "", ""],
+                        ["", "", "", "", "", ""],
                     ] // Everything unitless in this case
                 );
                 scaleTable.id = `${containerID}-scale-table`;
