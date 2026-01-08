@@ -10,7 +10,7 @@
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../_static/autodoc_pydantic.css" />
-      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=9a379e1d" />
+      <link rel="stylesheet" type="text/css" href="../_static/assets/css/base.css?v=5c8c2ed0" />
       <link rel="stylesheet" type="text/css" href="../_static/assets/css/controls.css?v=5ffa823a" />
       <link rel="stylesheet" type="text/css" href="https://pyscript.net/releases/2024.1.1/core.css" />
 
@@ -25,7 +25,7 @@
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
       <script src="../_static/assets/js/model-controls.js?v=07a4f401"></script>
-      <script src="../_static/assets/js/scale-table.js?v=d7d40db6"></script>
+      <script src="../_static/assets/js/scale-table.js?v=05822f22"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -248,6 +248,10 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                     // Infer Del_R from vertical momentum equation
                     const Del_R = Math.max((W ** 2 * R_bar) / (g * H), Del_P / (g * H));
                 
+                    if (Del_P > P_bar || Del_R > R_bar) {
+                        return [null, null, null, null, null];
+                    }
+                
                     // Buoyancy Scale
                     const Del_Phi =
                         (1 / gamma) * Math.log((P_bar + Del_P) / P_bar) -
@@ -268,6 +272,15 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                 function calculateTableValues(L, U, W, P_bar, R_bar) {
                     // Implied Scales
                     const [T, H, Del_P, Del_R, Del_Phi] = inferredScales(L, U, W, P_bar, R_bar);
+                
+                    if ([T, H, Del_P, Del_R, Del_Phi].some(x => x === null)) {
+                        // Handle the null case
+                        return [
+                            [null, null, null, null],
+                            [null, null, null, null],
+                            [null, null, null, null],
+                        ];
+                    }
                 
                     // Residuals
                     const Del_Phi_1 = (1 / gamma) * (Del_P / P_bar);
@@ -365,12 +378,10 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                         ["kg m<sup>-3</sup> s<sup>-1</sup>"],
                     ],
                     ["T", "H", "\\Delta P", "\\Delta R", "\\Delta \\Phi"],
-                    initialInferredScaleValues
+                    initialInferredScaleValues,
+                    ["s", "m", "Pa", "kg m<sup>-3</sup>", ""]
                 );
                 table_container.append(scaleTable.table, scaleTable.inferredScalesDiv);
-                
-                // TODO: Setup an "inferred-scales" div, and put the inferred scales in there,
-                // e.g. T, H, Del_P, Del_R, Del_Phi, and update these when sliders change
                 
                 // Setup the listeners
                 let sliderIDs = [`${containerID}-L-slider`, `${containerID}-U-slider`];

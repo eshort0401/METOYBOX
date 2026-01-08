@@ -31,6 +31,10 @@ function inferredScales(L, U, W, P_bar, R_bar) {
     // Infer Del_R from vertical momentum equation
     const Del_R = Math.max((W ** 2 * R_bar) / (g * H), Del_P / (g * H));
 
+    if (Del_P > P_bar || Del_R > R_bar) {
+        return [null, null, null, null, null];
+    }
+
     // Buoyancy Scale
     const Del_Phi =
         (1 / gamma) * Math.log((P_bar + Del_P) / P_bar) -
@@ -51,6 +55,15 @@ function inferredScales(L, U, W, P_bar, R_bar) {
 function calculateTableValues(L, U, W, P_bar, R_bar) {
     // Implied Scales
     const [T, H, Del_P, Del_R, Del_Phi] = inferredScales(L, U, W, P_bar, R_bar);
+
+    if ([T, H, Del_P, Del_R, Del_Phi].some(x => x === null)) {
+        // Handle the null case
+        return [
+            [null, null, null, null],
+            [null, null, null, null],
+            [null, null, null, null],
+        ];
+    }
 
     // Residuals
     const Del_Phi_1 = (1 / gamma) * (Del_P / P_bar);
@@ -148,7 +161,8 @@ const scaleTable = new ScaleTable(
         ["kg m<sup>-3</sup> s<sup>-1</sup>"],
     ],
     ["T", "H", "\\Delta P", "\\Delta R", "\\Delta \\Phi"],
-    initialInferredScaleValues
+    initialInferredScaleValues,
+    ["s", "m", "Pa", "kg m<sup>-3</sup>", ""]
 );
 table_container.append(scaleTable.table, scaleTable.inferredScalesDiv);
 

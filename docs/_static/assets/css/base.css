@@ -87,3 +87,13 @@ table tr.ruler-bottom {
 table td.ruler-left {
     border-left: 2px solid #bbb;  /* Thicker darker line for rulers */
 }
+
+.inferred-scales {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: medium;
+    font-family: serif;
+    text-align: center;
+    display: block;
+    justify-content: center;
+}

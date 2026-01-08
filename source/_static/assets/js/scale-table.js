@@ -7,6 +7,7 @@ class ScaleTable {
      * @param {string[]} units - Array of units for each equation
      * @param {string[]} inferredScaleLabels - Array of inferred scale labels
      * @param {string[]} inferredScaleValues - Array of inferred scale values
+     * @param {string[]} inferredScaleUnits - Array of units for inferred scales
      * @param {string} name - Optional name for the table so can ensure unique IDs
      */
     constructor(
@@ -16,6 +17,7 @@ class ScaleTable {
         units,
         inferredScaleLabels,
         inferredScaleValues,
+        inferredScaleUnits,
         name = "scale-table"
     ) {
         this.id = `${containerID}-${name}`;
@@ -38,17 +40,33 @@ class ScaleTable {
         inferredScalesDiv.id = `${containerID}-${name}-inferred-scales`;
         inferredScalesDiv.classList.add("inferred-scales");
         for (let i = 0; i < inferredScaleLabels.length; i++) {
+            const scaleSpan = document.createElement("span");
+            scaleSpan.style.whiteSpace = "nowrap";
+            // Span for the label - this is static
             const labelSpan = document.createElement("span");
             labelSpan.innerHTML = `\\(${inferredScaleLabels[i]}\\) = `;
+            // Span for the value - this is dynamic
             const valueSpan = document.createElement("span");
             valueSpan.id = this.inferredScaleIDs[i];
             const value = this.inferredScaleValues[i];
             this._updateValue(valueSpan, value);
-            inferredScalesDiv.append(labelSpan, valueSpan);
+            // Span for the units - this is static
+            const unitsSpan = document.createElement("span");
+            unitsSpan.innerHTML = ` ${inferredScaleUnits[i]}`;
+            inferredScalesDiv.append(unitsSpan);
+            // Span for joining comma or not
+            const joinSpan = document.createElement("span");
             if (i < inferredScaleLabels.length - 1) {
-                inferredScalesDiv.append(document.createTextNode(", "));
+                joinSpan.innerHTML = ", ";
+            } else {
+                joinSpan.innerHTML = "";
             }
+            scaleSpan.append(labelSpan, valueSpan, unitsSpan);
+            inferredScalesDiv.append(scaleSpan);
+            inferredScalesDiv.append(joinSpan);
         }
+        // Set the initial visibility of the inferred scales div
+        this._setInferredScalesVisibility(inferredScalesDiv);
 
         // Build the table itself
         const table = document.createElement("table");
@@ -69,7 +87,8 @@ class ScaleTable {
                 const term = this.labels[i][j];
                 label_td.innerHTML = `\\(${term}\\)`;
                 // Initialize the table value
-                this._updateTableValue(value_td, i, j);
+                const value = this.values[i][j];
+                this._updateValue(value_td, value);
                 label_tr.appendChild(label_td);
                 value_tr.appendChild(value_td);
             }
@@ -99,31 +118,20 @@ class ScaleTable {
         for (let i = 0; i < this.ids.length; i++) {
             for (let j = 0; j < this.ids[i].length; j++) {
                 const value_td = document.getElementById(this.ids[i][j]);
-                this._updateTableValue(value_td, i, j);
+                const value = this.values[i][j];
+                this._updateValue(value_td, value);
             }
         }
         // Update the inferred scales
         for (let i = 0; i < this.inferredScaleIDs.length; i++) {
             const value = this.inferredScaleValues[i];
-            const value_td = document.getElementById(this.inferredScaleIDs[i]);
-            const exponent = Math.log10(Math.abs(value)).toFixed(1);
-            value_td.innerHTML = `10<sup>${exponent}</sup>`;
+            const value_element = document.getElementById(
+                this.inferredScaleIDs[i]
+            );
+            this._updateValue(value_element, value);
         }
-    }
-
-    /**
-     * Convenience method to update a single table value
-     * @param {HTMLElement} td - The table cell to update
-     * @param {number} i - The row index
-     * @param {number} j - The column index
-     */
-    _updateTableValue(value_td, i, j) {
-        const value = this.values[i][j];
-        if (value === null) {
-            value_td.innerHTML = "";
-        } else {
-            this._updateValue(value_td, value);
-        }
+        const scalesDiv = document.getElementById(`${this.id}-inferred-scales`);
+        this._setInferredScalesVisibility(scalesDiv);
     }
 
     /**
@@ -132,8 +140,20 @@ class ScaleTable {
      * @param {number} value - The inferred scale value
      */
     _updateValue(value_td, value) {
-        const exponent = Math.log10(Math.abs(value)).toFixed(1);
-        value_td.innerHTML = `10<sup>${exponent}</sup>`;
+        if (value === null) {
+            value_td.innerHTML = "";
+        } else {
+            const exponent = Math.log10(Math.abs(value)).toFixed(1);
+            value_td.innerHTML = `10<sup>${exponent}</sup>`;
+        }
+    }
+
+    _setInferredScalesVisibility(scalesDiv) {
+        if (this.inferredScaleValues.some((x) => x === null)) {
+            scalesDiv.style.visibility = "hidden";
+        } else {
+            scalesDiv.style.visibility = "visible";
+        }
     }
 }
 
