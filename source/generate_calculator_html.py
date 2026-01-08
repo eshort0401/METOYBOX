@@ -23,7 +23,6 @@ _div_close = """
 def generate_html(
     stub_path,
     html_path=None,
-    config_path="/METOYBOX/_static/assets/pyscript.toml",
     local_parent=None,
     container_id=None,
 ):
@@ -54,7 +53,6 @@ def generate_html(
     )
 
     with open(html_path, "w") as f:
-        # f.write(_header)
         f.write(div_open)
         f.write(indented_stub)
         f.write(_div_close)

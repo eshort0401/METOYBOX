@@ -14,15 +14,14 @@ const rho_s = p_s / (R * T_s); // Ideal gas law
 
 /**
  * Calculate the terms for the scale analysis table
- * @param {number} P_bar - Base state pressure scale
- * @param {number} R_bar - Base state density scale
  * @param {number} L - Horizontal length scale
  * @param {number} U - Horizontal velocity scale
  * @param {number} W - Vertical velocity scale
- * @returns
+ * @param {number} P_bar - Base state pressure scale
+ * @param {number} R_bar - Base state density scale
+ * @returns {number[]} - Array with inferred scales
  */
-function calculateTableValues(L, U, W, P_bar, R_bar) {
-    // Infer T and H scales immediately
+function inferredScales(L, U, W, P_bar, R_bar) {
     const T = L / U;
     const H = W * T;
 
@@ -37,6 +36,22 @@ function calculateTableValues(L, U, W, P_bar, R_bar) {
         (1 / gamma) * Math.log((P_bar + Del_P) / P_bar) -
         Math.log((R_bar + Del_R) / R_bar);
 
+    return [T, H, Del_P, Del_R, Del_Phi];
+}
+
+/**
+ * Calculate the terms for the scale analysis table
+ * @param {number} L - Horizontal length scale
+ * @param {number} U - Horizontal velocity scale
+ * @param {number} W - Vertical velocity scale
+ * @param {number} P_bar - Base state pressure scale
+ * @param {number} R_bar - Base state density scale
+ * @returns {Array} - 2D array of table values
+ */
+function calculateTableValues(L, U, W, P_bar, R_bar) {
+    // Implied Scales
+    const [T, H, Del_P, Del_R, Del_Phi] = inferredScales(L, U, W, P_bar, R_bar);
+
     // Residuals
     const Del_Phi_1 = (1 / gamma) * (Del_P / P_bar);
     const Del_Phi_2 = -(Del_R / R_bar);
@@ -45,12 +60,14 @@ function calculateTableValues(L, U, W, P_bar, R_bar) {
     const R_3 = 1 / (R_bar + Del_R) - 1 / R_bar;
     const R_4 = -g * R_1 - g * R_2 + R_3 * (-Del_P / H - g * Del_R);
 
-    // Hmm... if the length, time, density and pressure scales are specified, I suspect the height
-    // scale will follow from the continuity equation.
-
-    u_mom_terms = [U / T, f * U, (1 / R_bar) * (Del_P / L), (R_3 * Del_P) / L];
-    w_mom_terms = [W / T, g * Del_Phi, Del_P / R_bar / H, R_4];
-    cont_terms = [Del_R / T, R_bar / T, R_bar / T, Del_R / T];
+    const u_mom_terms = [
+        U / T,
+        f * U,
+        (1 / R_bar) * (Del_P / L),
+        (R_3 * Del_P) / L,
+    ];
+    const w_mom_terms = [W / T, g * Del_Phi, Del_P / R_bar / H, R_4];
+    const cont_terms = [Del_R / T, R_bar / T, R_bar / T, Del_R / T];
 
     return [u_mom_terms, w_mom_terms, cont_terms];
 }
@@ -102,7 +119,8 @@ const controls = document.querySelector(controlsIdentifier);
 controls.append(...allSliders);
 
 // Build the scale table
-const initialTableValues = calculateTableValues(...initialSliderValues);
+initialTableValues = calculateTableValues(...initialSliderValues);
+initialInferredScaleValues = inferredScales(...initialSliderValues);
 const zPressureGradientForce =
     "-\\frac{\\partial }{\\partial z}" +
     "\\left(\\frac{\\delta p}{\\overline{\\rho}}\\right)";
@@ -124,10 +142,15 @@ const scaleTable = new ScaleTable(
         ],
     ],
     initialTableValues,
-    [["m s<sup>-2</sup>"], ["m s<sup>-2</sup>"], ["m s<sup>-2</sup>"]]
+    [
+        ["m s<sup>-2</sup>"],
+        ["m s<sup>-2</sup>"],
+        ["kg m<sup>-3</sup> s<sup>-1</sup>"],
+    ],
+    ["T", "H", "\\Delta P", "\\Delta R", "\\Delta \\Phi"],
+    initialInferredScaleValues
 );
-scaleTable.id = `${containerID}-scale-table`;
-table_container.appendChild(scaleTable.table);
+table_container.append(scaleTable.table, scaleTable.inferredScalesDiv);
 
 // TODO: Setup an "inferred-scales" div, and put the inferred scales in there,
 // e.g. T, H, Del_P, Del_R, Del_Phi, and update these when sliders change
@@ -138,7 +161,7 @@ sliderIDs.push(`${containerID}-W-slider`);
 sliderIDs.push(`${containerID}-P_bar-slider`);
 sliderIDs.push(`${containerID}-R_bar-slider`);
 
-addListeners(sliderIDs, calculateTableValues, scaleTable);
+addListeners(sliderIDs, inferredScales, calculateTableValues, scaleTable);
 
 // Hide loading screen and show main content
 const container = document.querySelector(`#${containerID}`);
