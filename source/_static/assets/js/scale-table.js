@@ -36,6 +36,7 @@ class ScaleTable {
         // Build the inferred scales div
         const inferredScalesDiv = document.createElement("span");
         inferredScalesDiv.id = `${containerID}-${name}-inferred-scales`;
+        inferredScalesDiv.classList.add("inferred-scales");
         for (let i = 0; i < inferredScaleLabels.length; i++) {
             const labelSpan = document.createElement("span");
             labelSpan.innerHTML = `\\(${inferredScaleLabels[i]}\\) = `;

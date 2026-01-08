@@ -152,9 +152,6 @@ const scaleTable = new ScaleTable(
 );
 table_container.append(scaleTable.table, scaleTable.inferredScalesDiv);
 
-// TODO: Setup an "inferred-scales" div, and put the inferred scales in there,
-// e.g. T, H, Del_P, Del_R, Del_Phi, and update these when sliders change
-
 // Setup the listeners
 let sliderIDs = [`${containerID}-L-slider`, `${containerID}-U-slider`];
 sliderIDs.push(`${containerID}-W-slider`);
