@@ -1,5 +1,5 @@
 The Anelastic Equations
-==============================================
+===========================================================
 
 Loosely speaking, the anelastic approximation is obtained by
 
@@ -25,7 +25,7 @@ I initially found both these approximations very unpleasant. Seeing variables su
 Derivation of Anelastic System
 ------------------------------------------
 
-Our approach here will be to expand key terms as Taylor series, but instead of immediately truncating, we will carry all the residual terms through to the bitter end, performing a scale analysis to justify their final dismissal. To begin, we first decompose our thermodynamic variables into hydrostatic and perturbation components. Let
+Our approach here will be to expand key terms as Taylor series, but instead of immediately truncating, we will carry all the residual terms through to the bitter end, eventually performing a scale analysis to justify their final dismissal. To begin, we decompose our thermodynamic variables into hydrostatic and perturbation components. Let
 
 .. math::
     \begin{align*}
@@ -34,7 +34,7 @@ Our approach here will be to expand key terms as Taylor series, but instead of i
     T &= \overline{T}(z) + \delta T(x,y,z,t),
     \end{align*}
 
-where :math:`\overline{p}`, :math:`\overline{\rho}`, and :math:`\overline{T}` denote the hydrostatic base state terms, assumed to be functions of :math:`z` only, with :math:`\delta p`, :math:`\delta \rho`, and :math:`\delta T` the corresponding perturbations. Now define :math:`\theta = \overline{\theta}(z) + \delta\theta,` where
+where :math:`\overline{p}`, :math:`\overline{\rho}`, and :math:`\overline{T}` denote hydrostatic base state terms, assumed to be functions of :math:`z` only, with :math:`\delta p`, :math:`\delta \rho`, and :math:`\delta T` the corresponding perturbations. Now define :math:`\theta = \overline{\theta}(z) + \delta\theta,` where
 
 .. math::
 		\theta = T\left(\frac{p_s}{p}\right)^{\frac{R}{c_p}}, \quad \overline{\theta} = \overline{T}\left(\frac{p_s}{\overline{p}}\right)^{\frac{R}{c_p}},
