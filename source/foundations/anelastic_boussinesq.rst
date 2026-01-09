@@ -59,10 +59,11 @@ by `Taylor's theorem`_, where
 
 .. math::
     \begin{align*}
-    R_1 &= \frac{1}{\gamma}\left[-\frac{1}{2}\left(\frac{\delta p}{\overline{p}}\right)^2 + \frac{1}{3}\left(\frac{\delta p}{\overline{p}}\right)^3 + \cdots \right] \\ 
+    R_1 &= \frac{1}{\gamma}\left[-\frac{1}{2}\left(\frac{\delta p}{\overline{p}}\right)^2 + \frac{1}{3}\left(\frac{\delta p}{\overline{p}}\right)^3 + \cdots \right] = O\\ 
     R_2 &= -\frac{1}{2}\left(\frac{\delta \rho}{\overline{\rho}}\right)^2 + \frac{1}{3}\left(\frac{\delta \rho}{\overline{\rho}}\right)^3 + \cdots.
     \end{align*}
 
+The `Big O notation`_ means the magnitudes of :math:`R_1` and :math:`R_2` are bounded by functions proportional to :math:`\left(\frac{\delta p}{\overline{p}}\right)^2` and :math:`\left(\frac{\delta \rho}{\overline{\rho}}\right)^2`, respectively.
 Note, these sums require :math:`\frac{\delta p}{\overline{p}} < 1` and :math:`\frac{\delta \rho}{\overline{\rho}} < 1` to converge, hence our assumptions above. Note also that
 
 .. math::
