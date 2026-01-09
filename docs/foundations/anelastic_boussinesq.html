@@ -114,14 +114,14 @@
 <p>I initially found both these approximations very unpleasant. Seeing variables substituted out in some places but not others felt dirty. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Ogura and Phillips (1962)</a> provided the remedy, with a clean derivation based on truncations of asymptotic expansions. However, <a class="reference external" href="https://doi.org/10.1175/1520-0469(1962)019&lt;0173:SAODAS&gt;2.0.CO;2">Ogura and Phillips (1962)</a> use the <a class="reference external" href="https://en.wikipedia.org/wiki/Exner_function">Exner function</a> in place of pressure, which produces a more numerically accurate system, but obfuscates physical interpretation. Instead, I provide a derivation using vanilla variables, partly plagiarized from <a class="reference external" href="https://doi.org/10.1017/9781107588417">Vallis (2017, p. 75)</a>.</p>
 <section id="derivation-of-anelastic-system">
 <span id="derivation"></span><h2>Derivation of Anelastic System<a class="headerlink" href="#derivation-of-anelastic-system" title="Link to this heading"></a></h2>
-<p>Our approach here will be to expand key terms as Taylor series, but instead of immediately truncating, we will carry all the residual terms through to the bitter end, performing a scale analysis to justify their final dismissal. To begin, we first decompose our thermodynamic variables into hydrostatic and perturbation components. Let</p>
+<p>Our approach here will be to expand key terms as Taylor series, but instead of immediately truncating, we will carry all the residual terms through to the bitter end, eventually performing a scale analysis to justify their final dismissal. To begin, we decompose our thermodynamic variables into hydrostatic and perturbation components. Let</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align*}
 p &amp;= \overline{p}(z) + \delta p(x,y,z,t), \\
 \rho &amp;= \overline{\rho}(z) + \delta \rho(x,y,z,t), \\
 T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
 \end{align*}\end{split}\]</div>
-<p>where <span class="math notranslate nohighlight">\(\overline{p}\)</span>, <span class="math notranslate nohighlight">\(\overline{\rho}\)</span>, and <span class="math notranslate nohighlight">\(\overline{T}\)</span> denote the hydrostatic base state terms, assumed to be functions of <span class="math notranslate nohighlight">\(z\)</span> only, with <span class="math notranslate nohighlight">\(\delta p\)</span>, <span class="math notranslate nohighlight">\(\delta \rho\)</span>, and <span class="math notranslate nohighlight">\(\delta T\)</span> the corresponding perturbations. Now define <span class="math notranslate nohighlight">\(\theta = \overline{\theta}(z) + \delta\theta,\)</span> where</p>
+<p>where <span class="math notranslate nohighlight">\(\overline{p}\)</span>, <span class="math notranslate nohighlight">\(\overline{\rho}\)</span>, and <span class="math notranslate nohighlight">\(\overline{T}\)</span> denote hydrostatic base state terms, assumed to be functions of <span class="math notranslate nohighlight">\(z\)</span> only, with <span class="math notranslate nohighlight">\(\delta p\)</span>, <span class="math notranslate nohighlight">\(\delta \rho\)</span>, and <span class="math notranslate nohighlight">\(\delta T\)</span> the corresponding perturbations. Now define <span class="math notranslate nohighlight">\(\theta = \overline{\theta}(z) + \delta\theta,\)</span> where</p>
 <div class="math notranslate nohighlight">
 \[\theta = T\left(\frac{p_s}{p}\right)^{\frac{R}{c_p}}, \quad \overline{\theta} = \overline{T}\left(\frac{p_s}{\overline{p}}\right)^{\frac{R}{c_p}},\]</div>
 <p>with <span class="math notranslate nohighlight">\(p_s\)</span> a constant reference pressure used to ensure dimensional consistency. Next, form</p>
@@ -130,18 +130,19 @@ T &amp;= \overline{T}(z) + \delta T(x,y,z,t),
 \overline{\phi} &amp;= \ln\left(\frac{\overline{\theta}}{\theta_s}\right) = \frac{1}{\gamma}\ln\left(\frac{\overline{p}}{p_s}\right)  - \ln\left(\frac{\overline{\rho}}{\rho_s}\right), &amp;\\
 \phi &amp;= \ln\left(\frac{\theta}{\theta_s}\right) = \frac{1}{\gamma}\ln\left(\frac{\overline{p}+\delta p}{p_s}\right)  - \ln\left(\frac{\overline{\rho} + \delta \rho}{\rho_s}\right), &amp;
 \end{align}\end{split}\]</div>
-<p>with <span class="math notranslate nohighlight">\(\gamma = \frac{c_v}{c_p}\)</span> and <span class="math notranslate nohighlight">\(\theta_s\)</span> and <span class="math notranslate nohighlight">\(\rho_s\)</span> constant reference values. Then,</p>
+<p>with <span class="math notranslate nohighlight">\(\gamma = \frac{c_v}{c_p}\)</span> and <span class="math notranslate nohighlight">\(\theta_s\)</span> and <span class="math notranslate nohighlight">\(\rho_s\)</span> constant reference values. Now, assume <span class="math notranslate nohighlight">\(\delta p &lt; \overline{p}\)</span>, and <span class="math notranslate nohighlight">\(\delta \rho &lt; \overline{\rho}\)</span>. Then</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
 \delta \phi = \phi - \overline{\phi} &amp;=  \frac{1}{\gamma}\ln\left(\frac{\overline{p} + \delta p}{\overline{p}}\right)  - \ln\left(\frac{\overline{\rho}+\delta \rho}{\overline{\rho}}\right) &amp; \nonumber \\
-&amp;=  \frac{1}{\gamma}\frac{\delta p}{\overline{p}}  - \frac{\delta \rho}{\overline{\rho}} + R_1 + R_2 \label{eq:delphi} &amp;
+&amp;=  \frac{1}{\gamma}\frac{\delta p}{\overline{p}} + R_1 - \frac{\delta \rho}{\overline{\rho}}  + R_2 \label{eq:delphi} &amp;
 \end{align}\end{split}\]</div>
 <p>by <a class="reference external" href="https://en.wikipedia.org/wiki/Taylor%27s_theorem">Taylor’s theorem</a>, where</p>
 <div class="math notranslate nohighlight">
-\[\begin{equation}
-R_1 = O\left(\left[\frac{\delta p}{\overline{p}}\right]^2\right),\quad R_2 = O\left(\left[\frac{\delta \rho}{\overline{\rho}}\right]^2\right).
-\end{equation}\]</div>
-<p>The <a class="reference external" href="https://en.wikipedia.org/wiki/Big_O_notation">Big O notation</a> means the magnitude of each residual term is bounded by functions proportional to the squares of <span class="math notranslate nohighlight">\(\frac{\delta p}{\overline{p}}\)</span> and <span class="math notranslate nohighlight">\(\frac{\delta \rho}{\overline{\rho}}\)</span>, respectively. This suggests that if the perturbations are about an order of magnitude smaller than the base state values, the residual terms will each be about an order of magnitude smaller than the other terms.</p>
+\[\begin{split}\begin{align*}
+R_1 &amp;= \frac{1}{\gamma}\left[-\frac{1}{2}\left(\frac{\delta p}{\overline{p}}\right)^2 + \frac{1}{3}\left(\frac{\delta p}{\overline{p}}\right)^3 + \cdots \right] \\
+R_2 &amp;= -\frac{1}{2}\left(\frac{\delta \rho}{\overline{\rho}}\right)^2 + \frac{1}{3}\left(\frac{\delta \rho}{\overline{\rho}}\right)^3 + \cdots.
+\end{align*}\end{split}\]</div>
+<p>Note, these sums only converge if <span class="math notranslate nohighlight">\(\frac{\delta p}{\overline{p}} &lt; 1\)</span> and <span class="math notranslate nohighlight">\(\frac{\delta \rho}{\overline{\rho}} &lt; 1\)</span>, hence our assumption above.</p>
 <p>Note also that</p>
 <div class="math notranslate nohighlight">
 \[g\delta \phi = g\ln\left(\frac{\overline{\theta} + \delta \theta}{\overline{\theta}}\right) = g\frac{\delta \theta}{\overline{\theta}} + O\left(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\right)\]</div>

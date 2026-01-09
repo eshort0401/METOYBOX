@@ -47,27 +47,28 @@ with :math:`p_s` a constant reference pressure used to ensure dimensional consis
 	\phi &= \ln\left(\frac{\theta}{\theta_s}\right) = \frac{1}{\gamma}\ln\left(\frac{\overline{p}+\delta p}{p_s}\right)  - \ln\left(\frac{\overline{\rho} + \delta \rho}{\rho_s}\right), &
 	\end{align}
 
-with :math:`\gamma = \frac{c_v}{c_p}` and :math:`\theta_s` and :math:`\rho_s` constant reference values. Then,
+with :math:`\gamma = \frac{c_v}{c_p}` and :math:`\theta_s` and :math:`\rho_s` constant reference values. Now, assume :math:`\delta p < \overline{p}`, and :math:`\delta \rho < \overline{\rho}`. Then
 
 .. math::
 	\begin{align}
 	\delta \phi = \phi - \overline{\phi} &=  \frac{1}{\gamma}\ln\left(\frac{\overline{p} + \delta p}{\overline{p}}\right)  - \ln\left(\frac{\overline{\rho}+\delta \rho}{\overline{\rho}}\right) & \nonumber \\
-	&=  \frac{1}{\gamma}\frac{\delta p}{\overline{p}}  - \frac{\delta \rho}{\overline{\rho}} + R_1 + R_2 \label{eq:delphi} &
+	&=  \frac{1}{\gamma}\frac{\delta p}{\overline{p}} + R_1 - \frac{\delta \rho}{\overline{\rho}}  + R_2 \label{eq:delphi} &
 	\end{align}
 
 by `Taylor's theorem`_, where
 
 .. math::
-    \begin{equation}
-    R_1 = O\left(\left[\frac{\delta p}{\overline{p}}\right]^2\right),\quad R_2 = O\left(\left[\frac{\delta \rho}{\overline{\rho}}\right]^2\right).
-    \end{equation}
+    \begin{align*}
+    R_1 &= \frac{1}{\gamma}\left[-\frac{1}{2}\left(\frac{\delta p}{\overline{p}}\right)^2 + \frac{1}{3}\left(\frac{\delta p}{\overline{p}}\right)^3 + \cdots \right] \\ 
+    R_2 &= -\frac{1}{2}\left(\frac{\delta \rho}{\overline{\rho}}\right)^2 + \frac{1}{3}\left(\frac{\delta \rho}{\overline{\rho}}\right)^3 + \cdots.
+    \end{align*}
 
-The `Big O notation`_ means the magnitude of each residual term is bounded by functions proportional to the squares of :math:`\frac{\delta p}{\overline{p}}` and :math:`\frac{\delta \rho}{\overline{\rho}}`, respectively. This suggests that if the perturbations are about an order of magnitude smaller than the base state values, the residual terms will each be about an order of magnitude smaller than the other terms.
-
-Note also that
+Note, these sums require :math:`\frac{\delta p}{\overline{p}} < 1` and :math:`\frac{\delta \rho}{\overline{\rho}} < 1` to converge, hence our assumptions above. Note also that
 
 .. math::
-    g\delta \phi = g\ln\left(\frac{\overline{\theta} + \delta \theta}{\overline{\theta}}\right) = g\frac{\delta \theta}{\overline{\theta}} + O\left(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\right) 
+    g\delta \phi = g\ln\left(\frac{\overline{\theta} + \delta \theta}{\overline{\theta}}\right) = g\frac{\delta \theta}{\overline{\theta}} + 
+    
+    O\left(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\right)
 
 is buoyancy :math:`b` in the anelastic system. Furthermore,
 
