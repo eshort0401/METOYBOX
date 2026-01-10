@@ -1,7 +1,9 @@
 Foundations
 =======================================================
 
-Here I hope to provide some general reflections on math, logic and science generally. Also, the peculiarities of atmospheric science. 
+.. admonition:: TODO:
+
+    Roadmap this section.
 
 .. toctree::
     :maxdepth: 1

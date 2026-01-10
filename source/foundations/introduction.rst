@@ -1,7 +1,9 @@
 Introduction
 =======================================================
 
-The idea for the introduction would be to present similar content to chapters 1 and 2 of my `PhD Thesis <https://hdl.handle.net/11343/350333>`_. For now, note
+.. admonition:: TODO:
+
+    Some general comments on maths, logic etc, and the peculiarities of atmospheric science, could be valuable here. Could be adapted from chapters 1 and 2 of my `thesis <https://hdl.handle.net/11343/350333>`_.
 
 .. admonition:: Governing Equations for a Dry Atmosphere   
     

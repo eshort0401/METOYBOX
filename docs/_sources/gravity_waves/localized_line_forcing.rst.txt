@@ -1,6 +1,10 @@
 Localized Line Forcing
 =======================================================
 
+.. admonition:: TODO:
+
+    Explain this model.
+
 .. raw:: html
    :file: ../_static/models/gravity_waves/localized_line_forcing/localized_line_forcing.html
 

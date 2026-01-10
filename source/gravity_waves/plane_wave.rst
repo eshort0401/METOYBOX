@@ -1,6 +1,10 @@
 Plane Wave
 =======================================
 
+.. admonition:: TODO:
+
+    Explain this model.
+
 .. _plane-wave:
 
 .. raw:: html

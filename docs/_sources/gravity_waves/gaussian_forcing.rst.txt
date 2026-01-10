@@ -1,6 +1,10 @@
 Gaussian Temporal Forcing
 =======================================
 
+.. admonition:: TODO:
+
+    Explain this model.
+
 .. raw:: html
    :file: ../_static/models/gravity_waves/gaussian_forcing/gaussian_forcing.html
 

@@ -1,9 +1,13 @@
 Meteorological Toybox
 =======================================
 
-Welcome to the Meteorological Toybox! This site explores some "toy models", i.e. highly idealized analytic models, of atmospheric phenomena. The main goal of this site is to expose the beauty of idealized mathematical models.
+.. warning::
 
-The models on this site have been coded up in Python, and are presented interactively in your browser using `pyscript`_. Chrome is the recommended browser, noting the models are particularly slow to interactive with in Firefox. 
+    For some reason the models are laggy in Firefox. Other browsers seem fine.
+
+This site explores some "toy models", i.e. highly idealized analytic models, of atmospheric phenomena. Toy models are useful for building understanding and generating novel hypotheses, not for issuing whether forecasts.
+
+The models are coded up in Python, and are presented interactively in your browser using `pyscript`_.
 
 .. toctree::
     :maxdepth: 2

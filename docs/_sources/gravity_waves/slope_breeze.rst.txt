@@ -1,6 +1,10 @@
 Slope Breeze
 ================================================
 
+.. admonition:: TODO:
+
+    Explain this model.
+
 .. raw:: html
    :file: ../_static/models/gravity_waves/slope_breeze/slope_breeze.html
 

@@ -1,6 +1,10 @@
 The Anelastic Equations
 ===========================================================
 
+.. admonition:: TODO:
+
+    Either tighten up this page, or remove it entirely and just point readers to, for instance, `Klein (2010)`_. I like the javascript calculator below, but don't like the informality of the derivation.
+
 Loosely speaking, the anelastic approximation is obtained by
 
     #. defining a base state, and using this to express the governing equations in buoyancy form.
@@ -17,8 +21,6 @@ Our governing momentum and continuity equations become
         \end{align}
 
 The Boussinesq equations are very similar, but we instead replace :math:`\rho` with a constant :math:`\rho_s` in the momentum and continuity equations (but nowhere else!) 
-
-I initially found both these approximations very unpleasant. Seeing variables substituted out in some places but not others felt dirty. `Ogura and Phillips (1962)`_ provided the remedy, with a clean derivation based on truncations of asymptotic expansions. However, `Ogura and Phillips (1962)`_ use the `Exner function`_ in place of pressure, which produces a more numerically accurate system, but obfuscates physical interpretation. Instead, I provide a derivation using vanilla variables, partly plagiarized from `Vallis (2017, p. 75)`_.
 
 .. _derivation:
 
@@ -51,7 +53,7 @@ with :math:`\gamma = \frac{c_v}{c_p}` and :math:`\theta_s` and :math:`\rho_s` co
 
 .. math::
 	\begin{align}
-	\delta \phi = \phi - \overline{\phi} &=  \frac{1}{\gamma}\ln\left(\frac{\overline{p} + \delta p}{\overline{p}}\right)  - \ln\left(\frac{\overline{\rho}+\delta \rho}{\overline{\rho}}\right) & \nonumber \\
+	\delta \phi = \phi - \overline{\phi} &=  \frac{1}{\gamma}\ln\left(\frac{\overline{p} + \delta p}{\overline{p}}\right)  - \ln\left(\frac{\overline{\rho}+\delta \rho}{\overline{\rho}}\right) & \label{eq:delphi_og} \\
 	&=  \frac{1}{\gamma}\frac{\delta p}{\overline{p}} + R_1 - \frac{\delta \rho}{\overline{\rho}}  + R_2 \label{eq:delphi} &
 	\end{align}
 
@@ -59,16 +61,14 @@ by `Taylor's theorem`_, where
 
 .. math::
     \begin{align*}
-    R_1 &= \frac{1}{\gamma}\left[-\frac{1}{2}\left(\frac{\delta p}{\overline{p}}\right)^2 + \frac{1}{3}\left(\frac{\delta p}{\overline{p}}\right)^3 + \cdots \right] \\ 
-    R_2 &= -\frac{1}{2}\left(\frac{\delta \rho}{\overline{\rho}}\right)^2 + \frac{1}{3}\left(\frac{\delta \rho}{\overline{\rho}}\right)^3 + \cdots.
+    R_1 &= \frac{1}{\gamma}\left[-\frac{1}{2}\left(\frac{\delta p}{\overline{p}}\right)^2 + \frac{1}{3}\left(\frac{\delta p}{\overline{p}}\right)^3 + \cdots \right] = O\left[\left(\frac{\delta p}{\overline{p}}\right)^2\right]\\ 
+    R_2 &= -\frac{1}{2}\left(\frac{\delta \rho}{\overline{\rho}}\right)^2 + \frac{1}{3}\left(\frac{\delta \rho}{\overline{\rho}}\right)^3 + \cdots = O\left[\left(\frac{\delta \rho}{\overline{\rho}}\right)^2\right].
     \end{align*}
 
-Note, these sums only converge if :math:`\frac{\delta p}{\overline{p}} < 1` and :math:`\frac{\delta \rho}{\overline{\rho}} < 1`, hence our assumption above.
-
-Note also that
+The `Big O notation`_ means the magnitudes of :math:`R_1` and :math:`R_2` are bounded by functions proportional to :math:`\left(\frac{\delta p}{\overline{p}}\right)^2` and :math:`\left(\frac{\delta \rho}{\overline{\rho}}\right)^2`, respectively. Note, these sums require :math:`\frac{\delta p}{\overline{p}} < 1` and :math:`\frac{\delta \rho}{\overline{\rho}} < 1` to converge, hence our assumptions above. Note also that
 
 .. math::
-    g\delta \phi = g\ln\left(\frac{\overline{\theta} + \delta \theta}{\overline{\theta}}\right) = g\frac{\delta \theta}{\overline{\theta}} + O\left(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\right) 
+    g\delta \phi = g\ln\left(\frac{\overline{\theta} + \delta \theta}{\overline{\theta}}\right) = g\frac{\delta \theta}{\overline{\theta}} + O\left(\left[\frac{\delta \theta}{\overline{\theta}}\right]^2\right)
 
 is buoyancy :math:`b` in the anelastic system. Furthermore,
 
@@ -80,7 +80,7 @@ is buoyancy :math:`b` in the anelastic system. Furthermore,
 
 as the base state is hydrostatic.
 
-Turning now to our governing equations, the inviscid horizontal momentum equation is
+Now, the inviscid horizontal momentum equation is
 
 .. math::
     \begin{align}
@@ -119,12 +119,12 @@ Substituting for :math:`-g\frac{\delta \rho}{\overline{\rho}}` using :math:`g\ti
 	\frac{D w}{Dt} = -\frac{\partial}{\partial z}\left(\frac{\delta p}{\overline{\rho}}\right) - \frac{\delta p}{\overline{\rho}^2}\frac{\partial \overline{\rho}}{\partial z} + g\delta \phi - \frac{g}{\gamma}\frac{\delta p}{\overline{p}} + R_4,
 
 
-where we have collected all the residual terms into 
+where we define
 
 .. math::
     R_4 = -gR_1 - gR_2 + R_3\left(-\frac{\partial \delta p}{\partial z} - g\delta\rho \right)
 
-just to keep things tidy.
+for convenience.
 
 Substituting the second and fourth terms using :math:`\frac{\delta p}{\overline{\rho}}\times\eqref{eq:bar_phi_z}` gives
 
@@ -134,7 +134,7 @@ Substituting the second and fourth terms using :math:`\frac{\delta p}{\overline{
     \end{equation}
 
 
-Now, suppose we also require that the base state is neutrally stratified, i.e. that :math:`\overline{\theta}`, and therefore :math:`\overline{\phi}`, are constant. Then :math:`\eqref{eq:w_t_intermediate}` reduces to
+Now suppose we also require that the base state is neutrally stratified, i.e. that :math:`\overline{\theta}`, and therefore :math:`\overline{\phi}`, are constant. Then :math:`\eqref{eq:w_t_intermediate}` reduces to
 
 .. math::
     \begin{equation}
@@ -153,38 +153,49 @@ which we re-express as
 
 .. math::
     \begin{equation}
-	\nabla \cdot \left(\overline{\rho} \mathbf{v}\right) = - \nabla \cdot \left(\delta \rho \mathbf{v}\right)-\frac{\partial \delta \rho}{\partial t} \label{eq:anmass}.
+	\frac{\partial \delta \rho}{\partial t} + \nabla_h \cdot \left(\overline{\rho} \mathbf{u}\right) + \frac{\partial}{\partial z}\left(\overline{\rho} w\right) + \nabla \cdot \left(\delta \rho \mathbf{v}\right) = 0. \label{eq:anmass}
     \end{equation}
 
-So the anelastic approximation will be reasonable provided we can discard the terms on the right-hand-side of :math:`\eqref{eq:anmass}`, and the residual terms in :math:`\eqref{eq:anumom}` and :math:`\eqref{eq:anwmom}`. To explore circumstances where discarding these terms is defensible, we perform a scale analysis. This means we specify the length, height and time scales :math:`L`, :math:`H`, and :math:`T` of the processes we care about, and use these to infer representative scales for :math:`U`, :math:`W`. We can then check which terms in our governing equations are important at these scales.
+Now, we want to perform a scale-analysis, i.e. explore circumstances where the residual terms in :math:`\eqref{eq:anumom}`, :math:`\eqref{eq:anwmom}`, and the :math:`\delta \rho` terms in :math:`\eqref{eq:anmass}`, are much smaller than the other terms. The most rigorous approach involves distinguished limits and asymptotic expansions [#]_, but let's instead aim for accessibility. First, write all our variables as a number times a function with an order of magnitude of around 1; 
+
+.. math::
+    \begin{align*}
+    \mathbf{u} = U\widehat{\mathbf{u}}, \quad w = W\widehat{w}, \quad (x, y) = L\left(\widehat{x}, \widehat{y}\right), \quad z = H\widehat{z}, \quad t = T\widehat{t}, \\
+    \overline{\rho} = \overline{R} \widehat{\overline{\rho}}, \quad \delta \rho = \Delta R \widehat{\delta \rho}, \quad \overline{p} = \overline{P} \widehat{\overline{p}}, \quad \delta p = \Delta P \widehat{\delta p}, \quad \delta \phi = \Delta \Phi \widehat{\delta \phi}.
+    \end{align*}
+
+Just as there are relationships between our variables, there will be relationships between the numbers :math:`U,W,L` etc. Let's specify the scales :math:`L`, :math:`U`, :math:`W`, :math:`\Delta P` and :math:`\Delta R`, and infer the others. Because we assumed :math:`\delta \rho < \overline{\rho}`, :math:`\eqref{eq:anumom}` implies
+
+.. math::
+    \begin{equation*}
+    \Delta P \sim \max\left(\overline{R} U^2, \overline{R} f UL\right),
+    \end{equation*}
+
+using :math:`\sim` to mean "about the same order of magnitude". Note :math:`\Delta P \sim \overline{R}fUL` represents geostrophic balance. Next, :math:`\eqref{eq:anwmom}` implies
+
+.. math::
+    \begin{equation*}
+    \Delta R = \max\left(\frac{W^2}{H}\frac{\overline{R}}{g}, \frac{1}{g}\frac{\Delta P}{H} \right),
+    \end{equation*}
+
+noting :math:`\Delta R \sim \frac{\Delta P}{gH}` represents hydrostatic balance. The scale for :math:`\Delta \Phi` follows from :math:`\eqref{eq:delphi_og}`. Now let's put all this in a javascript table so you can play around with the scales and check the sizes of the residuals. Note I blank out cases where we end up with :math:`\Delta P > \overline{P}` or :math:`\Delta R > \overline{R}`, as such situations violate our earlier assumptions.
 
 .. raw:: html
     :file: ../_static/calculators/anelastic/anelastic.html
 
-Summarizing, we have
-
-.. admonition:: Anelastic Equations
-    
-    .. math::
-        \begin{align}
-        \frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v} &= -\nabla \left(\frac{p}{\overline{\rho}}\right) + g\delta \phi \mathbf{k}, & \\
-        \nabla \cdot \left(\overline{\rho} \mathbf{v}\right) &= 0 &
-        \end{align}
-
-The above derivation suggests the anelastic approximation will only be as accurate as the difference between the magnitudes of the pressure and density perturbations and the corresponding base state values, given that the base state is also neutrally stratified. 
-
-.. Note we could probably create a final scale check slider thing here 
-
 Derivation of Boussinesq System
 ------------------------------------------------------------------------
-The derivation of the Boussinesq equations mostly follows the same steps as above; we still define a hydrostatic, neutrally stratified base state and the buoyancy variable :math:`\delta \phi`. The simplification of :math:`\delta \phi` given by :math:`\eqref{eq:delphi}` will be just as accurate as in the anelastic case. 
 
-The difference with the Boussinesq system is we approximate :math:`\overline{\rho}+\delta \rho` by a constant reference density :math:`\rho_s` on the left hand sides in equations :math:`\eqref{eq:anumom}`, :math:`\eqref{eq:anwmom}`, and :math:`\eqref{eq:anmass}` (but nowhere else!) The Boussinesq system will thus only be numerically accurate when the overall density field :math:`\rho` is close to :math:`\rho_s` everywhere, which typically only occurs when the vertical scale being considered is much smaller than the density scale height (about 8 km in Earth's lower atmosphere.)
+.. admonition:: TODO:
+
+    Comment on adapting the above to the Boussinesq case.
 
 Extensions
 ------------------------------------------------------------------------
-Elaborating is on my todo list, but in brief, note both the anelastic and Boussinesq systems can be made more numerically accurate by using the Exner function; see `Ogura and Phillips (1962)`_. `Durran (1989)`_ has also grappled with the anelastic system, seeking to remove the requirement of a neutrally stratified base state.
+Both the anelastic and Boussinesq systems can be made more numerically accurate by using the Exner function; see `Ogura and Phillips (1962)`_. `Durran (1989)`_ has also grappled with the anelastic system, seeking to remove the requirement of a neutrally stratified base state. See `Klein (2010)`_ for a more rigorous review.
 
+
+.. [#] See for instance `Ogura and Phillips (1962)`_ and `Klein (2010)`_.
 
 .. _Vallis (2017, p. 75): https://doi.org/10.1017/9781107588417
 
@@ -199,3 +210,5 @@ Elaborating is on my todo list, but in brief, note both the anelastic and Boussi
 .. _Batchelor (1967, p. 166): https://doi.org/10.1017/CBO9780511800955
 
 .. _Durran (1989): https://doi.org/10.1175/1520-0469(1989)046<1453:ITAA>2.0.CO;2
+
+.. _Klein (2010): https://doi.org/10.1146/annurev-fluid-121108-145537

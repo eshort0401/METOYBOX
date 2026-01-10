@@ -1,12 +1,16 @@
 Introduction
-=======================================================
+========================================================================
+
+.. admonition:: TODO:
+
+    Restructure this page so the initial introductory material is about plane waves, plane wave rays, and so forth, avoiding the need for non-dimensional coordinates up-front. Move all the Rotunno (1983) stuff to a separate page.
 
 Here we present models that feature inertia-gravity wave dynamics. Most of our models are derived from the work of `Rotunno (1983)`_. We can often solve these models purely analytically, sometimes discovering interesting connections between the maths, logic and physics. On this page, we use the original `Rotunno (1983)`_ model to introduce some key ideas; further details on the `Rotunno (1983)`_ model itself can be found on the :doc:`land_sea` page.
 
 .. _inertia-gravity-wave-equations:
 
 Governing equations
----------------------------------------
+------------------------------------------------------------------------
 We first linearize the governing equations and make the `Boussinesq/shallow-anelastic`_ and :math:`f`-plane approximations. The symbol :math:`*` indicates our variables our "dimensional", i.e. they have physical units; we discuss the corresponding unit-less "non-dimensional" later.
 
 .. admonition:: Dimensional Governing Equations
@@ -44,7 +48,7 @@ The idea is that we have chosen our coordinates :math:`(x_*, y_*, z_*)` so that 
 .. _non-dim:
 
 Non-Dimensionalization
--------------------------------------
+------------------------------------------------------------------------
 Next we scale variables to remove units, i.e. we non-dimensionalize. One reason to non-dimensionalize is that units are mathematically annoying; what are the units of :math:`\ln(10 \text{ m})`? Another reason to non-dimensionalize is to `reduce the number of independent variables`_ in our models. Yet another reason is to ensure the interesting parts of our models are always visible in our figures as we mess with the parameters!
 
 Here we use the scalings from `Qian et al. (2009)`_;
@@ -87,7 +91,7 @@ where :math:`\mathcal{L} = \frac{\omega}{NH}L` is the non-dimensional horizontal
 Scroll back up to the :ref:`applet <igw_intro_applet>` (or open it in another window) and click the radio button to switch to non-dimensional coordinates. Notice the number of sliders decreases by two. As noted above, non-dimensionalization typically reduces the number of independent variables needed to completely describe all the possible behaviours of our model, reflecting a result called the |Buckingham pi theorem|.
 
 Hydrostatic Waves
-----------------------------
+------------------------------------------------------------------------
 When :math:`\omega` is the diurnal frequency :math:`\frac{2\pi}{24\cdot 3600} \text{ s}^{-1} \approx 7.272 \times 10^{-5} \text{ s}^{-1}`, the term :math:`\frac{\omega^2}{N^2}` is tiny, and terms containing this factor can be neglected. Wave solutions for which :math:`\frac{\omega^2}{N^2} \approx 0` are called hydrostatic waves. The adjective "hydrostatic" reflects 
 
 .. math::
@@ -98,7 +102,7 @@ i.e. that buoyancy forces are approximately balanced by vertical pressure gradie
 In the land-sea breeze model above, :math:`\omega` is indeed the diurnal frequency, and so the model is mostly unresponsive to :math:`\frac{N}{\omega}`, except for the very smallest values of :math:`N`. Switching back to dimensional coordinates, we see that varying :math:`N` changes the tick labels on the :math:`x` axis in accordance with the scalings given above.
 
 The Stream Function
----------------------------------------
+------------------------------------------------------------------------
 Most of our models are solved analytically using a stream function. By way of introduction, consider the function :math:`\psi(x,z,t)` defined by
 
 .. math::
@@ -253,7 +257,7 @@ So really what we've done is express :math:`\psi` as a fancy sum (a double integ
 Equation :math:`\eqref{psi_fourier_simp}` thus tells us how the vertical structure of the response depends on the vertical structure of the forcing. In other words, we can think of :math:`Q` as having "excited" a bunch of different horizontal waves :math:`e^{i(kx + \sigma t)}` in our fluid, with the strength of each wave at height :math:`z` determined precisely from :math:`Q` via :math:`\eqref{psi_fourier_simp}`.
 
 Solution
--------------------------------------------------
+------------------------------------------------------------------------
 So to solve the Rotunno (1983) model, we just need to solve :math:`\eqref{psi_fourier_simp}` for :math:`\widehat{\psi}`, then recover :math:`\psi` via the inverse Fourier transform :math:`\eqref{inverse_fourier}`. Our first step is to consider the simpler, so called "homogeneous", version of :math:`\eqref{psi_fourier_simp}`, 
 
 .. admonition:: Homogenous Equation for :math:`\widehat{\psi}`

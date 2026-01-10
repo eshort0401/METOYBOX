@@ -92,13 +92,13 @@
 <p>Recall the anelastic momentum equation is</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-    \frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v} = -\nabla \left(\frac{p}{\rho_0}\right) + g\delta \phi \mathbf{k},
+    \frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v} = -\nabla \left(\frac{p}{\overline{\rho}}\right) + g\delta \phi \mathbf{k},
 \label{eq:anmom}
 \end{equation}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\mathbf{v}=(u, v, w)\)</span>.</p>
 <p>Let <span class="math notranslate nohighlight">\(\nabla \mathbf{v}\)</span> denote the matrix (i.e. tensor) with columns one, two, and three containing the gradient of <span class="math notranslate nohighlight">\(u, v, w\)</span>, respectively. Note</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align}
+\[\begin{split}\begin{align*}
 \mathbf{v} \cdot \nabla\mathbf{v} &amp;= \left(u,v,w\right)
 \begin{pmatrix}
 u_x &amp; v_x &amp; w_x \\
@@ -106,7 +106,12 @@ u_y &amp; v_y &amp; w_y \\
 u_z &amp; v_z &amp; w_z \\
 \end{pmatrix}\\
 &amp;= \left(uu_x+vu_y+wu_z, uv_x+vv_y+wv_z, uw_x+vw_y+ww_z\right) \\
-&amp;= \nabla\frac{|\mathbf{v}|^2}{2}+\left(vu_y+wu_z-vv_x-ww_x, uv_x+wv_z-uu_y-ww_y, uw_x+vw_y-uu_z-vv_z\right)\\
+&amp;= \nabla\frac{|\mathbf{v}|^2}{2}+
+\begin{pmatrix}
+    vu_y+wu_z-vv_x-ww_x, \\
+    uv_x+wv_z-uu_y-ww_y, \\
+    uw_x+vw_y-uu_z-vv_z \\
+\end{pmatrix}^T \\
 &amp;=\nabla\frac{|\mathbf{v}|^2}{2}+
 \begin{vmatrix}
 \mathbf{i} &amp; \mathbf{j} &amp; \mathbf{k} \\
@@ -114,11 +119,11 @@ w_y-v_z &amp; u_z-w_x &amp; v_x - u_y \\
 u &amp; v &amp; w
 \end{vmatrix} \\
 &amp;=\nabla\frac{|\mathbf{v}|^2}{2}+ \boldsymbol{\omega}\times\mathbf{v}
-\end{align}\end{split}\]</div>
+\end{align*}\end{split}\]</div>
 <p>Following Markowski (2010, p. 21), to derive the vorticity equation, take the curl of both sides of equation <span class="math notranslate nohighlight">\(\eqref{eq:anmom}\)</span> and apply vector identities to obtain</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align}
-\nabla\times\left(\frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v}\right) &amp;= -\nabla \left(\frac{p}{\rho_0}\right) + g\delta \phi \mathbf{k} \\
+\nabla\times\left(\frac{D \mathbf{v}}{Dt} + f\mathbf{k}\times \mathbf{v}\right) &amp;= -\nabla \left(\frac{p}{\overline{\rho}}\right) + g\delta \phi \mathbf{k} \\
 \frac{D(\boldsymbol{\omega} + f \mathbf{k})}{Dt} + (\boldsymbol{\omega} + f \mathbf{k})(\nabla\cdot \mathbf{v}) &amp;= \left[\left(\boldsymbol{\omega} + f \mathbf{k}\right)\cdot \nabla\right]\mathbf{v} + \nabla \times \left(g\delta \phi \mathbf{k}\right),
 \end{align}\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\boldsymbol{\omega} = (\xi, \eta, \zeta)\)</span> is the vorticity vector, and <span class="math notranslate nohighlight">\(\nabla \mathbf{v}\)</span> is a tensor. Considering just the <span class="math notranslate nohighlight">\(y\)</span> component,</p>
@@ -127,14 +132,14 @@ u &amp; v &amp; w
 \left(\boldsymbol{\omega}+f\mathbf{k}\right)\cdot\nabla v + g\phi_x,\]</div>
 <p>where <span class="math notranslate nohighlight">\(x, y, z\)</span> subscripts denote partial derivatives. The continuity equation implies</p>
 <div class="math notranslate nohighlight">
-\[-w \eta \frac{1}{\rho_0}\frac{\partial \rho_0}{\partial z} = \eta\left[u_x + v_y + w_z\right].\]</div>
-<p>Substituting into the previous equation and multiplying through by <span class="math notranslate nohighlight">\(\frac{1}{\rho_0}\)</span> gives</p>
+\[-w \eta \frac{1}{\overline{\rho}}\frac{\partial \overline{\rho}}{\partial z} = \eta\left[u_x + v_y + w_z\right].\]</div>
+<p>Substituting into the previous equation and multiplying through by <span class="math notranslate nohighlight">\(\frac{1}{\overline{\rho}}\)</span> gives</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation}
-    \frac{D}{Dt}\left(\frac{\eta}{\rho_0}\right) = \underbrace{\frac{1}{\rho_0}\left(\boldsymbol{\omega}+f\mathbf{k}\right)\cdot\nabla v}_{\text{deformation}} + \underbrace{\frac{g}{\rho_0}\frac{\partial \phi}{\partial x}}_{\text{generation}}.
+    \frac{D}{Dt}\left(\frac{\eta}{\overline{\rho}}\right) = \underbrace{\frac{1}{\overline{\rho}}\left(\boldsymbol{\omega}+f\mathbf{k}\right)\cdot\nabla v}_{\text{deformation}} + \underbrace{\frac{g}{\overline{\rho}}\frac{\partial \phi}{\partial x}}_{\text{generation}}.
 \label{eq:vort}
 \end{equation}\]</div>
-<p>The quantity <span class="math notranslate nohighlight">\(\frac{\boldsymbol{\omega}}{\rho_0}\)</span> is sometimes called “specific-vorticity” (Petropoulos et al., 2017). Equation <span class="math notranslate nohighlight">\(\eqref{eq:vort}\)</span> says that the horizontal component of a parcel’s (anelastic) specific vorticity can change only through vorticity deformation or baroclinic vorticity generation. In the absence of deformation and generation, if a parcel’s specific volume increases, its horizontal vorticity <span class="math notranslate nohighlight">\(\eta\)</span> must decrease, behavior analogous to that of angular momentum.</p>
+<p>The quantity <span class="math notranslate nohighlight">\(\frac{\boldsymbol{\omega}}{\overline{\rho}}\)</span> is sometimes called “specific-vorticity” (Petropoulos et al., 2017). Equation <span class="math notranslate nohighlight">\(\eqref{eq:vort}\)</span> says that the horizontal component of a parcel’s (anelastic) specific vorticity can change only through vorticity deformation or baroclinic vorticity generation. In the absence of deformation and generation, if a parcel’s specific volume increases, its horizontal vorticity <span class="math notranslate nohighlight">\(\eta\)</span> must decrease, behavior analogous to that of angular momentum.</p>
 </section>
 
 
