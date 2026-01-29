@@ -3,7 +3,7 @@ The Anelastic Equations
 
 .. admonition:: TODO:
 
-    Either tighten up this page, or remove it entirely and just point readers to, for instance, `Klein (2010)`_. I like the javascript calculator below, but don't like the informality of the derivation.
+    Either tighten up the derivation section, or remove it entirely and just point readers to, for instance, `Klein (2010)`_. I like the JavaScript calculator below, but there seems to be something wrong with the argument preceding it, as :math:`R_4` gets large as :math:`L` gets large. Maybe we could keep the calculator but use the asymptotic style derivations instead.
 
 Loosely speaking, the anelastic approximation is obtained by
 
@@ -22,7 +22,7 @@ Our governing momentum and continuity equations become
 
 The Boussinesq equations are very similar, but we instead replace :math:`\rho` with a constant :math:`\rho_s` in the momentum and continuity equations (but nowhere else!) 
 
-.. _derivation:
+
 
 Derivation of Anelastic System
 ------------------------------------------
@@ -160,11 +160,11 @@ Now, we want to perform a scale-analysis, i.e. explore circumstances where the r
 
 .. math::
     \begin{align*}
-    \mathbf{u} = U\widehat{\mathbf{u}}, \quad w = W\widehat{w}, \quad (x, y) = L\left(\widehat{x}, \widehat{y}\right), \quad z = H\widehat{z}, \quad t = T\widehat{t}, \\
-    \overline{\rho} = \overline{R} \widehat{\overline{\rho}}, \quad \delta \rho = \Delta R \widehat{\delta \rho}, \quad \overline{p} = \overline{P} \widehat{\overline{p}}, \quad \delta p = \Delta P \widehat{\delta p}, \quad \delta \phi = \Delta \Phi \widehat{\delta \phi}.
+    \quad (x, y) = L\left(\hat{x}, \hat{y} \right), \quad z = H\widehat{z}, \quad t = T\widehat{t}, \quad \mathbf{u} = U\cdot\mathbf{f}_1, \quad w = W\cdot f_2, \\
+    \overline{\rho} = \overline{R} \cdot f_3, \quad \delta \rho = \Delta R \cdot f_4, \quad \overline{p} = \overline{P} \cdot f_5, \quad \delta p = \Delta P \cdot f_6, \quad \delta \phi = \Delta \Phi \cdot f_7.
     \end{align*}
 
-Just as there are relationships between our variables, there will be relationships between the numbers :math:`U,W,L` etc. Let's specify the scales :math:`L`, :math:`U`, :math:`W`, :math:`\Delta P` and :math:`\Delta R`, and infer the others. Because we assumed :math:`\delta \rho < \overline{\rho}`, :math:`\eqref{eq:anumom}` implies
+Our governing equations imply relationships between the numbers :math:`U,W,L` etc. Let's specify the scales :math:`L`, :math:`U`, :math:`W`, :math:`\Delta P` and :math:`\Delta R`, and infer the others. Because we assumed :math:`\delta \rho < \overline{\rho}`, :math:`\eqref{eq:anumom}` implies
 
 .. math::
     \begin{equation*}
@@ -178,7 +178,7 @@ using :math:`\sim` to mean "about the same order of magnitude". Note :math:`\Del
     \Delta R = \max\left(\frac{W^2}{H}\frac{\overline{R}}{g}, \frac{1}{g}\frac{\Delta P}{H} \right),
     \end{equation*}
 
-noting :math:`\Delta R \sim \frac{\Delta P}{gH}` represents hydrostatic balance. The scale for :math:`\Delta \Phi` follows from :math:`\eqref{eq:delphi_og}`. Now let's put all this in a javascript table so you can play around with the scales and check the sizes of the residuals. Note I blank out cases where we end up with :math:`\Delta P > \overline{P}` or :math:`\Delta R > \overline{R}`, as such situations violate our earlier assumptions.
+noting :math:`\Delta R \sim \frac{\Delta P}{gH}` represents hydrostatic balance. The scale for :math:`\Delta \Phi` follows from :math:`\eqref{eq:delphi_og}`. Now let's put all this in a JavaScript table so we can play around with the scales and check the sizes of the residuals. Cases where we end up with :math:`\Delta P > \overline{P}` or :math:`\Delta R > \overline{R}`, are blanked out, as these cases violate the core assumptions needed for the Taylor expansions above. 
 
 .. raw:: html
     :file: ../_static/calculators/anelastic/anelastic.html

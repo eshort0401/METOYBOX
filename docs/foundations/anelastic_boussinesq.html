@@ -28,9 +28,7 @@
       <script src="../_static/assets/js/scale-table.js?v=05822f22"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Anelastic Vorticity Equation" href="anelastic_vorticity_equation.html" />
-    <link rel="prev" title="Introduction" href="introduction.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -52,18 +50,8 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Foundations</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">The Anelastic Equations</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#derivation-of-anelastic-system">Derivation of Anelastic System</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#derivation-of-boussinesq-system">Derivation of Boussinesq System</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#extensions">Extensions</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="anelastic_vorticity_equation.html">Anelastic Vorticity Equation</a></li>
-</ul>
-</li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="index.html">Foundations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../gravity_waves/index.html">Inertia-Gravity Waves</a></li>
 </ul>
 
@@ -81,7 +69,6 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="index.html">Foundations</a></li>
       <li class="breadcrumb-item active">The Anelastic Equations</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/foundations/anelastic_boussinesq.rst.txt" rel="nofollow"> View page source</a>
@@ -96,7 +83,7 @@
 <h1>The Anelastic Equations<a class="headerlink" href="#the-anelastic-equations" title="Link to this heading"></a></h1>
 <div class="admonition-todo admonition">
 <p class="admonition-title">TODO:</p>
-<p>Either tighten up this page, or remove it entirely and just point readers to, for instance, <a class="reference external" href="https://doi.org/10.1146/annurev-fluid-121108-145537">Klein (2010)</a>. I like the javascript calculator below, but don’t like the informality of the derivation.</p>
+<p>Either tighten up the derivation section, or remove it entirely and just point readers to, for instance, <a class="reference external" href="https://doi.org/10.1146/annurev-fluid-121108-145537">Klein (2010)</a>. I like the JavaScript calculator below, but there seems to be something wrong with the argument preceding it, as <span class="math notranslate nohighlight">\(R_4\)</span> gets large as <span class="math notranslate nohighlight">\(L\)</span> gets large. Maybe we could keep the calculator but use the asymptotic style derivations instead.</p>
 </div>
 <p>Loosely speaking, the anelastic approximation is obtained by</p>
 <blockquote>
@@ -116,7 +103,7 @@
 </div>
 <p>The Boussinesq equations are very similar, but we instead replace <span class="math notranslate nohighlight">\(\rho\)</span> with a constant <span class="math notranslate nohighlight">\(\rho_s\)</span> in the momentum and continuity equations (but nowhere else!)</p>
 <section id="derivation-of-anelastic-system">
-<span id="derivation"></span><h2>Derivation of Anelastic System<a class="headerlink" href="#derivation-of-anelastic-system" title="Link to this heading"></a></h2>
+<h2>Derivation of Anelastic System<a class="headerlink" href="#derivation-of-anelastic-system" title="Link to this heading"></a></h2>
 <p>Our approach here will be to expand key terms as Taylor series, but instead of immediately truncating, we will carry all the residual terms through to the bitter end, eventually performing a scale analysis to justify their final dismissal. To begin, we decompose our thermodynamic variables into hydrostatic and perturbation components. Let</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align*}
@@ -209,10 +196,10 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
 <p>Now, we want to perform a scale-analysis, i.e. explore circumstances where the residual terms in <span class="math notranslate nohighlight">\(\eqref{eq:anumom}\)</span>, <span class="math notranslate nohighlight">\(\eqref{eq:anwmom}\)</span>, and the <span class="math notranslate nohighlight">\(\delta \rho\)</span> terms in <span class="math notranslate nohighlight">\(\eqref{eq:anmass}\)</span>, are much smaller than the other terms. The most rigorous approach involves distinguished limits and asymptotic expansions <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>, but let’s instead aim for accessibility. First, write all our variables as a number times a function with an order of magnitude of around 1;</p>
 <div class="math notranslate nohighlight">
 \[\begin{split}\begin{align*}
-\mathbf{u} = U\widehat{\mathbf{u}}, \quad w = W\widehat{w}, \quad (x, y) = L\left(\widehat{x}, \widehat{y}\right), \quad z = H\widehat{z}, \quad t = T\widehat{t}, \\
-\overline{\rho} = \overline{R} \widehat{\overline{\rho}}, \quad \delta \rho = \Delta R \widehat{\delta \rho}, \quad \overline{p} = \overline{P} \widehat{\overline{p}}, \quad \delta p = \Delta P \widehat{\delta p}, \quad \delta \phi = \Delta \Phi \widehat{\delta \phi}.
+\quad (x, y) = L\left(\hat{x}, \hat{y} \right), \quad z = H\widehat{z}, \quad t = T\widehat{t}, \quad \mathbf{u} = U\cdot\mathbf{f}_1, \quad w = W\cdot f_2, \\
+\overline{\rho} = \overline{R} \cdot f_3, \quad \delta \rho = \Delta R \cdot f_4, \quad \overline{p} = \overline{P} \cdot f_5, \quad \delta p = \Delta P \cdot f_6, \quad \delta \phi = \Delta \Phi \cdot f_7.
 \end{align*}\end{split}\]</div>
-<p>Just as there are relationships between our variables, there will be relationships between the numbers <span class="math notranslate nohighlight">\(U,W,L\)</span> etc. Let’s specify the scales <span class="math notranslate nohighlight">\(L\)</span>, <span class="math notranslate nohighlight">\(U\)</span>, <span class="math notranslate nohighlight">\(W\)</span>, <span class="math notranslate nohighlight">\(\Delta P\)</span> and <span class="math notranslate nohighlight">\(\Delta R\)</span>, and infer the others. Because we assumed <span class="math notranslate nohighlight">\(\delta \rho &lt; \overline{\rho}\)</span>, <span class="math notranslate nohighlight">\(\eqref{eq:anumom}\)</span> implies</p>
+<p>Our governing equations imply relationships between the numbers <span class="math notranslate nohighlight">\(U,W,L\)</span> etc. Let’s specify the scales <span class="math notranslate nohighlight">\(L\)</span>, <span class="math notranslate nohighlight">\(U\)</span>, <span class="math notranslate nohighlight">\(W\)</span>, <span class="math notranslate nohighlight">\(\Delta P\)</span> and <span class="math notranslate nohighlight">\(\Delta R\)</span>, and infer the others. Because we assumed <span class="math notranslate nohighlight">\(\delta \rho &lt; \overline{\rho}\)</span>, <span class="math notranslate nohighlight">\(\eqref{eq:anumom}\)</span> implies</p>
 <div class="math notranslate nohighlight">
 \[\begin{equation*}
 \Delta P \sim \max\left(\overline{R} U^2, \overline{R} f UL\right),
@@ -222,7 +209,7 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
 \[\begin{equation*}
 \Delta R = \max\left(\frac{W^2}{H}\frac{\overline{R}}{g}, \frac{1}{g}\frac{\Delta P}{H} \right),
 \end{equation*}\]</div>
-<p>noting <span class="math notranslate nohighlight">\(\Delta R \sim \frac{\Delta P}{gH}\)</span> represents hydrostatic balance. The scale for <span class="math notranslate nohighlight">\(\Delta \Phi\)</span> follows from <span class="math notranslate nohighlight">\(\eqref{eq:delphi_og}\)</span>. Now let’s put all this in a javascript table so you can play around with the scales and check the sizes of the residuals. Note I blank out cases where we end up with <span class="math notranslate nohighlight">\(\Delta P &gt; \overline{P}\)</span> or <span class="math notranslate nohighlight">\(\Delta R &gt; \overline{R}\)</span>, as such situations violate our earlier assumptions.</p>
+<p>noting <span class="math notranslate nohighlight">\(\Delta R \sim \frac{\Delta P}{gH}\)</span> represents hydrostatic balance. The scale for <span class="math notranslate nohighlight">\(\Delta \Phi\)</span> follows from <span class="math notranslate nohighlight">\(\eqref{eq:delphi_og}\)</span>. Now let’s put all this in a JavaScript table so we can play around with the scales and check the sizes of the residuals. Cases where we end up with <span class="math notranslate nohighlight">\(\Delta P &gt; \overline{P}\)</span> or <span class="math notranslate nohighlight">\(\Delta R &gt; \overline{R}\)</span>, are blanked out, as these cases violate the core assumptions needed for the Taylor expansions above.</p>
 <div id="anelastic">
     <div id="loading-screen">
         <div class="spinner"></div>
@@ -265,7 +252,7 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                     const Del_P = Math.max(R_bar * U ** 2, R_bar * f * U * L);
                 
                     // Infer Del_R from vertical momentum equation
-                    const Del_R = Math.max((W ** 2 * R_bar) / (g * H), Del_P / (g * H));
+                    const Del_R = Math.max((W * R_bar) / (g * T), Del_P / (g * H));
                 
                     if (Del_P > P_bar || Del_R > R_bar) {
                         return [null, null, null, null, null];
@@ -292,7 +279,7 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                     // Implied Scales
                     const [T, H, Del_P, Del_R, Del_Phi] = inferredScales(L, U, W, P_bar, R_bar);
                 
-                    if ([T, H, Del_P, Del_R, Del_Phi].some(x => x === null)) {
+                    if ([T, H, Del_P, Del_R, Del_Phi].some((x) => x === null)) {
                         // Handle the null case
                         return [
                             [null, null, null, null],
@@ -336,17 +323,17 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
                 
                 args = [`${containerID}-R_bar-slider`, `${containerID}-R_bar-output`];
                 args.push("\\(\\overline{R}:\\)", -3, 0.5, 0, 0.1);
-                args.push(null, "kg m⁻³");
+                args.push(null, "kg m<sup>-3</sup>");
                 const RBarSliderRow = createSliderRow(...args);
                 
                 args = [`${containerID}-U-slider`, `${containerID}-U-output`];
                 args.push("\\(U:\\)", -3, 2, 1, 0.1);
-                args.push(null, "m");
+                args.push(null, "m s<sup>−1</sup>");
                 const USliderRow = createSliderRow(...args);
                 
                 args = [`${containerID}-W-slider`, `${containerID}-W-output`];
                 args.push("\\(W:\\)", -3, 2, 1, 0.1);
-                args.push(null, "m");
+                args.push(null, "m s<sup>−1</sup>");
                 const WSliderRow = createSliderRow(...args);
                 
                 args = [`${containerID}-L-slider`, `${containerID}-L-output`];
@@ -445,10 +432,7 @@ R_3 = O\left(\frac{\delta \rho}{\overline{\rho}^2}\right),
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="anelastic_vorticity_equation.html" class="btn btn-neutral float-right" title="Anelastic Vorticity Equation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

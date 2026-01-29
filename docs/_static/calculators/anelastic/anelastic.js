@@ -29,7 +29,7 @@ function inferredScales(L, U, W, P_bar, R_bar) {
     const Del_P = Math.max(R_bar * U ** 2, R_bar * f * U * L);
 
     // Infer Del_R from vertical momentum equation
-    const Del_R = Math.max((W ** 2 * R_bar) / (g * H), Del_P / (g * H));
+    const Del_R = Math.max((W * R_bar) / (g * T), Del_P / (g * H));
 
     if (Del_P > P_bar || Del_R > R_bar) {
         return [null, null, null, null, null];
@@ -56,7 +56,7 @@ function calculateTableValues(L, U, W, P_bar, R_bar) {
     // Implied Scales
     const [T, H, Del_P, Del_R, Del_Phi] = inferredScales(L, U, W, P_bar, R_bar);
 
-    if ([T, H, Del_P, Del_R, Del_Phi].some(x => x === null)) {
+    if ([T, H, Del_P, Del_R, Del_Phi].some((x) => x === null)) {
         // Handle the null case
         return [
             [null, null, null, null],
@@ -100,17 +100,17 @@ const PBarSliderRow = createSliderRow(...args);
 
 args = [`${containerID}-R_bar-slider`, `${containerID}-R_bar-output`];
 args.push("\\(\\overline{R}:\\)", -3, 0.5, 0, 0.1);
-args.push(null, "kg m⁻³");
+args.push(null, "kg m<sup>-3</sup>");
 const RBarSliderRow = createSliderRow(...args);
 
 args = [`${containerID}-U-slider`, `${containerID}-U-output`];
 args.push("\\(U:\\)", -3, 2, 1, 0.1);
-args.push(null, "m");
+args.push(null, "m s<sup>−1</sup>");
 const USliderRow = createSliderRow(...args);
 
 args = [`${containerID}-W-slider`, `${containerID}-W-output`];
 args.push("\\(W:\\)", -3, 2, 1, 0.1);
-args.push(null, "m");
+args.push(null, "m s<sup>−1</sup>");
 const WSliderRow = createSliderRow(...args);
 
 args = [`${containerID}-L-slider`, `${containerID}-L-output`];
