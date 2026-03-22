@@ -186,7 +186,7 @@ function createRadioGroupRow(labelText, buttons) {
  */
 function createCoordinateSelectionRow(
     containerID,
-    starting_coordinates = "non-dimensional"
+    starting_coordinates = "dimensional"
 ) {
     const nonDimButton = createRadioButton(
         `${containerID}-non-dimensional-button`,
@@ -291,7 +291,7 @@ function createFieldSelectionRow(
  */
 function setupCoordinateToggle(
     containerID,
-    starting_coordinates = "non-dimensional"
+    starting_coordinates = "dimensional"
 ) {
     // Get the container to put all the controls in
     const container = document.getElementById(containerID);

@@ -24,7 +24,7 @@
       <script>window.MathJax = {"tex": {"tags": "ams", "useLabelIds": true}, "chtml": {"displayAlign": "center"}}</script>
       <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
       <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-      <script src="../_static/assets/js/model-controls.js?v=07a4f401"></script>
+      <script src="../_static/assets/js/model-controls.js?v=ec946411"></script>
       <script src="../_static/assets/js/scale-table.js?v=05822f22"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -57,7 +57,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Inertia-Gravity Waves</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plane_wave.html">Plane Wave</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Land-Sea Breeze</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Land-Sea Breeze</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#governing-equations">Governing Equations</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="gaussian_forcing.html">Gaussian Temporal Forcing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="localized_line_forcing.html">Localized Line Forcing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="slope_breeze.html">Slope Breeze</a></li>
@@ -94,10 +97,10 @@
              
   <section id="land-sea-breeze">
 <h1>Land-Sea Breeze<a class="headerlink" href="#land-sea-breeze" title="Link to this heading"></a></h1>
-<div class="admonition-todo admonition">
-<p class="admonition-title">TODO:</p>
-<p>Move the Rotunno (1983) specific content from the introduction here.</p>
-</div>
+<p>Land-sea breeze models are special both scientifically, and to me personally. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1983)040&lt;1999:OTLTOT&gt;2.0.CO;2">Rotunno’s 1983 paper</a> on the linear theory of the land-sea breeze was the first atmospheric science paper I read after switching from math to meteorology. After 10 years, I am still thinking about it.</p>
+<section id="governing-equations">
+<h2>Governing Equations<a class="headerlink" href="#governing-equations" title="Link to this heading"></a></h2>
+<p>We begin with the same governing equations presented in the <a class="reference internal" href="introduction.html"><span class="doc">Introduction</span></a>.</p>
 <div id="land_sea">
     <div id="loading-screen">
         <div class="spinner"></div>
@@ -120,8 +123,8 @@
                 
                 // Change starting values of t and alpha sliders
                 // Remember the "input" objects here are the sliders themselves.
-                nonDimSliders.tSlider.querySelector('input').value = Math.PI / 2;
-                nonDimSliders.alphaOmegaSlider.querySelector('input').value = 0.1;
+                dimSliders.tDimSlider.querySelector("input").value = Math.PI / 2 / Omega;
+                dimSliders.alphaSlider.querySelector("input").value = 0.1 * Omega;
                 
                 // Add new sliders for L
                 nonDimSliders.LNonDimSlider = getLNonDimSlider(containerID);
@@ -132,11 +135,13 @@
                 const imshowSelection = createFieldSelectionRow(
                     containerID,
                     ["psi", "u", "v", "w", "Q"],
-                    ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(Q\\)"]
+                    ["\\(\\psi\\)", "\\(u\\)", "\\(v\\)", "\\(w\\)", "\\(Q\\)"],
                 );
                 
                 // Get the relevant div container
-                const container = document.querySelector(`#${containerID} #main-content #controls`);
+                const container = document.querySelector(
+                    `#${containerID} #main-content #controls`,
+                );
                 // Append all the control rows to the container
                 container.append(coordinateToggle, overlayToggle, imshowSelection);
                 container.append(...Object.values(nonDimSliders), ...Object.values(dimSliders));
@@ -150,6 +155,7 @@
         </py-script>
     </div>
 </div><p><span class="math notranslate nohighlight">\(\,\)</span></p>
+</section>
 </section>
 
 
