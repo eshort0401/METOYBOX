@@ -6,6 +6,7 @@ A collection of meteorological (and other) toy/analytic models. Some pedagogic c
 Clone the repo in the usual ways. To build the site, navigate to the METOYBOX directory in a terminal and run
 
 .. code:: shell
+    
     rm -rf docs && sphinx-build -b html source docs
 
 To view the site from a local webserver, it is helpful to create a symbolic link to emulate the directory structure used by GitHub pages.
