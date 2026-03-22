@@ -38,7 +38,6 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
     "sphinx.ext.napoleon",
-    "sphinxcontrib.autodoc_pydantic",
     "sphinx.ext.autosectionlabel",
 ]
 
@@ -52,12 +51,6 @@ autodoc_default_options = {
 autosectionlabel_prefix_document = True
 autosummary_generate = True
 autosummary_ignore_module_all = False
-
-autodoc_pydantic_model_show_json = False
-autodoc_pydantic_settings_show_json = False
-autodoc_pydantic_field_list_validators = False
-autodoc_pydantic_model_show_config_summary = False
-
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
